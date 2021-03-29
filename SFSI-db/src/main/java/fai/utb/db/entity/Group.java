@@ -9,14 +9,14 @@ import java.util.Objects;
 
 public class Group {
 
-    public Long id;
-    public Degree degree;
-    public String fieldOfStudy;
-    public FormOfStudy formOfStudy;
-    public Semester semester;
-    public int grade;
-    public int quantity;
-    public Language language;
+    private Long id;
+    private Degree degree;
+    private String fieldOfStudy;
+    private FormOfStudy formOfStudy;
+    private Semester semester;
+    private int grade;
+    private int quantity;
+    private Language language;
 
     public Group(Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade, int quantity, Language language) {
         this.degree = degree;

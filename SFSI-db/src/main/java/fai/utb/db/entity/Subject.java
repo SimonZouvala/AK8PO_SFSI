@@ -6,22 +6,22 @@ import fai.utb.db.entity.entityEnum.Language;
 import java.util.List;
 import java.util.Objects;
 
-public class Classroom {
+public class Subject {
 
     private Long id;
-    public String acronym;
-    public String name;
-    public String teacher;
-    public int lectureCapacity;
-    public int seminarCapacity;
-    public int exerciseCapacity;
-    public int numberOfWeeks;
-    public Completion completion;
-    public int classroomCapacity;
-    public Language language;
-    public List<Group> groupList = null;
+    private String acronym;
+    private String name;
+    private String teacher;
+    private int lectureCapacity;
+    private int seminarCapacity;
+    private int exerciseCapacity;
+    private int numberOfWeeks;
+    private Completion completion;
+    private int classroomCapacity;
+    private Language language;
+    private List<Group> groupList = null;
 
-    public Classroom(String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity, int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity, Language language) {
+    public Subject(String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity, int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity, Language language) {
         this.acronym = acronym;
         this.name = name;
         this.teacher = teacher;
@@ -134,8 +134,8 @@ public class Classroom {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Classroom aClassroom = (Classroom) o;
-        return lectureCapacity == aClassroom.lectureCapacity && seminarCapacity == aClassroom.seminarCapacity && exerciseCapacity == aClassroom.exerciseCapacity && numberOfWeeks == aClassroom.numberOfWeeks && classroomCapacity == aClassroom.classroomCapacity && Objects.equals(acronym, aClassroom.acronym) && Objects.equals(name, aClassroom.name) && Objects.equals(teacher, aClassroom.teacher) && completion == aClassroom.completion && language == aClassroom.language && Objects.equals(groupList, aClassroom.groupList);
+        Subject aSubject = (Subject) o;
+        return lectureCapacity == aSubject.lectureCapacity && seminarCapacity == aSubject.seminarCapacity && exerciseCapacity == aSubject.exerciseCapacity && numberOfWeeks == aSubject.numberOfWeeks && classroomCapacity == aSubject.classroomCapacity && Objects.equals(acronym, aSubject.acronym) && Objects.equals(name, aSubject.name) && Objects.equals(teacher, aSubject.teacher) && completion == aSubject.completion && language == aSubject.language && Objects.equals(groupList, aSubject.groupList);
     }
 
     @Override

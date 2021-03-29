@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<points>
+    <hour>
+        <lecture>1.8</lecture>
+        <seminar>1.2</seminar>
+        <exercise>1.2</exercise>
+    </hour>
+    <completions>
+        <credit>0.2</credit>
+        <graded_credit>0.3</graded_credit>>
+        <examination>0.4</examination>
+    </completions>
+    <en>
+        <hour>
+            <lecture>2.4</lecture>
+            <seminar>1.8</seminar>
+            <exercise>1.8</exercise>
+        </hour>
+        <completions>
+            <credit>0.2</credit>
+            <graded_credit>0.3</graded_credit>>
+            <examination>0.4</examination>
+        </completions>
+    </en>
+</points>

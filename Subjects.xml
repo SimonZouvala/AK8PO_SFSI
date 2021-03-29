@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<subjects>
+    <subject id="1">
+        <name>Pokročilé programování</name>
+        <acronym>AK8PO</acronym>
+        <teacher>Vařacha Pavel</teacher>
+        <capacity>
+            <lecture>0</lecture>
+            <seminar>0</seminar>
+            <exercise>15</exercise>
+            <classroom>30</classroom>
+        </capacity>
+        <number_of_weeks>1</number_of_weeks>
+        <completion>kl</completion>
+        <groups>
+            <group id="1"/>
+            <group id="2"/>
+        </groups>
+    </subject>
+
+</subjects>

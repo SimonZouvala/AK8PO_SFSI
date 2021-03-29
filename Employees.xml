@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<employees>
+    <employee id="1">
+        <name>Pavel</name>
+        <surname>Vařacha</surname>
+        <phone>+420 576 035 186</phone>
+        <email>varacha@utb.cz</email>
+        <jobtime>1</jobtime>
+        <isemployee>true</isemployee>
+        <workpoint>0</workpoint>
+        <workpoint_without_en>0</workpoint_without_en>
+        <worklabels>
+            <worklabel id="1"/>
+        </worklabels>
+    </employee>
+
+
+</employees>

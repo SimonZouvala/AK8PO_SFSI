@@ -8,21 +8,21 @@ import java.util.Objects;
 
 public class WorkLabel {
 
-    public Long id;
-    public String name;
-    public Employee employee;
-    public Classroom classroom;
-    public Language language;
-    public int points;
-    public int NumberOfStudents;
-    public LessonType lessonType;
-    public Completion completion;
-    public int numberOfWeeks;
-    public int numberOfHours;
+    private Long id;
+    private String name;
+    private Employee employee;
+    private Subject subject;
+    private Language language;
+    private int points;
+    private int NumberOfStudents;
+    private LessonType lessonType;
+    private Completion completion;
+    private int numberOfWeeks;
+    private int numberOfHours;
 
-    public WorkLabel(String name, Classroom classroom, Language language) {
+    public WorkLabel(String name, Subject subject, Language language) {
         this.name = name;
-        this.classroom = classroom;
+        this.subject = subject;
         this.language = language;
     }
 
@@ -67,12 +67,12 @@ public class WorkLabel {
         this.employee = employee;
     }
 
-    public Classroom getClassroom() {
-        return classroom;
+    public Subject getClassroom() {
+        return subject;
     }
 
-    public void setClassroom(Classroom classroom) {
-        this.classroom = classroom;
+    public void setClassroom(Subject subject) {
+        this.subject = subject;
     }
 
     public Language getLanguage() {

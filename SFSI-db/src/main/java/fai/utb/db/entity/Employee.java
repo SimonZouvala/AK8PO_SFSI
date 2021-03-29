@@ -1,27 +1,42 @@
 package fai.utb.db.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Employee {
 
     private Long id;
-    public String jmeno;
-    public String prijmeni;
-    public String telefon;
-    public String email;
-    public Double uvazek;
-    public Boolean zamestnanec;
-    public int pracovniBody;
-    public int pracovniBodyBezEN;
-    public WorkLabel stitek;
+    private String name;
+    private String surname;
+    private String phone;
+    private String email;
+    private Double jobTime;
+    private Boolean isEmployee;
+    private int workPoint;
+    private int workPointWithoutEN;
+    private List<WorkLabel> workLabels;
 
-    public Employee(String jmeno, String prijmeni, String telefon, String email, Double uvazek, Boolean zamestnanec) {
-        this.jmeno = jmeno;
-        this.prijmeni = prijmeni;
-        this.telefon = telefon;
+    public Employee(Long id, String name, String surname, String phone, String email, Double jobTime, Boolean isEmployee, int workPoint, int workPointWithoutEN, List<WorkLabel> workLabels) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
         this.email = email;
-        this.uvazek = uvazek;
-        this.zamestnanec = zamestnanec;
+        this.jobTime = jobTime;
+        this.isEmployee = isEmployee;
+        this.workPoint = workPoint;
+        this.workPointWithoutEN = workPointWithoutEN;
+        this.workLabels = workLabels;
+    }
+
+    public Employee(Long id, String name, String surname, String phone, String email, Double jobTime, Boolean isEmployee) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+        this.email = email;
+        this.jobTime = jobTime;
+        this.isEmployee = isEmployee;
     }
 
     public Long getId() {
@@ -32,28 +47,28 @@ public class Employee {
         this.id = id;
     }
 
-    public String getJmeno() {
-        return jmeno;
+    public String getName() {
+        return name;
     }
 
-    public void setJmeno(String jmeno) {
-        this.jmeno = jmeno;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPrijmeni() {
-        return prijmeni;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setPrijmeni(String prijmeni) {
-        this.prijmeni = prijmeni;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public String getTelefon() {
-        return telefon;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -64,44 +79,44 @@ public class Employee {
         this.email = email;
     }
 
-    public Double getUvazek() {
-        return uvazek;
+    public Double getJobTime() {
+        return jobTime;
     }
 
-    public void setUvazek(Double uvazek) {
-        this.uvazek = uvazek;
+    public void setJobTime(Double jobTime) {
+        this.jobTime = jobTime;
     }
 
-    public Boolean getZamestnanec() {
-        return zamestnanec;
+    public Boolean getIsEmployee() {
+        return isEmployee;
     }
 
-    public void setZamestnanec(Boolean zamestnanec) {
-        this.zamestnanec = zamestnanec;
+    public void setIsEmployee(Boolean isEmployee) {
+        this.isEmployee = isEmployee;
     }
 
-    public int getPracovniBody() {
-        return pracovniBody;
+    public int getWorkPoint() {
+        return workPoint;
     }
 
-    public void setPracovniBody(int pracovniBody) {
-        this.pracovniBody = pracovniBody;
+    public void setWorkPoint(int workPoint) {
+        this.workPoint = workPoint;
     }
 
-    public int getPracovniBodyBezEN() {
-        return pracovniBodyBezEN;
+    public int getWorkPointWithoutEN() {
+        return workPointWithoutEN;
     }
 
-    public void setPracovniBodyBezEN(int pracovniBodyBezEN) {
-        this.pracovniBodyBezEN = pracovniBodyBezEN;
+    public void setWorkPointWithoutEN(int workPointWithoutEN) {
+        this.workPointWithoutEN = workPointWithoutEN;
     }
 
-    public WorkLabel getStitek() {
-        return stitek;
+    public List<WorkLabel> getWorkLabels() {
+        return workLabels;
     }
 
-    public void setStitek(WorkLabel stitek) {
-        this.stitek = stitek;
+    public void setWorkLabels(List<WorkLabel> workLabels) {
+        this.workLabels = workLabels;
     }
 
     @Override
@@ -109,11 +124,27 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee that = (Employee) o;
-        return Objects.equals(jmeno, that.jmeno) && Objects.equals(prijmeni, that.prijmeni) && Objects.equals(telefon, that.telefon) && Objects.equals(email, that.email) && Objects.equals(uvazek, that.uvazek) && Objects.equals(zamestnanec, that.zamestnanec);
+        return Objects.equals(name, that.name) && Objects.equals(surname, that.surname) && Objects.equals(phone, that.phone) && Objects.equals(email, that.email) && Objects.equals(jobTime, that.jobTime) && Objects.equals(isEmployee, that.isEmployee);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(jmeno, prijmeni, telefon, email, uvazek, zamestnanec);
+        return Objects.hash(name, surname, phone, email, jobTime, isEmployee);
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", jobTime=" + jobTime +
+                ", isEmployee=" + isEmployee +
+                ", workPoint=" + workPoint +
+                ", workPointWithoutEN=" + workPointWithoutEN +
+                ", workLabels=" + workLabels +
+                '}';
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<worklabels>
+    <worklabel id="1">
+        <name>Cvičení AP8PO 1</name>
+        <employee id="1"/>
+        <subject id="1"/>
+        <language>cz</language>
+        <point></point>
+        <number_of_students></number_of_students>
+        <lesson_type></lesson_type>
+        <comletion></comletion>
+        <number_of_weeks></number_of_weeks>
+        <number_of_hours></number_of_hours>
+    </worklabel>
+
+
+</worklabels>
