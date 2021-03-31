@@ -5,15 +5,15 @@ import fai.utb.db.entity.Employee;
 
 import java.util.List;
 
-public interface EmployeeManager {
+public abstract class EmployeeManager extends BasicManager{
 
 
-    void create(Employee employee);
+    public abstract void create(Employee employee);
 
-    void remove(Employee employee);
+    public abstract void remove(Employee employee);
 
-    List<Employee> getAllEmployees();
+    public abstract List<Employee> getAllEmployees();
 
-    Employee getEmployee(Long id);
+    public abstract Employee getEmployee(Long id);
 
 }

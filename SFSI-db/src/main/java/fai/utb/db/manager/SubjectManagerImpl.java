@@ -5,7 +5,7 @@ import org.w3c.dom.Document;
 
 import java.util.List;
 
-public class SubjectManagerImpl implements SubjectManager {
+public class SubjectManagerImpl extends SubjectManager {
 
     private Document document;
 
@@ -25,7 +25,7 @@ public class SubjectManagerImpl implements SubjectManager {
 
     @Override
     public void remove(Subject subject) {
-
+        remove(document,subject.getId(),"subject","Subjects.xml");
     }
 
     @Override

@@ -4,7 +4,7 @@ import fai.utb.db.entity.Employee;
 import fai.utb.db.entity.WorkLabel;
 import org.w3c.dom.Document;
 
-public class WorkLabelManagerImpl implements WorkLabelManager {
+public class WorkLabelManagerImpl extends WorkLabelManager {
 
     private Document document;
 
@@ -25,6 +25,11 @@ public class WorkLabelManagerImpl implements WorkLabelManager {
     @Override
     public void createWorkLabel(WorkLabel workLabel) {
 
+    }
+
+    @Override
+    public void removeWorkLabels(WorkLabel workLabel) {
+        remove(document,workLabel.getId(),"worklabel","WorkLabels");
     }
 
     @Override

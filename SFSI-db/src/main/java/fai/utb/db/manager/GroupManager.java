@@ -4,16 +4,16 @@ import fai.utb.db.entity.Group;
 
 import java.util.List;
 
-public interface GroupManager {
+public abstract class GroupManager  extends BasicManager{
 
-    void create(Group group);
+    public abstract void create(Group group);
 
-    void remove(Group group);
+    public abstract void remove(Group group);
 
-    void setQuantity(Group group, int quantity);
+    public abstract void setQuantity(Group group, int quantity);
 
-    List<Group> getAllGroup();
+    public abstract List<Group> getAllGroup();
 
-    Group getGroup(Long id);
+    public abstract Group getGroup(Long id);
 
 }

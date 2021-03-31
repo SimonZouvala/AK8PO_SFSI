@@ -1,23 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <groups>
     <group id="1">
-        <degree>mgr</degree>
+        <degree>MGR</degree>
         <field_of_study>swi</field_of_study>
-        <form_of_study>k</form_of_study>
-        <semester>ls</semester>
+        <form_of_study>K</form_of_study>
+        <semester>LS</semester>
         <grade>1</grade>
         <quantity>35</quantity>
-        <language>cz</language>
+        <language>CZ</language>
     </group>
     <group id="2">
-        <degree>mgr</degree>
+        <degree>MGR</degree>
         <field_of_study>kib</field_of_study>
-        <form_of_study>k</form_of_study>
-        <semester>ls</semester>
+        <form_of_study>K</form_of_study>
+        <semester>LS</semester>
         <grade>1</grade>
         <quantity>25</quantity>
-        <language>cz</language>
+        <language>CZ</language>
     </group>
-
 
 </groups>

@@ -4,17 +4,17 @@ import fai.utb.db.entity.Subject;
 
 import java.util.List;
 
-public interface SubjectManager {
+public abstract class SubjectManager  extends BasicManager{
 
-    void create(Subject subject);
+    public abstract void create(Subject subject);
 
-    void setSubjectCapacity(Subject subjectCapacity, int newCapacity);
+    public abstract void setSubjectCapacity(Subject subjectCapacity, int newCapacity);
 
-    void remove(Subject subject);
+    public abstract void remove(Subject subject);
 
-    List<Subject> getAllSubject();
+    public abstract List<Subject> getAllSubject();
 
-    Subject getSubjectByAcronym(String acronym);
+    public abstract Subject getSubjectByAcronym(String acronym);
 
-    Subject getSubject(Long id);
+    public abstract Subject getSubject(Long id);
 }

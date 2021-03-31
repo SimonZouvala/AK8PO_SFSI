@@ -5,6 +5,8 @@ import fai.utb.db.entity.entityEnum.Language;
 import fai.utb.db.entity.entityEnum.Semester;
 import fai.utb.db.entity.entityEnum.FormOfStudy;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Group {
@@ -17,6 +19,17 @@ public class Group {
     private int grade;
     private int quantity;
     private Language language;
+
+    public Group(Long id, Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade, int quantity, Language language) {
+        this.id = id;
+        this.degree = degree;
+        this.fieldOfStudy = fieldOfStudy;
+        this.formOfStudy = formOfStudy;
+        this.semester = semester;
+        this.grade = grade;
+        this.quantity = quantity;
+        this.language = language;
+    }
 
     public Group(Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade, int quantity, Language language) {
         this.degree = degree;
@@ -103,5 +116,30 @@ public class Group {
     @Override
     public int hashCode() {
         return Objects.hash(degree, fieldOfStudy, formOfStudy, semester, grade, quantity, language);
+    }
+
+    public List<String> getGroupItems() {
+        return Arrays.asList(
+                getDegree().toString(),
+                getFieldOfStudy(),
+                getFormOfStudy().toString(),
+                getSemester().toString(),
+                String.valueOf(getGrade()),
+                String.valueOf(getQuantity()),
+                getLanguage().toString());
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "id=" + id +
+                ", degree=" + degree +
+                ", fieldOfStudy='" + fieldOfStudy + '\'' +
+                ", formOfStudy=" + formOfStudy +
+                ", semester=" + semester +
+                ", grade=" + grade +
+                ", quantity=" + quantity +
+                ", language=" + language +
+                '}';
     }
 }

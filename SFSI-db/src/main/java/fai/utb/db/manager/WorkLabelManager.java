@@ -3,18 +3,20 @@ package fai.utb.db.manager;
 import fai.utb.db.entity.Employee;
 import fai.utb.db.entity.WorkLabel;
 
-public interface WorkLabelManager {
+public abstract class WorkLabelManager extends BasicManager{
 
-    void generateWorkLabels();
+    public abstract void generateWorkLabels();
 
-    void generateWorkLabelsAfterUpgrade();
+    public abstract void generateWorkLabelsAfterUpgrade();
 
-    void createWorkLabel(WorkLabel workLabel);
+    public abstract void createWorkLabel(WorkLabel workLabel);
 
-    void addEmployeeToWorkLabel(Employee employee, WorkLabel workLabel);
+    public abstract void addEmployeeToWorkLabel(Employee employee, WorkLabel workLabel);
 
-    void removeEmployeeFromWorkLabel(Employee employee, WorkLabel workLabel);
+    public abstract void removeEmployeeFromWorkLabel(Employee employee, WorkLabel workLabel);
 
-    WorkLabel getWorkLabel(Long id);
+    public abstract void removeWorkLabels(WorkLabel workLabel);
+
+    public abstract WorkLabel getWorkLabel(Long id);
 
 }

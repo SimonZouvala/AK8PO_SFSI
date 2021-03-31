@@ -1,5 +1,7 @@
 package fai.utb.db.entity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +40,8 @@ public class Employee {
         this.jobTime = jobTime;
         this.isEmployee = isEmployee;
     }
+
+
 
     public Long getId() {
         return id;
@@ -117,6 +121,19 @@ public class Employee {
 
     public void setWorkLabels(List<WorkLabel> workLabels) {
         this.workLabels = workLabels;
+    }
+
+    public List<String> getEmployeeItems() {
+        return Arrays.asList(
+                getId().toString(),
+                getName(),
+                getSurname(),
+                getPhone(),
+                getEmail(),
+                getJobTime().toString(),
+                getIsEmployee().toString(),
+                String.valueOf(getWorkPoint()),
+                String.valueOf(getWorkPointWithoutEN()));
     }
 
     @Override
