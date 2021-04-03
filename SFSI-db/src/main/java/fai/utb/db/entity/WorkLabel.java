@@ -4,21 +4,37 @@ import fai.utb.db.entity.entityEnum.Completion;
 import fai.utb.db.entity.entityEnum.Language;
 import fai.utb.db.entity.entityEnum.LessonType;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class WorkLabel {
 
-    private Long id;
+    private long id;
     private String name;
-    private Employee employee;
+    private Long employeeId;
     private Subject subject;
     private Language language;
-    private int points;
-    private int NumberOfStudents;
+    private double points;
+    private int numberOfStudents;
     private LessonType lessonType;
     private Completion completion;
     private int numberOfWeeks;
     private int numberOfHours;
+
+    public WorkLabel(long id, String name, Long employeeId, Subject subject, Language language, double points, int numberOfStudents, LessonType lessonType, Completion completion, int numberOfWeeks, int numberOfHours) {
+        this.id = id;
+        this.name = name;
+        this.employeeId = employeeId;
+        this.subject = subject;
+        this.language = language;
+        this.points = points;
+        this.numberOfStudents = numberOfStudents;
+        this.lessonType = lessonType;
+        this.completion = completion;
+        this.numberOfWeeks = numberOfWeeks;
+        this.numberOfHours = numberOfHours;
+    }
 
     public WorkLabel(String name, Subject subject, Language language) {
         this.name = name;
@@ -37,17 +53,48 @@ public class WorkLabel {
     public WorkLabel(String name, Language language, int numberOfStudents, Completion completion) {
         this.name = name;
         this.language = language;
-        this.NumberOfStudents = numberOfStudents;
+        this.numberOfStudents = numberOfStudents;
         this.completion = completion;
         this.numberOfHours = 0;
         this.numberOfWeeks = 0;
     }
 
-    public Long getId() {
+    public WorkLabel(long id, String name, Language language, int numberOfStudents) {
+        this.id = id;
+        this.name = name;
+        this.language = language;
+        this.numberOfStudents = numberOfStudents;
+    }
+
+    public WorkLabel(long id, String name, Language language) {
+        this.id = id;
+        this.name = name;
+        this.language = language;
+    }
+
+    public WorkLabel(long id, String name, Subject subject, Language language, LessonType lessonType, int numberOfWeeks) {
+        this.id = id;
+        this.name = name;
+        this.subject = subject;
+        this.language = language;
+        this.lessonType = lessonType;
+        this.numberOfWeeks = numberOfWeeks;
+    }
+
+    public WorkLabel(long id, String name, Subject subject, Language language, int numberOfStudents, Completion completion) {
+        this.id = id;
+        this.name = name;
+        this.subject = subject;
+        this.language = language;
+        this.numberOfStudents = numberOfStudents;
+        this.completion = completion;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -59,19 +106,19 @@ public class WorkLabel {
         this.name = name;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
-    public Subject getClassroom() {
+    public Subject getSubject() {
         return subject;
     }
 
-    public void setClassroom(Subject subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
     }
 
@@ -83,20 +130,20 @@ public class WorkLabel {
         this.language = language;
     }
 
-    public int getPoints() {
+    public double getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(double points) {
         this.points = points;
     }
 
     public int getNumberOfStudents() {
-        return NumberOfStudents;
+        return numberOfStudents;
     }
 
     public void setNumberOfStudents(int numberOfStudents) {
-        NumberOfStudents = numberOfStudents;
+        this.numberOfStudents = numberOfStudents;
     }
 
     public LessonType getLessonType() {
@@ -131,6 +178,24 @@ public class WorkLabel {
         this.numberOfHours = numberOfHours;
     }
 
+    public List<String> getWorklabelsItemsOrIds() {
+
+
+        return Arrays.asList(
+                String.valueOf(getId()),
+                getName(),
+                getEmployeeId() == null ? "" : getEmployeeId().toString(),
+                getSubject() == null ? "" : String.valueOf(getSubject().getId()),
+                getLanguage().toString(),
+                String.valueOf(getPoints()),
+                String.valueOf(getNumberOfStudents()),
+                getLessonType() == null ? "" : getLessonType().toString(),
+                getCompletion() == null ? "" : getCompletion().toString(),
+                String.valueOf(getNumberOfWeeks()),
+                String.valueOf(getNumberOfHours()));
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -142,5 +207,22 @@ public class WorkLabel {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, language);
+    }
+
+    @Override
+    public String toString() {
+        return "WorkLabel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", employeeId=" + employeeId +
+                ", subject=" + subject +
+                ", language=" + language +
+                ", points=" + points +
+                ", numberOfStudents=" + numberOfStudents +
+                ", lessonType=" + lessonType +
+                ", completion=" + completion +
+                ", numberOfWeeks=" + numberOfWeeks +
+                ", numberOfHours=" + numberOfHours +
+                '}';
     }
 }

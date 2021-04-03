@@ -6,9 +6,9 @@
         <exercise>1.2</exercise>
     </hour>
     <completions>
-        <credit>0.2</credit>
-        <graded_credit>0.3</graded_credit>>
-        <examination>0.4</examination>
+        <z>0.2</z>
+        <kl>0.3</kl>>
+        <zk>0.4</zk>
     </completions>
     <en>
         <hour>
@@ -17,9 +17,9 @@
             <exercise>1.8</exercise>
         </hour>
         <completions>
-            <credit>0.2</credit>
-            <graded_credit>0.3</graded_credit>>
-            <examination>0.4</examination>
+            <z>0.2</z>
+            <kl>0.3</kl>>
+            <zk>0.4</zk>
         </completions>
     </en>
 </points>

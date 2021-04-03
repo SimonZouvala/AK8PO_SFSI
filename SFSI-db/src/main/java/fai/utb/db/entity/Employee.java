@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Employee {
 
-    private Long id;
+    private long id;
     private String name;
     private String surname;
     private String phone;
@@ -18,7 +18,7 @@ public class Employee {
     private int workPointWithoutEN;
     private List<WorkLabel> workLabels;
 
-    public Employee(Long id, String name, String surname, String phone, String email, Double jobTime, Boolean isEmployee, int workPoint, int workPointWithoutEN, List<WorkLabel> workLabels) {
+    public Employee(long id, String name, String surname, String phone, String email, Double jobTime, Boolean isEmployee, int workPoint, int workPointWithoutEN, List<WorkLabel> workLabels) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -31,7 +31,7 @@ public class Employee {
         this.workLabels = workLabels;
     }
 
-    public Employee(Long id, String name, String surname, String phone, String email, Double jobTime, Boolean isEmployee) {
+    public Employee(long id, String name, String surname, String phone, String email, Double jobTime, Boolean isEmployee) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -42,12 +42,11 @@ public class Employee {
     }
 
 
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -123,9 +122,17 @@ public class Employee {
         this.workLabels = workLabels;
     }
 
+    public List<Long> getWorkLablesId() {
+        List<Long> ids = new ArrayList<>();
+        for (WorkLabel workLabel : getWorkLabels()) {
+            ids.add(workLabel.getId());
+        }
+        return ids;
+    }
+
     public List<String> getEmployeeItems() {
         return Arrays.asList(
-                getId().toString(),
+                String.valueOf(getId()),
                 getName(),
                 getSurname(),
                 getPhone(),

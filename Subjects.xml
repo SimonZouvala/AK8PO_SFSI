@@ -4,14 +4,13 @@
         <name>Pokročilé programování</name>
         <acronym>AK8PO</acronym>
         <teacher>Vařacha Pavel</teacher>
-        <capacity>
-            <lecture>0</lecture>
-            <seminar>0</seminar>
-            <exercise>15</exercise>
-            <classroom>30</classroom>
-        </capacity>
+        <capacity-lecture>0</capacity-lecture>
+        <capacity-seminar>0</capacity-seminar>
+        <capacity-exercise>15</capacity-exercise>
+        <capacity-classroom>30</capacity-classroom>
         <number_of_weeks>1</number_of_weeks>
-        <completion>kl</completion>
+        <completion>KL</completion>
+        <language>CZ</language>
         <groups>
             <group id="1"/>
             <group id="2"/>

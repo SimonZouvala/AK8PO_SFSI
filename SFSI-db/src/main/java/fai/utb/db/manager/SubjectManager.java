@@ -8,7 +8,7 @@ public abstract class SubjectManager  extends BasicManager{
 
     public abstract void create(Subject subject);
 
-    public abstract void setSubjectCapacity(Subject subjectCapacity, int newCapacity);
+    public abstract void setSubjectCapacity(Subject subject, int newCapacity);
 
     public abstract void remove(Subject subject);
 

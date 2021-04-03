@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class Group {
 
-    private Long id;
+    private long id;
     private Degree degree;
     private String fieldOfStudy;
     private FormOfStudy formOfStudy;
@@ -20,7 +20,7 @@ public class Group {
     private int quantity;
     private Language language;
 
-    public Group(Long id, Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade, int quantity, Language language) {
+    public Group(long id, Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade, int quantity, Language language) {
         this.id = id;
         this.degree = degree;
         this.fieldOfStudy = fieldOfStudy;
