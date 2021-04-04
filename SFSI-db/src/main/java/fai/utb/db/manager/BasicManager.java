@@ -18,6 +18,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public class BasicManager {
 
@@ -66,7 +67,7 @@ public class BasicManager {
     }
 
 
-    public void remove(Document document, Long id, String entity, String file) {
+    public void remove(Document document, UUID id, String entity, String file) {
         NodeList nodeList = document.getElementsByTagName(entity);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -74,7 +75,7 @@ public class BasicManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (Long.parseLong(element.getAttribute("id")) == id) {
+                if (UUID.fromString(element.getAttribute("id")) == id) {
                     document.getDocumentElement().removeChild(node);
                 }
             }
@@ -97,7 +98,7 @@ public class BasicManager {
             DOMSource domSource = new DOMSource(document);
             StreamResult streamResult = new StreamResult(new File(xml));
             transformer.transform(domSource, streamResult);
-            System.out.println("Done save XML File: " + xml);
+//            System.out.println("Done save XML File: " + xml);
         } catch (TransformerConfigurationException e) {
             e.printStackTrace();
         } catch (TransformerException e) {
@@ -105,7 +106,8 @@ public class BasicManager {
         }
     }
 
-    public void setElement(Document document, Long id, String elementToSet, String value, String file, String mainElement) {
+    public void setElement(Document document, UUID id, String elementToSet,
+                           String value, String file, String mainElement) {
         NodeList nodeList = document.getElementsByTagName(mainElement);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -114,8 +116,8 @@ public class BasicManager {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
 
-                if (Long.parseLong(element.getAttribute("id")) == id) {
-                    element.getElementsByTagName(elementToSet).item(0).setTextContent(String.valueOf(value));
+                if (UUID.fromString(element.getAttribute("id")).equals(id)) {
+                    element.getElementsByTagName(elementToSet).item(0).setTextContent(value);
                     break;
                 }
             }
@@ -126,7 +128,8 @@ public class BasicManager {
 
     }
 
-    public Element getItemToXML(Document document, List<String> xmlDom, List<String> items, Long id, String mainElement) {
+    public Element getItemToXML(Document document, List<String> xmlDom,
+                                List<String> items, UUID id, String mainElement) {
         Element element = document.createElement(mainElement);
         element.setAttribute("id", id.toString());
 
@@ -138,7 +141,9 @@ public class BasicManager {
         return element;
     }
 
-    public Element getItemToXML(Document document, List<String> xmlDom, List<String> items, Long id, String mainElement, List<Long> idList, String entityName) {
+    public Element getItemToXML(Document document, List<String> xmlDom,
+                                List<String> items, UUID id, String mainElement,
+                                List<UUID> idList, String entityName) {
         Element element = document.createElement(mainElement);
         element.setAttribute("id", id.toString());
 
@@ -148,7 +153,7 @@ public class BasicManager {
             if (index == xmlDom.size() - 1) {
                 if (items.size() > 0) {
 
-                    for (Long entityId : idList) {
+                    for (UUID entityId : idList) {
                         Element label = document.createElement(entityName);
                         label.setAttribute("id", entityId.toString());
                         newElement.appendChild(label);

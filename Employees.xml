@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <employees>
-    <employee id="1">
+
+    <employee id="4a82b795-9d0e-4070-8252-4da0ff5bf4c0">
         <name>Pavel</name>
         <surname>Vařacha</surname>
         <phone>+420 576 035 186</phone>
         <email>varacha@utb.cz</email>
-        <jobtime>1</jobtime>
+        <jobtime>1.0</jobtime>
         <isemployee>true</isemployee>
-        <workpoint>0</workpoint>
-        <workpoint_without_en>0</workpoint_without_en>
-        <worklabels>
-            <worklabel id="1"/>
-        </worklabels>
+        <workpoint>117.9</workpoint>
+        <workpoint_without_en>117.9</workpoint_without_en>
+        <worklabels/>
     </employee>
-
-
 </employees>

@@ -1,13 +1,10 @@
 package fai.utb.db.entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Employee {
 
-    private long id;
+    private UUID id;
     private String name;
     private String surname;
     private String phone;
@@ -18,7 +15,8 @@ public class Employee {
     private int workPointWithoutEN;
     private List<WorkLabel> workLabels;
 
-    public Employee(long id, String name, String surname, String phone, String email, Double jobTime, Boolean isEmployee, int workPoint, int workPointWithoutEN, List<WorkLabel> workLabels) {
+    public Employee(UUID id, String name, String surname, String phone, String email, Double jobTime,
+                    Boolean isEmployee, int workPoint, int workPointWithoutEN, List<WorkLabel> workLabels) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -31,7 +29,8 @@ public class Employee {
         this.workLabels = workLabels;
     }
 
-    public Employee(long id, String name, String surname, String phone, String email, Double jobTime, Boolean isEmployee) {
+    public Employee(UUID id, String name, String surname, String phone, String email, Double jobTime,
+                    Boolean isEmployee) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -42,11 +41,11 @@ public class Employee {
     }
 
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -122,8 +121,8 @@ public class Employee {
         this.workLabels = workLabels;
     }
 
-    public List<Long> getWorkLablesId() {
-        List<Long> ids = new ArrayList<>();
+    public List<UUID> getWorkLablesId() {
+        List<UUID> ids = new ArrayList<>();
         for (WorkLabel workLabel : getWorkLabels()) {
             ids.add(workLabel.getId());
         }
@@ -132,7 +131,6 @@ public class Employee {
 
     public List<String> getEmployeeItems() {
         return Arrays.asList(
-                String.valueOf(getId()),
                 getName(),
                 getSurname(),
                 getPhone(),
@@ -140,7 +138,8 @@ public class Employee {
                 getJobTime().toString(),
                 getIsEmployee().toString(),
                 String.valueOf(getWorkPoint()),
-                String.valueOf(getWorkPointWithoutEN()));
+                String.valueOf(getWorkPointWithoutEN()),
+                "");
     }
 
     @Override
@@ -148,7 +147,9 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee that = (Employee) o;
-        return Objects.equals(name, that.name) && Objects.equals(surname, that.surname) && Objects.equals(phone, that.phone) && Objects.equals(email, that.email) && Objects.equals(jobTime, that.jobTime) && Objects.equals(isEmployee, that.isEmployee);
+        return Objects.equals(name, that.name) && Objects.equals(surname, that.surname)
+                && Objects.equals(phone, that.phone) && Objects.equals(email, that.email)
+                && Objects.equals(jobTime, that.jobTime) && Objects.equals(isEmployee, that.isEmployee);
     }
 
     @Override

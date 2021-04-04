@@ -1,15 +1,20 @@
 package fai.utb.db.manager;
 
 import fai.utb.db.entity.Employee;
+import fai.utb.db.entity.Group;
+import fai.utb.db.entity.Subject;
 import fai.utb.db.entity.WorkLabel;
 
 import java.util.List;
+import java.util.UUID;
 
 public abstract class WorkLabelManager extends BasicManager{
 
     public abstract void generateWorkLabels();
 
-    public abstract void generateWorkLabelsAfterUpgrade();
+    public abstract void generateWorkLabelsAfterUpgrade(Subject subject);
+
+    public abstract void generateWorkLabelsAfterUpgrade(Group group);
 
     public abstract void createWorkLabel(WorkLabel workLabel);
 
@@ -19,7 +24,7 @@ public abstract class WorkLabelManager extends BasicManager{
 
     public abstract void removeWorkLabels(WorkLabel workLabel);
 
-    public abstract WorkLabel getWorkLabel(Long id);
+    public abstract WorkLabel getWorkLabel(UUID id);
 
     public abstract List<WorkLabel> getAllWorkLabels();
 

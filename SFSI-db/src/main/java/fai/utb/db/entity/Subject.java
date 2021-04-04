@@ -3,15 +3,12 @@ package fai.utb.db.entity;
 import fai.utb.db.entity.entityEnum.Completion;
 import fai.utb.db.entity.entityEnum.Language;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Subject {
 
 
-    private long id;
+    private UUID id;
     private String acronym;
     private String name;
     private String teacher;
@@ -22,9 +19,11 @@ public class Subject {
     private Completion completion;
     private int classroomCapacity;
     private Language language;
-    private List<Group> groups = null;
+    private List<Group> groups;
 
-    public Subject(long id, String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity, int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity, Language language) {
+    public Subject(UUID id, String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity,
+                   int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity,
+                   Language language) {
         this.id = id;
         this.acronym = acronym;
         this.name = name;
@@ -38,7 +37,9 @@ public class Subject {
         this.language = language;
     }
 
-    public Subject(long id, String name, String acronym, String teacher, int lectureCapacity, int seminarCapacity, int exerciseCapacity, int classroomCapacity, int numberOfWeeks, Completion completion, Language language, List<Group> groups) {
+    public Subject(UUID id, String name, String acronym, String teacher, int lectureCapacity, int seminarCapacity,
+                   int exerciseCapacity, int classroomCapacity, int numberOfWeeks, Completion completion,
+                   Language language, List<Group> groups) {
         this.id = id;
         this.acronym = acronym;
         this.name = name;
@@ -53,11 +54,11 @@ public class Subject {
         this.language = language;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -149,8 +150,8 @@ public class Subject {
         this.groups = groups;
     }
 
-    public List<Long> getGroupsIds() {
-        List<Long> ids = new ArrayList<>();
+    public List<UUID> getGroupsIds() {
+        List<UUID> ids = new ArrayList<>();
         for (Group group : getGroups()) {
             ids.add(group.getId());
         }
@@ -162,12 +163,18 @@ public class Subject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject aSubject = (Subject) o;
-        return lectureCapacity == aSubject.lectureCapacity && seminarCapacity == aSubject.seminarCapacity && exerciseCapacity == aSubject.exerciseCapacity && numberOfWeeks == aSubject.numberOfWeeks && classroomCapacity == aSubject.classroomCapacity && Objects.equals(acronym, aSubject.acronym) && Objects.equals(name, aSubject.name) && Objects.equals(teacher, aSubject.teacher) && completion == aSubject.completion && language == aSubject.language && Objects.equals(groups, aSubject.groups);
+        return lectureCapacity == aSubject.lectureCapacity && seminarCapacity == aSubject.seminarCapacity
+                && exerciseCapacity == aSubject.exerciseCapacity && numberOfWeeks == aSubject.numberOfWeeks
+                && classroomCapacity == aSubject.classroomCapacity && Objects.equals(acronym, aSubject.acronym)
+                && Objects.equals(name, aSubject.name) && Objects.equals(teacher, aSubject.teacher)
+                && completion == aSubject.completion && language == aSubject.language
+                && Objects.equals(groups, aSubject.groups);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(acronym, name, teacher, lectureCapacity, seminarCapacity, exerciseCapacity, numberOfWeeks, completion, classroomCapacity, language, groups);
+        return Objects.hash(acronym, name, teacher, lectureCapacity, seminarCapacity,
+                exerciseCapacity, numberOfWeeks, completion, classroomCapacity, language, groups);
     }
 
     public List<String> getSubjectItems() {
@@ -180,7 +187,8 @@ public class Subject {
                 String.valueOf(getExerciseCapacity()),
                 String.valueOf(getClassroomCapacity()),
                 String.valueOf(getNumberOfWeeks()),
-                getCompletion().toString());
+                getCompletion().toString(),
+                getLanguage().toString());
     }
 
     @Override

@@ -8,10 +8,11 @@ import fai.utb.db.entity.entityEnum.FormOfStudy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Group {
 
-    private long id;
+    private UUID id;
     private Degree degree;
     private String fieldOfStudy;
     private FormOfStudy formOfStudy;
@@ -20,7 +21,8 @@ public class Group {
     private int quantity;
     private Language language;
 
-    public Group(long id, Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade, int quantity, Language language) {
+    public Group(UUID id, Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade,
+                 int quantity, Language language) {
         this.id = id;
         this.degree = degree;
         this.fieldOfStudy = fieldOfStudy;
@@ -31,7 +33,8 @@ public class Group {
         this.language = language;
     }
 
-    public Group(Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade, int quantity, Language language) {
+    public Group(Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade,
+                 int quantity, Language language) {
         this.degree = degree;
         this.fieldOfStudy = fieldOfStudy;
         this.formOfStudy = formOfStudy;
@@ -41,11 +44,11 @@ public class Group {
         this.language = language;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -110,7 +113,9 @@ public class Group {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return grade == group.grade && quantity == group.quantity && degree == group.degree && Objects.equals(fieldOfStudy, group.fieldOfStudy) && formOfStudy == group.formOfStudy && semester == group.semester && language == group.language;
+        return grade == group.grade && quantity == group.quantity && degree == group.degree
+                && Objects.equals(fieldOfStudy, group.fieldOfStudy) && formOfStudy == group.formOfStudy
+                && semester == group.semester && language == group.language;
     }
 
     @Override

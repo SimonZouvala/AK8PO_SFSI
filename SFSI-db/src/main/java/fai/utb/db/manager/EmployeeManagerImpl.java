@@ -2,7 +2,7 @@ package fai.utb.db.manager;
 
 import fai.utb.db.entity.Employee;
 import fai.utb.db.entity.WorkLabel;
-import fai.utb.db.reader.DataReaderXML;
+import fai.utb.db.entity.entityEnum.Language;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class EmployeeManagerImpl extends EmployeeManager {
 
@@ -18,9 +19,8 @@ public class EmployeeManagerImpl extends EmployeeManager {
     private static final String MAIN_ELEMENT = "employee";
 
 
-
     public EmployeeManagerImpl() {
-        this.document= getEmployeesDocument();
+        this.document = getEmployeesDocument();
 
     }
 
@@ -31,9 +31,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
                 getEmployeeXmlDomList(),
                 employee.getEmployeeItems(),
                 employee.getId(),
-                MAIN_ELEMENT,
-                employee.getWorkLablesId(),
-                "worklabel");
+                MAIN_ELEMENT);
         create(document, employeeElement, EMPLOYEES_XML);
     }
 
@@ -44,7 +42,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
     @Override
     public List<Employee> getAllEmployees() {
-        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
         List<Employee> employees = new ArrayList<>();
 
@@ -63,8 +61,8 @@ public class EmployeeManagerImpl extends EmployeeManager {
     }
 
     @Override
-    public Employee getEmployee(Long id) {
-        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+    public Employee getEmployee(UUID id) {
+//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -72,7 +70,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (Long.parseLong(element.getAttribute("id")) == id) {
+                if (UUID.fromString(element.getAttribute("id")) == id) {
                     return getEmployeeFromXML(element);
                 }
             }
@@ -85,7 +83,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
     private Employee getEmployeeFromXML(Element element) {
         return new Employee(
-                Long.parseLong(element.getAttribute("id")),
+                UUID.fromString(element.getAttribute("id")),
                 element.getElementsByTagName("name").item(0).getTextContent(),
                 element.getElementsByTagName("surname").item(0).getTextContent(),
                 element.getElementsByTagName("phone").item(0).getTextContent(),
@@ -111,11 +109,60 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element workLabel = (Element) node;
-                workLabels.add(new WorkLabelManagerImpl().getWorkLabel(Long.parseLong(workLabel.getAttribute("id"))));
+                workLabels.add(
+                        new WorkLabelManagerImpl().getWorkLabel(UUID.fromString(workLabel.getAttribute("id"))));
             }
         }
 
         return workLabels;
+    }
+
+    private List<WorkLabel> getWorkLabels(Employee employee) {
+        return new WorkLabelManagerImpl()
+                .getAllWorkLabels()
+                .stream()
+                .filter(workLabel -> employee.getId().equals(workLabel.getEmployeeId()))
+                .toList();
+    }
+
+    @Override
+    public void setWorkPoints(Employee employee) {
+        setElement(
+                document,
+                employee.getId(),
+                "workpoint",
+                String.valueOf(getNumberOfWorkPoint(employee)),
+                EMPLOYEES_XML,
+                MAIN_ELEMENT);
+        setElement(
+                document,
+                employee.getId(),
+                "workpoint_without_en",
+                String.valueOf(getNumberOfWorkPointWithoutEn(employee)),
+                EMPLOYEES_XML,
+                MAIN_ELEMENT);
+
+    }
+
+    private double getNumberOfWorkPoint(Employee employee) {
+        return calculateWorkPoints(getWorkLabels(employee));
+    }
+
+    private double calculateWorkPoints(List<WorkLabel> workLabels) {
+        double workPoints = 0.0;
+
+        for (WorkLabel workLabel : workLabels) {
+            workPoints += workLabel.getPoints();
+        }
+        return workPoints;
+    }
+
+
+    private double getNumberOfWorkPointWithoutEn(Employee employee) {
+        return calculateWorkPoints(getWorkLabels(employee)
+                .stream()
+                .filter(workLabel -> Language.CZ.equals(workLabel.getLanguage()))
+                .toList());
     }
 
     private List<String> getEmployeeXmlDomList() {
@@ -129,84 +176,6 @@ public class EmployeeManagerImpl extends EmployeeManager {
                 "workpoint",
                 "workpoint_without_en",
                 "worklabels");
-//        List<String> employeeItems = employee.getEmployeeItems();
-//        Element employeeElement = document.createElement("employee");
-//        employeeElement.setAttribute("id", employee.getId().toString());
-//
-//
-//        for (int index = 0; index < xmlDom.size(); index++) {
-//            Element newElement = document.createElement(xmlDom.get(index));
-//
-//            if (index == xmlDom.size() - 1) {
-//                if (employee.getWorkLabels().size() > 0) {
-//
-//                    for (WorkLabel workLabel : employee.getWorkLabels()) {
-//                        Element label = document.createElement("worklabel");
-//                        label.setAttribute("id", workLabel.getId().toString());
-//                        newElement.appendChild(label);
-//                    }
-//                    employeeElement.appendChild(newElement);
-//                }
-//            }else {
-//                newElement.appendChild(document.createTextNode(employeeItems.get(index)));
-//                employeeElement.appendChild(newElement);
-//            }
-//        }
 
-//
-//        Element newElement = document.createElement("name");
-//        newElement.appendChild(document.createTextNode(employee.getName()));
-//
-//        employeeElement.appendChild(newElement);
-//
-//        newElement = document.createElement("surname");
-//        newElement.appendChild(document.createTextNode(employee.getSurname()));
-//
-//        employeeElement.appendChild(newElement);
-//
-//        newElement = document.createElement("phone");
-//        newElement.appendChild(document.createTextNode(employee.getPhone()));
-//
-//        employeeElement.appendChild(newElement);
-//
-//        newElement = document.createElement("email");
-//        newElement.appendChild(document.createTextNode(employee.getEmail()));
-//
-//        employeeElement.appendChild(newElement);
-//
-//        newElement = document.createElement("jobtime");
-//        newElement.appendChild(document.createTextNode(employee.getJobTime().toString()));
-//
-//        employeeElement.appendChild(newElement);
-//
-//        newElement = document.createElement("isemployee");
-//        newElement.appendChild(document.createTextNode(employee.getIsEmployee().toString()));
-//
-//        employeeElement.appendChild(newElement);
-//
-//        newElement = document.createElement("workpoint");
-//        newElement.appendChild(document.createTextNode(String.valueOf(employee.getWorkPoint())));
-//
-//        employeeElement.appendChild(newElement);
-//
-//        newElement = document.createElement("workpoint_without_en");
-//        newElement.appendChild(document.createTextNode(String.valueOf(employee.getWorkPointWithoutEN())));
-//
-//        employeeElement.appendChild(newElement);
-//
-//        if (employee.getWorkLabels().size() > 0) {
-//            newElement = document.createElement("worklabels");
-//
-//            for (WorkLabel workLabel : employee.getWorkLabels()) {
-//                Element label = document.createElement("worklabel");
-//                label.setAttribute("id", workLabel.getId().toString());
-//                newElement.appendChild(label);
-//            }
-//
-//            employeeElement.appendChild(newElement);
-//        }
-//        return employeeElement;
     }
-
-
 }

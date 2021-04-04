@@ -1,17 +1,76 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <worklabels>
-    <worklabel id="1">
-        <name>Cvičení AP8PO 1</name>
-        <employee>1</employee>
-        <subject>1</subject>
+
+    <worklabel id="6574ab00-2d1c-4892-a5c3-bba614b68ac3">
+        <name>EXERCISE Pokročilé programování 1</name>
+        <employee>4a82b795-9d0e-4070-8252-4da0ff5bf4c0</employee>
+        <subject>3239e257-0f49-4e5e-96bc-26b66de6a81a</subject>
         <language>CZ</language>
-        <point></point>
-        <number_of_students>30</number_of_students>
+        <point>18.0</point>
+        <number_of_students>19</number_of_students>
         <lesson_type>EXERCISE</lesson_type>
-        <completion></completion>
-        <number_of_weeks></number_of_weeks>
-        <number_of_hours></number_of_hours>
+        <completion/>
+        <number_of_weeks>1</number_of_weeks>
+        <number_of_hours>15</number_of_hours>
     </worklabel>
-
-
+    <worklabel id="92edd9a1-cc1b-4318-9922-dabf91c958b8">
+        <name>EXERCISE Pokročilé programování 2</name>
+        <employee>4a82b795-9d0e-4070-8252-4da0ff5bf4c0</employee>
+        <subject>3239e257-0f49-4e5e-96bc-26b66de6a81a</subject>
+        <language>CZ</language>
+        <point>18.0</point>
+        <number_of_students>19</number_of_students>
+        <lesson_type>EXERCISE</lesson_type>
+        <completion/>
+        <number_of_weeks>1</number_of_weeks>
+        <number_of_hours>15</number_of_hours>
+    </worklabel>
+    <worklabel id="c7511e48-f801-448f-a704-f648ac8d11f5">
+        <name>EXERCISE Pokročilé programování 3</name>
+        <employee>4a82b795-9d0e-4070-8252-4da0ff5bf4c0</employee>
+        <subject>3239e257-0f49-4e5e-96bc-26b66de6a81a</subject>
+        <language>CZ</language>
+        <point>18.0</point>
+        <number_of_students>19</number_of_students>
+        <lesson_type>EXERCISE</lesson_type>
+        <completion/>
+        <number_of_weeks>1</number_of_weeks>
+        <number_of_hours>15</number_of_hours>
+    </worklabel>
+    <worklabel id="513dcb54-6254-4125-ab81-f60c34d6fd35">
+        <name>EXERCISE Pokročilé programování 4</name>
+        <employee>4a82b795-9d0e-4070-8252-4da0ff5bf4c0</employee>
+        <subject>3239e257-0f49-4e5e-96bc-26b66de6a81a</subject>
+        <language>CZ</language>
+        <point>18.0</point>
+        <number_of_students>18</number_of_students>
+        <lesson_type>EXERCISE</lesson_type>
+        <completion/>
+        <number_of_weeks>1</number_of_weeks>
+        <number_of_hours>15</number_of_hours>
+    </worklabel>
+    <worklabel id="e5819981-4b73-4af6-88f1-f840dadd9914">
+        <name>EXERCISE Pokročilé programování 5</name>
+        <employee>4a82b795-9d0e-4070-8252-4da0ff5bf4c0</employee>
+        <subject>3239e257-0f49-4e5e-96bc-26b66de6a81a</subject>
+        <language>CZ</language>
+        <point>18.0</point>
+        <number_of_students>18</number_of_students>
+        <lesson_type>EXERCISE</lesson_type>
+        <completion/>
+        <number_of_weeks>1</number_of_weeks>
+        <number_of_hours>15</number_of_hours>
+    </worklabel>
+    <worklabel id="46711e81-0873-4d8f-99d1-9c687dffc498">
+        <name>KL Pokročilé programování</name>
+        <employee>4a82b795-9d0e-4070-8252-4da0ff5bf4c0</employee>
+        <subject>3239e257-0f49-4e5e-96bc-26b66de6a81a</subject>
+        <language>CZ</language>
+        <point>27.9</point>
+        <number_of_students>93</number_of_students>
+        <lesson_type/>
+        <completion>KL</completion>
+        <number_of_weeks>0</number_of_weeks>
+        <number_of_hours>0</number_of_hours>
+    </worklabel>
 </worklabels>

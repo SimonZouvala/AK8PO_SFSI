@@ -15,7 +15,9 @@ public class PointWeights {
     private double gradedCreditEn;
     private double examinationEN;
 
-    public PointWeights(double lecture, double seminar, double exercise, double credit, double gradedCredit, double examination, double lectureEn, double seminarEn, double exerciseEn, double creditEn, double gradedCreditEn, double examinationEN) {
+    public PointWeights(double lecture, double seminar, double exercise, double credit, double gradedCredit,
+                        double examination, double lectureEn, double seminarEn, double exerciseEn, double creditEn,
+                        double gradedCreditEn, double examinationEN) {
         this.lecture = lecture;
         this.seminar = seminar;
         this.exercise = exercise;

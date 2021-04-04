@@ -7,12 +7,13 @@ import fai.utb.db.entity.entityEnum.LessonType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class WorkLabel {
 
-    private long id;
+    private UUID id;
     private String name;
-    private Long employeeId;
+    private UUID employeeId;
     private Subject subject;
     private Language language;
     private double points;
@@ -22,57 +23,15 @@ public class WorkLabel {
     private int numberOfWeeks;
     private int numberOfHours;
 
-    public WorkLabel(long id, String name, Long employeeId, Subject subject, Language language, double points, int numberOfStudents, LessonType lessonType, Completion completion, int numberOfWeeks, int numberOfHours) {
-        this.id = id;
-        this.name = name;
-        this.employeeId = employeeId;
-        this.subject = subject;
-        this.language = language;
-        this.points = points;
-        this.numberOfStudents = numberOfStudents;
-        this.lessonType = lessonType;
-        this.completion = completion;
-        this.numberOfWeeks = numberOfWeeks;
-        this.numberOfHours = numberOfHours;
-    }
-
-    public WorkLabel(String name, Subject subject, Language language) {
-        this.name = name;
-        this.subject = subject;
-        this.language = language;
-    }
-
-    public WorkLabel(String name, Language language, LessonType lessonType, int numberOfWeeks, int numberOfHours) {
-        this.name = name;
-        this.language = language;
-        this.lessonType = lessonType;
-        this.numberOfWeeks = numberOfWeeks;
-        this.numberOfHours = numberOfHours;
-    }
-
-    public WorkLabel(String name, Language language, int numberOfStudents, Completion completion) {
-        this.name = name;
-        this.language = language;
-        this.numberOfStudents = numberOfStudents;
-        this.completion = completion;
-        this.numberOfHours = 0;
-        this.numberOfWeeks = 0;
-    }
-
-    public WorkLabel(long id, String name, Language language, int numberOfStudents) {
+    public WorkLabel(UUID id, String name, Language language, int numberOfStudents) {
         this.id = id;
         this.name = name;
         this.language = language;
         this.numberOfStudents = numberOfStudents;
     }
 
-    public WorkLabel(long id, String name, Language language) {
-        this.id = id;
-        this.name = name;
-        this.language = language;
-    }
-
-    public WorkLabel(long id, String name, Subject subject, Language language, LessonType lessonType, int numberOfWeeks) {
+    public WorkLabel(UUID id, String name, Subject subject, Language language,
+                     LessonType lessonType, int numberOfWeeks) {
         this.id = id;
         this.name = name;
         this.subject = subject;
@@ -81,7 +40,8 @@ public class WorkLabel {
         this.numberOfWeeks = numberOfWeeks;
     }
 
-    public WorkLabel(long id, String name, Subject subject, Language language, int numberOfStudents, Completion completion) {
+    public WorkLabel(UUID id, String name, Subject subject, Language language,
+                     int numberOfStudents, Completion completion) {
         this.id = id;
         this.name = name;
         this.subject = subject;
@@ -90,11 +50,11 @@ public class WorkLabel {
         this.completion = completion;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -106,11 +66,11 @@ public class WorkLabel {
         this.name = name;
     }
 
-    public Long getEmployeeId() {
+    public UUID getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(Long employeeId) {
+    public void setEmployeeId(UUID employeeId) {
         this.employeeId = employeeId;
     }
 
@@ -179,10 +139,7 @@ public class WorkLabel {
     }
 
     public List<String> getWorklabelsItemsOrIds() {
-
-
         return Arrays.asList(
-                String.valueOf(getId()),
                 getName(),
                 getEmployeeId() == null ? "" : getEmployeeId().toString(),
                 getSubject() == null ? "" : String.valueOf(getSubject().getId()),
@@ -201,7 +158,9 @@ public class WorkLabel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkLabel workLabel = (WorkLabel) o;
-        return Objects.equals(id, workLabel.id) && Objects.equals(name, workLabel.name) && language == workLabel.language;
+        return Objects.equals(id, workLabel.id)
+                && Objects.equals(name, workLabel.name)
+                && language == workLabel.language;
     }
 
     @Override
@@ -214,15 +173,15 @@ public class WorkLabel {
         return "WorkLabel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", employeeId=" + employeeId +
-                ", subject=" + subject +
                 ", language=" + language +
-                ", points=" + points +
                 ", numberOfStudents=" + numberOfStudents +
                 ", lessonType=" + lessonType +
                 ", completion=" + completion +
                 ", numberOfWeeks=" + numberOfWeeks +
                 ", numberOfHours=" + numberOfHours +
+                ", points=" + points +
+                ", employeeId=" + employeeId +
+                ", subject=" + subject +
                 '}';
     }
 }

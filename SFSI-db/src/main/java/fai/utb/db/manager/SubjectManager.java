@@ -3,6 +3,7 @@ package fai.utb.db.manager;
 import fai.utb.db.entity.Subject;
 
 import java.util.List;
+import java.util.UUID;
 
 public abstract class SubjectManager  extends BasicManager{
 
@@ -16,5 +17,5 @@ public abstract class SubjectManager  extends BasicManager{
 
     public abstract Subject getSubjectByAcronym(String acronym);
 
-    public abstract Subject getSubject(Long id);
+    public abstract Subject getSubject(UUID id);
 }

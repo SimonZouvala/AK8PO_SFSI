@@ -4,6 +4,7 @@ package fai.utb.db.manager;
 import fai.utb.db.entity.Employee;
 
 import java.util.List;
+import java.util.UUID;
 
 public abstract class EmployeeManager extends BasicManager{
 
@@ -14,6 +15,8 @@ public abstract class EmployeeManager extends BasicManager{
 
     public abstract List<Employee> getAllEmployees();
 
-    public abstract Employee getEmployee(Long id);
+    public abstract Employee getEmployee(UUID id);
+
+    public abstract void setWorkPoints(Employee employee);
 
 }

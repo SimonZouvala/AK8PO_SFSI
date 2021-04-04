@@ -1,20 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<subjects>
-    <subject id="1">
-        <name>Pokročilé programování</name>
-        <acronym>AK8PO</acronym>
-        <teacher>Vařacha Pavel</teacher>
-        <capacity-lecture>0</capacity-lecture>
-        <capacity-seminar>0</capacity-seminar>
-        <capacity-exercise>15</capacity-exercise>
-        <capacity-classroom>30</capacity-classroom>
-        <number_of_weeks>1</number_of_weeks>
-        <completion>KL</completion>
-        <language>CZ</language>
-        <groups>
-            <group id="1"/>
-            <group id="2"/>
-        </groups>
-    </subject>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><subjects>
 
-</subjects>
+<subject id="3239e257-0f49-4e5e-96bc-26b66de6a81a"><name>Pokročilé programování</name><acronym>AK8PO</acronym><teacher>Vařacha Pavel</teacher><capacity_lecture>0</capacity_lecture><capacity_seminar>0</capacity_seminar><capacity_exercise>15</capacity_exercise><capacity_classroom>23</capacity_classroom><number_of_weeks>1</number_of_weeks><completion>KL</completion><language>CZ</language><groups><group id="f4f247a2-0467-4ad9-9db4-130d24903e74"/><group id="2923815e-9208-4b40-afb4-d97021f176d4"/></groups></subject></subjects>

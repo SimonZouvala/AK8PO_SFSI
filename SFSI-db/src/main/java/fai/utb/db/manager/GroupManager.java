@@ -3,6 +3,7 @@ package fai.utb.db.manager;
 import fai.utb.db.entity.Group;
 
 import java.util.List;
+import java.util.UUID;
 
 public abstract class GroupManager  extends BasicManager{
 
@@ -14,6 +15,6 @@ public abstract class GroupManager  extends BasicManager{
 
     public abstract List<Group> getAllGroup();
 
-    public abstract Group getGroup(Long id);
+    public abstract Group getGroup(UUID id);
 
 }

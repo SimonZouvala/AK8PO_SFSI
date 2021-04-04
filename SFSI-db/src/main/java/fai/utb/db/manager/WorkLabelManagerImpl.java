@@ -20,22 +20,20 @@ import java.util.UUID;
 
 public class WorkLabelManagerImpl extends WorkLabelManager {
 
-    private SubjectManager subjectManager;
-    private Document document;
-    private PointWeights pointWeights;
+    private final Document document;
+    private final PointWeights pointWeights;
     private static final String MAIN_ELEMENT = "worklabel";
 
     public WorkLabelManagerImpl() {
         this.document = getWorklabelsDocument();
         this.pointWeights = getPointWeights();
-        subjectManager = new SubjectManagerImpl();
     }
 
     private PointWeights getPointWeights() {
         Document pointDocument = getData("PointWeights.xml");
         XPath xPath = XPathFactory.newInstance().newXPath();
-
         PointWeights newPointWeights = null;
+
         try {
             newPointWeights = new PointWeights(
                     Double.parseDouble(
@@ -83,70 +81,64 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     @Override
     public void generateWorkLabels() {
         List<WorkLabel> allWorkLabels = getAllWorkLabels();
-        List<Subject> subjectList = subjectManager.getAllSubject();
+        List<Subject> allSubjects = new SubjectManagerImpl().getAllSubject();
 
-        int numberOfLectures = 0;
-        int numberOfSeminars = 0;
-        int numberOfExercises = 0;
-
-        for (Subject subject : subjectList) {
+        for (Subject subject : allSubjects) {
             int totalNumberOfStudentsInSubject = 0;
 
             for (Group group : subject.getGroups()) {
                 totalNumberOfStudentsInSubject += group.getQuantity();
             }
 
+            int numberOfLabels =
+                    (int) Math.ceil((double) totalNumberOfStudentsInSubject / subject.getClassroomCapacity());
+
             List<WorkLabel> currentWorkLabels =
                     allWorkLabels
                             .stream()
-                            .filter(workLabel -> workLabel.getSubject().equals(subject))
+                            .filter(workLabel -> subject.equals(workLabel.getSubject()))
                             .toList();
 
             if (subject.getLectureCapacity() > 0) {
-                numberOfLectures = 1;
+
                 checkOrCreateWorkLabelsByLessonType(
                         currentWorkLabels,
                         subject,
                         LessonType.LECTURE,
-                        numberOfLectures,
+                        1,
                         totalNumberOfStudentsInSubject);
             }
             if (subject.getSeminarCapacity() > 0) {
-                numberOfSeminars = (int) Math.ceil(
-                        (double) totalNumberOfStudentsInSubject / subject.getClassroomCapacity());
+
                 checkOrCreateWorkLabelsByLessonType(
                         currentWorkLabels,
                         subject,
                         LessonType.SEMINAR,
-                        numberOfSeminars,
+                        numberOfLabels,
                         totalNumberOfStudentsInSubject);
             }
             if (subject.getExerciseCapacity() > 0) {
-                numberOfExercises = (int) Math.ceil(
-                        (double) totalNumberOfStudentsInSubject / subject.getClassroomCapacity());
+
                 checkOrCreateWorkLabelsByLessonType(
                         currentWorkLabels,
                         subject,
                         LessonType.EXERCISE,
-                        numberOfExercises,
+                        numberOfLabels,
                         totalNumberOfStudentsInSubject);
             }
+
             checkOrCreateWorkLabelsByCompletion(
                     currentWorkLabels,
                     subject,
                     subject.getCompletion(),
                     totalNumberOfStudentsInSubject);
-
-
         }
-
-
     }
 
     private int getNumberOfLabelsByLessonType(List<WorkLabel> workLabels, LessonType lessonType) {
         return workLabels
                 .stream()
-                .filter(workLabel -> workLabel.getLessonType().equals(lessonType))
+                .filter(workLabel -> lessonType.equals(workLabel.getLessonType()))
                 .toList()
                 .size();
     }
@@ -154,7 +146,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     private int getNumberOfLabelsByCompletion(List<WorkLabel> workLabels, Completion completion) {
         return workLabels
                 .stream()
-                .filter(workLabel -> workLabel.getCompletion().equals(completion))
+                .filter(workLabel -> completion.equals(workLabel.getCompletion()))
                 .toList()
                 .size();
     }
@@ -163,29 +155,31 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                                                      LessonType lessonType, int numberOfLessonType,
                                                      int totalNumberOfStudents) {
         int numberOfLabels = getNumberOfLabelsByLessonType(workLabels, lessonType);
-
+        int insertNumber = (int) Math.ceil((double) totalNumberOfStudents / (numberOfLessonType));
 
         if (numberOfLessonType != numberOfLabels) {
-            totalNumberOfStudents = totalNumberOfStudents - subject.getClassroomCapacity() * numberOfLabels;
-            for (int index = 0; index < numberOfLessonType - numberOfLabels; index++) {
+            int restNumberOfStudents = totalNumberOfStudents - insertNumber * numberOfLabels;
 
+            for (int index = 0; index < numberOfLessonType - numberOfLabels; index++) {
+                insertNumber =
+                        (int) Math.ceil((double) restNumberOfStudents / (numberOfLessonType - numberOfLabels - index));
                 WorkLabel newWorkLabel = new WorkLabel(
-                        UUID.randomUUID().getMostSignificantBits(),
-                        lessonType.toString() + " " + subject.getName() + " " + numberOfLabels,
+                        UUID.randomUUID(),
+                        lessonType.toString() + " " + subject.getName() + " " + (numberOfLabels + index + 1),
                         subject,
                         subject.getLanguage(),
                         lessonType,
                         subject.getNumberOfWeeks());
-                if (subject.getClassroomCapacity() >= totalNumberOfStudents || lessonType.equals(LessonType.LECTURE)) {
-                    newWorkLabel.setNumberOfStudents(totalNumberOfStudents);
+
+                if (subject.getClassroomCapacity() >= restNumberOfStudents || lessonType.equals(LessonType.LECTURE)) {
+                    newWorkLabel.setNumberOfStudents(restNumberOfStudents);
                 } else {
-                    int numberOfStudents = (int) Math.ceil(
-                            (double) totalNumberOfStudents / (numberOfLessonType - numberOfLabels));
-                    newWorkLabel.setNumberOfStudents(numberOfStudents);
+                    newWorkLabel.setNumberOfStudents(insertNumber);
                 }
+                restNumberOfStudents -= insertNumber;
+
                 newWorkLabel.setNumberOfHours(getNumberOfHoursByLessonType(newWorkLabel));
                 newWorkLabel.setPoints(generatePoints(newWorkLabel));
-
                 createWorkLabel(newWorkLabel);
             }
         }
@@ -194,8 +188,9 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     private void checkOrCreateWorkLabelsByCompletion(List<WorkLabel> workLabels, Subject subject,
                                                      Completion completion, int totalNumberOfStudents) {
         int numberOfLabels = getNumberOfLabelsByCompletion(workLabels, completion);
+
         if (numberOfLabels == 0) {
-            WorkLabel newWorkLabel = new WorkLabel(UUID.randomUUID().getMostSignificantBits(),
+            WorkLabel newWorkLabel = new WorkLabel(UUID.randomUUID(),
                     completion.toString() + " " + subject.getName(),
                     subject,
                     subject.getLanguage(),
@@ -207,18 +202,109 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     }
 
     @Override
-    public void generateWorkLabelsAfterUpgrade() {
+    public void generateWorkLabelsAfterUpgrade(Group group) {
+        List<Subject> subjects =
+                new SubjectManagerImpl()
+                        .getAllSubject()
+                        .stream()
+                        .filter(subject -> subject.getGroups().contains(group))
+                        .toList();
+        for (Subject subject : subjects) {
+            generateWorkLabelsAfterUpgrade(subject);
+        }
+    }
+
+    @Override
+    public void generateWorkLabelsAfterUpgrade(Subject subject) {
+
+        List<WorkLabel> currentWorkLabels = getAllWorkLabels()
+                .stream()
+                .filter(workLabel -> workLabel.getSubject().equals(subject))
+                .toList();
+        int totalNumberOfStudentsInSubject = 0;
+
+        for (Group group : subject.getGroups()) {
+            totalNumberOfStudentsInSubject += group.getQuantity();
+        }
+
+        int numberOfLabels =
+                (int) Math.ceil((double) totalNumberOfStudentsInSubject / subject.getClassroomCapacity());
+
+        System.out.println(numberOfLabels);
+        changeNumberOfStudentsInWorkLabels(currentWorkLabels, totalNumberOfStudentsInSubject, numberOfLabels);
+    }
+
+    private void changeNumberOfStudentsInWorkLabels(List<WorkLabel> workLabels, int totalNumberOfStudents,
+                                                    int numberOfLabels) {
+        generateWorkLabels();
+        changeNumberOfStudentsInWorkLabel(
+                workLabels
+                        .stream()
+                        .filter(workLabel -> LessonType.LECTURE.equals(workLabel.getLessonType()))
+                        .toList(),
+                totalNumberOfStudents);
+        changeNumberOfStudentsInWorkLabel(
+                workLabels
+                        .stream()
+                        .filter(workLabel -> LessonType.SEMINAR.equals(workLabel.getLessonType()))
+                        .toList(),
+                totalNumberOfStudents,
+                numberOfLabels);
+        changeNumberOfStudentsInWorkLabel(
+                workLabels
+                        .stream()
+                        .filter(workLabel -> LessonType.EXERCISE.equals(workLabel.getLessonType()))
+                        .toList(),
+                totalNumberOfStudents,
+                numberOfLabels);
+        changeNumberOfStudentsInWorkLabel(
+                workLabels
+                        .stream()
+                        .filter(workLabel -> workLabel.getLessonType() == null)
+                        .toList(),
+                totalNumberOfStudents);
+    }
+
+    private void changeNumberOfStudentsInWorkLabel(List<WorkLabel> workLabels, int totalNumberOfStudents,
+                                                   int numberOfLabels) {
+        int restNumberOfStudents = totalNumberOfStudents;
+        for (int index = 0; index < workLabels.size(); index++) {
+            int insetNumberOfStudents = (int) Math.ceil((double) restNumberOfStudents / (numberOfLabels - index));
+
+            setElement(
+                    document,
+                    workLabels.get(index).getId(),
+                    "number_of_students",
+                    String.valueOf(insetNumberOfStudents),
+                    WORK_LABELS_XML,
+                    MAIN_ELEMENT);
+            restNumberOfStudents -= insetNumberOfStudents;
+            System.out.println(insetNumberOfStudents + "  zbývá  " + restNumberOfStudents + "    ze   " + totalNumberOfStudents);
+        }
+    }
+
+    private void changeNumberOfStudentsInWorkLabel(List<WorkLabel> workLabels, int totalNumberOfStudents) {
+
+        for (WorkLabel workLabel : workLabels) {
+            setElement(
+                    document,
+                    workLabel.getId(),
+                    "number_of_students",
+                    String.valueOf(totalNumberOfStudents),
+                    WORK_LABELS_XML,
+                    MAIN_ELEMENT);
+        }
     }
 
     @Override
     public void createWorkLabel(WorkLabel workLabel) {
-        Element worklabelElement = getItemToXML(
+        Element workLabelElement = getItemToXML(
                 document,
                 getWorkLabelXmlDomList(),
                 workLabel.getWorklabelsItemsOrIds(),
                 workLabel.getId(),
                 MAIN_ELEMENT);
-        create(document, worklabelElement, WORK_LABELS_XML);
+        create(document, workLabelElement, WORK_LABELS_XML);
     }
 
     @Override
@@ -235,7 +321,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                 String.valueOf(employee.getId()),
                 WORK_LABELS_XML,
                 MAIN_ELEMENT);
-
     }
 
     @Override
@@ -251,7 +336,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     @Override
     public List<WorkLabel> getAllWorkLabels() {
-        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
         List<WorkLabel> workLabels = new ArrayList<>();
 
@@ -268,8 +353,8 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
 
     @Override
-    public WorkLabel getWorkLabel(Long id) {
-        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+    public WorkLabel getWorkLabel(UUID id) {
+//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -277,7 +362,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (Long.parseLong(element.getAttribute("id")) == id) {
+                if (UUID.fromString(element.getAttribute("id")) == id) {
                     return getWorkLabelFromXML(element);
                 }
             }
@@ -288,7 +373,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     private WorkLabel getWorkLabelFromXML(Element element) {
 
         WorkLabel workLabel = new WorkLabel(
-                Long.parseLong(element.getAttribute("id")),
+                UUID.fromString(element.getAttribute("id")),
                 element.getElementsByTagName("name").item(0).getTextContent(),
                 Language.valueOf(element.getElementsByTagName("language").item(0).getTextContent()),
                 Integer.parseInt(element.getElementsByTagName("number_of_students").item(0).getTextContent()));
@@ -304,13 +389,12 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         return workLabel;
     }
 
-    private Long getEmployeeIdFromXml(Element element) {
+    private UUID getEmployeeIdFromXml(Element element) {
         String employeeId = element.getElementsByTagName("employee").item(0).getTextContent();
         if (employeeId.equals("")) {
             return null;
         }
-        return Long.parseLong(employeeId);
-
+        return UUID.fromString(employeeId);
     }
 
     private Subject getSubjectFormXml(Element element) {
@@ -318,8 +402,8 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         if (subject.equals("")) {
             return null;
         }
-        return subjectManager.getSubject(
-                Long.parseLong(
+        return new SubjectManagerImpl().getSubject(
+                UUID.fromString(
                         element.getElementsByTagName("subject").item(0).getTextContent()));
     }
 
@@ -385,14 +469,13 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     private int getNumberOfHoursByLessonType(WorkLabel workLabel) {
         LessonType lessonType = workLabel.getLessonType();
-
-        if (lessonType.equals(LessonType.LECTURE)) {
+        if (LessonType.LECTURE.equals(lessonType)) {
             return workLabel.getSubject().getLectureCapacity();
         }
-        if (lessonType.equals(LessonType.SEMINAR)) {
+        if (LessonType.SEMINAR.equals(lessonType)) {
             return workLabel.getSubject().getSeminarCapacity();
         }
-        if (lessonType.equals(LessonType.EXERCISE)) {
+        if (LessonType.EXERCISE.equals(lessonType)) {
             return workLabel.getSubject().getExerciseCapacity();
         }
         return 0;
@@ -448,6 +531,5 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                 "completion",
                 "number_of_weeks",
                 "number_of_hours");
-
     }
 }

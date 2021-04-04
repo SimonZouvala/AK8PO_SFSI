@@ -11,17 +11,16 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class SubjectManagerImpl extends SubjectManager {
 
-    private final GroupManagerImpl groupManager;
-    private Document document;
+    private final Document document;
     private static final String MAIN_ELEMENT = "subject";
 
 
     public SubjectManagerImpl() {
         this.document = getSubjectsDocument();
-        groupManager = new GroupManagerImpl();
     }
 
     @Override
@@ -42,10 +41,13 @@ public class SubjectManagerImpl extends SubjectManager {
         setElement(
                 document,
                 subject.getId(),
-                "capacity-classroom",
+                "capacity_classroom",
                 String.valueOf(newCapacity),
                 SUBJECTS_XML,
                 MAIN_ELEMENT);
+
+        new WorkLabelManagerImpl().generateWorkLabelsAfterUpgrade(getSubject(subject.getId()));
+
     }
 
     @Override
@@ -55,7 +57,7 @@ public class SubjectManagerImpl extends SubjectManager {
 
     @Override
     public List<Subject> getAllSubject() {
-        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
         List<Subject> subjects = new ArrayList<>();
 
@@ -77,8 +79,8 @@ public class SubjectManagerImpl extends SubjectManager {
     }
 
     @Override
-    public Subject getSubject(Long id) {
-        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+    public Subject getSubject(UUID id) {
+//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -86,7 +88,7 @@ public class SubjectManagerImpl extends SubjectManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (Long.parseLong(element.getAttribute("id")) == id) {
+                if (UUID.fromString(element.getAttribute("id")) == id) {
                     return getSubjectFromXML(element);
                 }
             }
@@ -96,14 +98,14 @@ public class SubjectManagerImpl extends SubjectManager {
 
     private Subject getSubjectFromXML(Element element) {
         return new Subject(
-                Long.parseLong(element.getAttribute("id")),
+                UUID.fromString(element.getAttribute("id")),
                 element.getElementsByTagName("name").item(0).getTextContent(),
                 element.getElementsByTagName("acronym").item(0).getTextContent(),
                 element.getElementsByTagName("teacher").item(0).getTextContent(),
-                Integer.parseInt(element.getElementsByTagName("capacity-lecture").item(0).getTextContent()),
-                Integer.parseInt(element.getElementsByTagName("capacity-seminar").item(0).getTextContent()),
-                Integer.parseInt(element.getElementsByTagName("capacity-exercise").item(0).getTextContent()),
-                Integer.parseInt(element.getElementsByTagName("capacity-classroom").item(0).getTextContent()),
+                Integer.parseInt(element.getElementsByTagName("capacity_lecture").item(0).getTextContent()),
+                Integer.parseInt(element.getElementsByTagName("capacity_seminar").item(0).getTextContent()),
+                Integer.parseInt(element.getElementsByTagName("capacity_exercise").item(0).getTextContent()),
+                Integer.parseInt(element.getElementsByTagName("capacity_classroom").item(0).getTextContent()),
                 Integer.parseInt(element.getElementsByTagName("number_of_weeks").item(0).getTextContent()),
                 Completion.valueOf(element.getElementsByTagName("completion").item(0).getTextContent()),
                 Language.valueOf(element.getElementsByTagName("language").item(0).getTextContent()),
@@ -120,7 +122,7 @@ public class SubjectManagerImpl extends SubjectManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element group = (Element) node;
-                groups.add(groupManager.getGroup(Long.parseLong(group.getAttribute("id"))));
+                groups.add(new GroupManagerImpl().getGroup(UUID.fromString(group.getAttribute("id"))));
             }
         }
         return groups;
@@ -129,40 +131,16 @@ public class SubjectManagerImpl extends SubjectManager {
     private List<String> getSubjectXmlDomList() {
         return Arrays.asList(
                 "name",
-                "surname",
-                "phone",
-                "email",
-                "jobtime",
-                "isemployee",
-                "workpoint",
-                "workpoint_without_en",
-                "worklabels");
-//        List<String> subjectItems = subject.getSubjectItems();
-//        Element subjectElement = document.createElement("subject");
-//        subjectElement.setAttribute("id", subject.getId().toString());
-//
-//
-//        for (int index = 0; index < xmlDom.size(); index++) {
-//            Element newElement = document.createElement(xmlDom.get(index));
-//
-//            if (index == xmlDom.size() - 1) {
-//                if (subject.getGroupList().size() > 0) {
-//
-//                    for (Group group : subject.getGroupList()) {
-//                        Element label = document.createElement("group");
-//                        label.setAttribute("id", group.getId().toString());
-//                        newElement.appendChild(label);
-//                    }
-//                    subjectElement.appendChild(newElement);
-//                }
-//            }else {
-//                newElement.appendChild(document.createTextNode(subjectItems.get(index)));
-//                subjectElement.appendChild(newElement);
-//            }
-//        }
-//        return subjectElement;
-//
-
+                "acronym",
+                "teacher",
+                "capacity_lecture",
+                "capacity_seminar",
+                "capacity_exercise",
+                "capacity_classroom",
+                "number_of_weeks",
+                "completion",
+                "language",
+                "groups");
     }
 
 }
