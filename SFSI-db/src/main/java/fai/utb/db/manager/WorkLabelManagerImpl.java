@@ -29,6 +29,10 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         this.pointWeights = getPointWeights();
     }
 
+    private Document getWorklabelsDocument() {
+        return getData(WORK_LABELS_XML);
+    }
+
     private PointWeights getPointWeights() {
         Document pointDocument = getData("PointWeights.xml");
         XPath xPath = XPathFactory.newInstance().newXPath();
@@ -76,6 +80,45 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
             e.printStackTrace();
         }
         return newPointWeights;
+    }
+
+
+    @Override
+    public void createWorkLabel(WorkLabel workLabel) {
+        Element workLabelElement = getItemToXML(
+                document,
+                getWorkLabelXmlDomList(),
+                workLabel.getWorklabelsItemsOrIds(),
+                workLabel.getId(),
+                MAIN_ELEMENT);
+        create(document, workLabelElement, WORK_LABELS_XML);
+    }
+
+    @Override
+    public void removeWorkLabels(WorkLabel workLabel) {
+        remove(document, workLabel.getId(), MAIN_ELEMENT, WORK_LABELS_XML);
+    }
+
+    @Override
+    public void addEmployeeToWorkLabel(Employee employee, WorkLabel workLabel) {
+        setElement(
+                document,
+                workLabel.getId(),
+                "employee",
+                String.valueOf(employee.getId()),
+                WORK_LABELS_XML,
+                MAIN_ELEMENT);
+    }
+
+    @Override
+    public void removeEmployeeFromWorkLabel(WorkLabel workLabel) {
+        setElement(
+                document,
+                workLabel.getId(),
+                "employee",
+                "",
+                WORK_LABELS_XML,
+                MAIN_ELEMENT);
     }
 
     @Override
@@ -296,43 +339,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         }
     }
 
-    @Override
-    public void createWorkLabel(WorkLabel workLabel) {
-        Element workLabelElement = getItemToXML(
-                document,
-                getWorkLabelXmlDomList(),
-                workLabel.getWorklabelsItemsOrIds(),
-                workLabel.getId(),
-                MAIN_ELEMENT);
-        create(document, workLabelElement, WORK_LABELS_XML);
-    }
-
-    @Override
-    public void removeWorkLabels(WorkLabel workLabel) {
-        remove(document, workLabel.getId(), MAIN_ELEMENT, "WorkLabels");
-    }
-
-    @Override
-    public void addEmployeeToWorkLabel(Employee employee, WorkLabel workLabel) {
-        setElement(
-                document,
-                workLabel.getId(),
-                "employee",
-                String.valueOf(employee.getId()),
-                WORK_LABELS_XML,
-                MAIN_ELEMENT);
-    }
-
-    @Override
-    public void removeEmployeeFromWorkLabel(WorkLabel workLabel) {
-        setElement(
-                document,
-                workLabel.getId(),
-                "employee",
-                "",
-                WORK_LABELS_XML,
-                MAIN_ELEMENT);
-    }
 
     @Override
     public List<WorkLabel> getAllWorkLabels() {

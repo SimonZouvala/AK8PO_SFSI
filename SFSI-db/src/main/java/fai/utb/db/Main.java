@@ -107,6 +107,17 @@ public class Main {
 
         employeeManager.setWorkPoints(e1);
 
+        for (WorkLabel workLabel: workLabelManager.getAllWorkLabels()){
+            workLabelManager.removeWorkLabels(workLabel);
+        }
+
+        subjectManager.remove(s1);
+        groupManager.remove(g1);
+        groupManager.remove(g2);
+        employeeManager.remove(e1);
+
+
+
 //        subjectManager.setSubjectCapacity(subjectManager.getSubject(1L),33);
 //        groupManager.setQuantity(groupManager.getGroup(1L),111);
 

@@ -1,5 +1,6 @@
 package fai.utb.db.manager;
 
+import fai.utb.db.entity.Group;
 import fai.utb.db.entity.Subject;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public abstract class SubjectManager  extends BasicManager{
     public abstract Subject getSubjectByAcronym(String acronym);
 
     public abstract Subject getSubject(UUID id);
+
+    public abstract void removeGroupFromSubjects(Group group);
 }

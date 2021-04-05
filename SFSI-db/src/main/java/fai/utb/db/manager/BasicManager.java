@@ -30,11 +30,10 @@ public class BasicManager {
 
     public Document getData(String xml) {
         Document document = null;
+
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-
-
             document = builder.parse(new File(xml));
         } catch (SAXException saxException) {
             saxException.printStackTrace();
@@ -50,32 +49,17 @@ public class BasicManager {
         return document;
     }
 
-    public Document getEmployeesDocument() {
-        return getData(EMPLOYEES_XML);
-    }
-
-    public Document getGroupsDocument() {
-        return getData(GROUPS_XML);
-    }
-
-    public Document getSubjectsDocument() {
-        return getData(SUBJECTS_XML);
-    }
-
-    public Document getWorklabelsDocument() {
-        return getData(WORK_LABELS_XML);
-    }
-
-
     public void remove(Document document, UUID id, String entity, String file) {
         NodeList nodeList = document.getElementsByTagName(entity);
+//        System.out.println(document.toString() + "     " + id + " ---- " + entity + " : " + file);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
             Node node = nodeList.item(index);
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (UUID.fromString(element.getAttribute("id")) == id) {
+
+                if (UUID.fromString(element.getAttribute("id")).equals(id)) {
                     document.getDocumentElement().removeChild(node);
                 }
             }
@@ -93,6 +77,7 @@ public class BasicManager {
     public void saveChangesToXML(Document document, String xml) {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer;
+
         try {
             transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(document);
@@ -124,8 +109,6 @@ public class BasicManager {
         }
         document.getDocumentElement().normalize();
         saveChangesToXML(document, file);
-
-
     }
 
     public Element getItemToXML(Document document, List<String> xmlDom,
@@ -167,6 +150,4 @@ public class BasicManager {
         }
         return element;
     }
-
-
 }

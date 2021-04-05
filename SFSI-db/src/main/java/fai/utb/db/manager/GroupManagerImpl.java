@@ -24,6 +24,10 @@ public class GroupManagerImpl extends GroupManager {
         this.document = getGroupsDocument();
     }
 
+    private Document getGroupsDocument() {
+        return getData(GROUPS_XML);
+    }
+
     @Override
     public void create(Group group) {
         Element groupElement = getItemToXML(

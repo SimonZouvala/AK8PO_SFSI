@@ -23,6 +23,10 @@ public class SubjectManagerImpl extends SubjectManager {
         this.document = getSubjectsDocument();
     }
 
+    private Document getSubjectsDocument() {
+        return getData(SUBJECTS_XML);
+    }
+
     @Override
     public void create(Subject subject) {
         Element subjectElement = getItemToXML(
@@ -126,6 +130,22 @@ public class SubjectManagerImpl extends SubjectManager {
             }
         }
         return groups;
+    }
+
+
+    @Override
+    public void removeGroupFromSubjects(Group group) {
+        List<Subject> currentSubjects = getAllSubject()
+                .stream()
+                .filter(subject -> subject.getGroups().contains(group))
+                .toList();
+        for (Subject subject: currentSubjects) {
+            remove(subject);
+            List<Group> oldGroup = subject.getGroups();
+            oldGroup.remove(group);
+            subject.setGroups(oldGroup);
+            create(subject);
+        }
     }
 
     private List<String> getSubjectXmlDomList() {

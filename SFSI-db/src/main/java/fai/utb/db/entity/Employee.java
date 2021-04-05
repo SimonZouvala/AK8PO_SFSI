@@ -11,12 +11,12 @@ public class Employee {
     private String email;
     private Double jobTime;
     private Boolean isEmployee;
-    private int workPoint;
-    private int workPointWithoutEN;
+    private double workPoint;
+    private double workPointWithoutEN;
     private List<WorkLabel> workLabels;
 
     public Employee(UUID id, String name, String surname, String phone, String email, Double jobTime,
-                    Boolean isEmployee, int workPoint, int workPointWithoutEN, List<WorkLabel> workLabels) {
+                    Boolean isEmployee, double workPoint, double workPointWithoutEN, List<WorkLabel> workLabels) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -97,19 +97,19 @@ public class Employee {
         this.isEmployee = isEmployee;
     }
 
-    public int getWorkPoint() {
+    public double getWorkPoint() {
         return workPoint;
     }
 
-    public void setWorkPoint(int workPoint) {
+    public void setWorkPoint(double workPoint) {
         this.workPoint = workPoint;
     }
 
-    public int getWorkPointWithoutEN() {
+    public double getWorkPointWithoutEN() {
         return workPointWithoutEN;
     }
 
-    public void setWorkPointWithoutEN(int workPointWithoutEN) {
+    public void setWorkPointWithoutEN(double workPointWithoutEN) {
         this.workPointWithoutEN = workPointWithoutEN;
     }
 

@@ -24,6 +24,10 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
     }
 
+    private Document getEmployeesDocument() {
+        return getData(EMPLOYEES_XML);
+    }
+
     @Override
     public void create(Employee employee) {
         Element employeeElement = getItemToXML(
@@ -90,8 +94,8 @@ public class EmployeeManagerImpl extends EmployeeManager {
                 element.getElementsByTagName("email").item(0).getTextContent(),
                 Double.parseDouble(element.getElementsByTagName("jobtime").item(0).getTextContent()),
                 getIsEmployee(element),
-                Integer.parseInt(element.getElementsByTagName("workpoint").item(0).getTextContent()),
-                Integer.parseInt(element.getElementsByTagName("workpoint_without_en").item(0).getTextContent()),
+                Double.parseDouble(element.getElementsByTagName("workpoint").item(0).getTextContent()),
+                Double.parseDouble(element.getElementsByTagName("workpoint_without_en").item(0).getTextContent()),
                 getWorkLabels((Element) element.getElementsByTagName("worklabels").item(0)));
 
     }
