@@ -1,7 +1,9 @@
 package fai.utb.db.entity;
 
 import java.util.*;
-
+/**
+ * @author Šimon Zouvala
+ */
 public class Employee {
 
     private UUID id;
@@ -29,9 +31,9 @@ public class Employee {
         this.workLabels = workLabels;
     }
 
-    public Employee(UUID id, String name, String surname, String phone, String email, Double jobTime,
+    public Employee(String name, String surname, String phone, String email, Double jobTime,
                     Boolean isEmployee) {
-        this.id = id;
+
         this.name = name;
         this.surname = surname;
         this.phone = phone;
@@ -148,8 +150,7 @@ public class Employee {
         if (o == null || getClass() != o.getClass()) return false;
         Employee that = (Employee) o;
         return Objects.equals(name, that.name) && Objects.equals(surname, that.surname)
-                && Objects.equals(phone, that.phone) && Objects.equals(email, that.email)
-                && Objects.equals(jobTime, that.jobTime) && Objects.equals(isEmployee, that.isEmployee);
+                && Objects.equals(phone, that.phone) && Objects.equals(email, that.email);
     }
 
     @Override

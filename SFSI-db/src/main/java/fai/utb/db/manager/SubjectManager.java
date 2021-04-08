@@ -5,7 +5,9 @@ import fai.utb.db.entity.Subject;
 
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public abstract class SubjectManager  extends BasicManager{
 
     public abstract void create(Subject subject);

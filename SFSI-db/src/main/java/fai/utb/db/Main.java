@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @author Šimon Zouvala
+ */
 public class Main {
 
     public static void main(String[] args) {
@@ -49,7 +52,7 @@ public class Main {
 
         groupManager.create(g2);
 
-        List<Group> groupList = new ArrayList<>(Arrays.asList(g1,g2));
+        List<Group> groupList = new ArrayList<>(Arrays.asList(g1, g2));
 
         Subject s1 = new Subject(
                 UUID.randomUUID(),
@@ -65,12 +68,9 @@ public class Main {
                 Language.CZ,
                 groupList);
 
-
-
         subjectManager.create(s1);
 
         Employee e1 = new Employee(
-                UUID.randomUUID(),
                 "Pavel",
                 "Vařacha",
                 "+420 576 035 186",
@@ -80,34 +80,27 @@ public class Main {
 
         employeeManager.create(e1);
 
-
-
         System.out.println(employeeManager.getAllEmployees());
 //        System.out.println(employeeManager.getEmployee());
-
 
         System.out.println(groupManager.getAllGroup());
 //        groupManager.create(new Group(3L, Degree.BC, "kyb", FormOfStudy.P, Semester.ZS,2, 20, Language.CZ));
 
-
 //        System.out.println(groupManager.getAllGroup());
 //        groupManager.remove(new Group(3L, Degree.BC, "kyb", FormOfStudy.P, Semester.ZS,2, 20, Language.CZ));
-
-
         System.out.println(subjectManager.getAllSubject());
 
         System.out.println(workLabelManager.getAllWorkLabels());
-
         workLabelManager.generateWorkLabels();
 //        workLabelManager.addEmployeeToWorkLabel(employeeManager.getEmployee(1L),workLabelManager.getWorkLabel(1L));
         System.out.println(workLabelManager.getAllWorkLabels());
-        for (WorkLabel workLabel: workLabelManager.getAllWorkLabels()){
-            workLabelManager.addEmployeeToWorkLabel(employeeManager.getAllEmployees().get(0),workLabel);
+        for (WorkLabel workLabel : workLabelManager.getAllWorkLabels()) {
+            workLabelManager.addEmployeeToWorkLabel(employeeManager.getAllEmployees().get(0), workLabel);
         }
 
         employeeManager.setWorkPoints(e1);
 
-        for (WorkLabel workLabel: workLabelManager.getAllWorkLabels()){
+        for (WorkLabel workLabel : workLabelManager.getAllWorkLabels()) {
             workLabelManager.removeWorkLabels(workLabel);
         }
 
@@ -116,11 +109,7 @@ public class Main {
         groupManager.remove(g2);
         employeeManager.remove(e1);
 
-
-
 //        subjectManager.setSubjectCapacity(subjectManager.getSubject(1L),33);
 //        groupManager.setQuantity(groupManager.getGroup(1L),111);
-
-
     }
 }

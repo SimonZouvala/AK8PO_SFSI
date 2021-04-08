@@ -5,6 +5,7 @@ import fai.utb.db.entity.entityEnum.Degree;
 import fai.utb.db.entity.entityEnum.FormOfStudy;
 import fai.utb.db.entity.entityEnum.Language;
 import fai.utb.db.entity.entityEnum.Semester;
+import fai.utb.db.exception.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -15,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @author Šimon Zouvala
+ */
 public class GroupManagerImpl extends GroupManager {
 
     private final Document document;
@@ -30,13 +34,60 @@ public class GroupManagerImpl extends GroupManager {
 
     @Override
     public void create(Group group) {
+        validate(group);
+
         Element groupElement = getItemToXML(
                 document,
                 getGroupXmlDomList(),
                 group.getGroupItems(),
-                group.getId(),
                 MAIN_ELEMENT);
         create(document, groupElement, GROUPS_XML);
+    }
+
+    private void validate(Group group) {
+        if (group == null) {
+            throw new IllegalArgumentException("group is null");
+        }
+        if (group.getQuantity() <= 0) {
+            throw new ValidationException("Quantity is negative number");
+        }
+        if (group.getFieldOfStudy().equals("") || group.getFieldOfStudy() == null) {
+            throw new ValidationException("Field of study is empty");
+        }
+        if (group.getDegree() == null) {
+            throw new ValidationException("Degree is not set");
+        }
+        if (group.getFormOfStudy() == null) {
+            throw new ValidationException("Form of study is not set");
+        }
+        if (group.getLanguage() == null) {
+            throw new ValidationException("Language is not set");
+        }
+        if (group.getSemester() == null) {
+            throw new ValidationException("Semester is not set");
+        }
+        if (group.getGrade() < 1) {
+            throw new ValidationException("Grade is negative number or zero");
+        }
+        if (isSameGroupInXml(group)) {
+            throw new ValidationException(
+                    "Group " + group.getFieldOfStudy() + " with form of study " + group.getFormOfStudy() + ", "
+                            + group.getGrade()+   ". grade, "+ "semester " + group.getSemester()
+                            + " and language " + group.getLanguage()+ "is already exist");
+
+        }
+
+    }
+
+    private boolean isSameGroupInXml(Group newGroup) {
+        List<Group> groups = getAllGroup();
+
+        for (Group oldGroup : groups) {
+            if (oldGroup.equals(newGroup)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -53,7 +104,7 @@ public class GroupManagerImpl extends GroupManager {
                 String.valueOf(quantity),
                 GROUPS_XML,
                 MAIN_ELEMENT);
-       new WorkLabelManagerImpl().generateWorkLabelsAfterUpgrade(getGroup(group.getId()));
+        new WorkLabelManagerImpl().generateWorkLabelsAfterUpgrade(getGroup(group.getId()));
     }
 
     @Override

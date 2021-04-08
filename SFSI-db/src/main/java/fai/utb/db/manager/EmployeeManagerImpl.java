@@ -1,8 +1,10 @@
 package fai.utb.db.manager;
 
 import fai.utb.db.entity.Employee;
+import fai.utb.db.entity.Group;
 import fai.utb.db.entity.WorkLabel;
 import fai.utb.db.entity.entityEnum.Language;
+import fai.utb.db.exception.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public class EmployeeManagerImpl extends EmployeeManager {
 
     private final Document document;
@@ -30,13 +34,52 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
     @Override
     public void create(Employee employee) {
+        validate(employee);
         Element employeeElement = getItemToXML(
                 document,
                 getEmployeeXmlDomList(),
                 employee.getEmployeeItems(),
-                employee.getId(),
                 MAIN_ELEMENT);
         create(document, employeeElement, EMPLOYEES_XML);
+    }
+
+    private void validate(Employee employee) {
+        if (employee == null) {
+            throw new IllegalArgumentException("group is null");
+        }if (employee.getName() == null) {
+            throw new ValidationException("Name is not set");
+        }if (employee.getSurname() == null) {
+            throw new ValidationException("Surname is not set");
+        }
+        if (employee.getPhone() == null) {
+            throw new ValidationException("Phone is not set");
+        }
+        if (employee.getEmail() == null) {
+            throw new ValidationException("Email is not set");
+        }
+        if (employee.getJobTime() <= 0.0 || employee.getJobTime() ==null) {
+            throw new ValidationException("JobTime  is not set or is negative or zero");
+        }
+        if (employee.getIsEmployee() == null) {
+            throw new ValidationException("Is Employee is not set");
+        }
+        if (isSameEmployeeInXml(employee)){
+            throw new ValidationException(
+                    "Employee "+ employee.getName() +" "+employee.getSurname() +" with email "+ employee.getEmail() +
+                            " and phone number "+employee.getPhone() + "is already exist");
+
+        }
+    }
+
+    private boolean isSameEmployeeInXml(Employee newEmployee) {
+        List<Employee> employees = getAllEmployees();
+
+        for (Employee oldEmployee: employees){
+            if (oldEmployee.equals(newEmployee)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public class SubjectManagerImpl extends SubjectManager {
 
     private final Document document;

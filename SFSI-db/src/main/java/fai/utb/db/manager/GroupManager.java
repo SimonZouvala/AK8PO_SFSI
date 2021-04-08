@@ -4,7 +4,9 @@ import fai.utb.db.entity.Group;
 
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public abstract class GroupManager  extends BasicManager{
 
     public abstract void create(Group group);

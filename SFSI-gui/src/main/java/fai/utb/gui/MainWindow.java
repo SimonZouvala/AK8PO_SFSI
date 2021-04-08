@@ -1,0 +1,374 @@
+package fai.utb.gui;
+
+import fai.utb.db.entity.Employee;
+import fai.utb.db.entity.Group;
+import fai.utb.db.entity.Subject;
+import fai.utb.db.entity.WorkLabel;
+import fai.utb.db.manager.EmployeeManager;
+import fai.utb.db.manager.GroupManager;
+import fai.utb.db.manager.SubjectManager;
+import fai.utb.db.manager.WorkLabelManager;
+import fai.utb.gui.addFormular.AddEmployee;
+import fai.utb.gui.addFormular.AddGroup;
+import fai.utb.gui.addFormular.AddSubject;
+import fai.utb.gui.addFormular.AddWorkLabel;
+import fai.utb.gui.listModel.EmployeeListModel;
+import fai.utb.gui.listModel.GroupListModel;
+import fai.utb.gui.listModel.SubjectListModel;
+import fai.utb.gui.listModel.WorkLabelListModel;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+/**
+ * @author Šimon Zouvala
+ */
+public class MainWindow extends JFrame {
+
+    private static final I18n I18N = new I18n(MainWindow.class);
+    private JPanel mainPanel;
+    private JButton groupButton;
+    private JButton subjectButton;
+    private JButton employeeButton;
+    private JButton workLabelButton;
+    private JButton addButton;
+    private JButton removeButton;
+    private JButton joinButton;
+    private JTextArea showTextArea;
+    private JList<String> selectionTabel;
+    private GroupManager groupManager;
+    private Group group;
+    private EmployeeManager employeeManager;
+    private WorkLabelManager workLabelManager;
+    private SubjectManager subjectManager;
+    private Subject subject;
+    private Employee employee;
+    private WorkLabel workLabel;
+
+    public MainWindow(GroupManager groupManager, SubjectManager subjectManager, EmployeeManager employeeManager, WorkLabelManager workLabelManager) {
+        super("Hello World");
+        this.groupManager = groupManager;
+        this.subjectManager = subjectManager;
+        this.employeeManager = employeeManager;
+        this.workLabelManager = workLabelManager;
+        createUIComponents();
+
+        joinButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        subjectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SubjectListSwingWorker subjectListSwingWorker = new SubjectListSwingWorker();
+                subjectListSwingWorker.execute();
+
+                showTextArea.setText("");
+                addButton.setVisible(true);
+                removeButton.setVisible(true);
+                selectionTabel.setVisible(true);
+                joinButton.setVisible(true);
+                joinButton.setEnabled(false);
+                removeButton.setEnabled(false);
+
+            }
+        });
+        employeeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EmployeeListSwingWorker employeeListSwingWorker = new EmployeeListSwingWorker();
+                employeeListSwingWorker.execute();
+
+                showTextArea.setText("");
+                addButton.setVisible(true);
+                removeButton.setVisible(true);
+                selectionTabel.setVisible(true);
+                joinButton.setVisible(true);
+                joinButton.setEnabled(false);
+                removeButton.setEnabled(false);
+
+            }
+        });
+        workLabelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker();
+                workLabelListSwingWorker.execute();
+
+                showTextArea.setText("");
+                addButton.setVisible(true);
+                removeButton.setVisible(true);
+                selectionTabel.setVisible(true);
+                joinButton.setVisible(true);
+                joinButton.setEnabled(false);
+                removeButton.setEnabled(false);
+            }
+        });
+        selectionTabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                showTextArea.setText("");
+                PrintSwingWorker printSwingWorker;
+                int indexOfValue = selectionTabel.getSelectedIndex();
+                if ((selectionTabel.getModel() instanceof GroupListModel)) {
+                    printSwingWorker = new PrintSwingWorker(groupManager, indexOfValue);
+                }
+                else if ((selectionTabel.getModel() instanceof SubjectListModel)) {
+                    printSwingWorker = new PrintSwingWorker(subjectManager, indexOfValue);
+                }
+                else if ((selectionTabel.getModel() instanceof EmployeeListModel)) {
+                    printSwingWorker = new PrintSwingWorker(employeeManager, indexOfValue);
+                } else
+                    printSwingWorker = new PrintSwingWorker(workLabelManager, indexOfValue);
+
+                printSwingWorker.execute();
+            }
+        });
+
+
+        groupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GroupListSwingWorker groupListSwingWorker = new GroupListSwingWorker();
+                groupListSwingWorker.execute();
+
+                showTextArea.setText("");
+                addButton.setVisible(true);
+                removeButton.setVisible(true);
+                selectionTabel.setVisible(true);
+                joinButton.setVisible(false);
+                removeButton.setEnabled(false);
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectionTabel.getModel() instanceof GroupListModel) {
+                    AddGroup newGroup = new AddGroup(groupManager, (GroupListModel) selectionTabel.getModel());
+                    newGroup.setVisible(true);
+                }
+                if (selectionTabel.getModel() instanceof SubjectListModel) {
+                    AddSubject newSubject = new AddSubject(subjectManager, (SubjectListModel) selectionTabel.getModel());
+                    newSubject.setVisible(true);
+                }
+                if (selectionTabel.getModel() instanceof EmployeeListModel) {
+                    AddEmployee newEmployee = new AddEmployee(employeeManager, (EmployeeListModel) selectionTabel.getModel());
+                    newEmployee.setVisible(true);
+                }
+                if (selectionTabel.getModel() instanceof WorkLabelListModel) {
+                    AddWorkLabel newWorkLabel = new AddWorkLabel(workLabelManager, (WorkLabelListModel) selectionTabel.getModel());
+                    newWorkLabel.setVisible(true);
+                }
+            }
+        });
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+
+        showTextArea.setText("");
+        selectionTabel.setVisible(false);
+        joinButton.setVisible(false);
+        addButton.setVisible(false);
+        removeButton.setVisible(false);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setContentPane(mainPanel);
+        this.pack();
+    }
+
+    private class PrintSwingWorker extends SwingWorker<Object, Object> {
+
+        private final GroupManager groupManager;
+        private final EmployeeManager employeeManager;
+        private final SubjectManager subjectManager;
+        private final WorkLabelManager workLabelManager;
+        private final int index;
+
+        public PrintSwingWorker(GroupManager groupManager, int index) {
+            this.groupManager = groupManager;
+            this.index = index;
+            this.employeeManager = null;
+            this.subjectManager = null;
+            this.workLabelManager = null;
+        }
+
+        public PrintSwingWorker(EmployeeManager employeeManager, int index) {
+            this.employeeManager = employeeManager;
+            this.index = index;
+            this.subjectManager = null;
+            this.workLabelManager = null;
+            this.groupManager = null;
+        }
+
+        public PrintSwingWorker(WorkLabelManager workLabelManager, int index) {
+            this.workLabelManager = workLabelManager;
+            this.index = index;
+            this.employeeManager = null;
+            this.subjectManager = null;
+            this.groupManager = null;
+        }
+
+        public PrintSwingWorker(SubjectManager subjectManager, int index) {
+            this.subjectManager = subjectManager;
+            this.index = index;
+            this.workLabelManager = null;
+            this.groupManager = null;
+            this.employeeManager = null;
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            if (groupManager != null) {
+                group = groupManager.getAllGroup().get(index);
+                return group;
+            }
+            if (subjectManager != null) {
+                subject = subjectManager.getAllSubject().get(index);
+                return subject;
+            }
+            if (employeeManager != null) {
+                employee = employeeManager.getAllEmployees().get(index);
+                return employee;
+            } else {
+                workLabel = workLabelManager.getAllWorkLabels().get(index);
+                return workLabel;
+
+            }
+
+        }
+
+        @Override
+        protected void done() {
+            try {
+                showTextArea.append(get().toString());
+                if (group == get()) {
+                    joinButton.setEnabled(true);
+                } else {
+                    joinButton.setEnabled(false);
+                }
+                removeButton.setEnabled(true);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private class GroupListSwingWorker extends SwingWorker<List<Group>, List<Group>> {
+
+        public GroupListSwingWorker() {
+        }
+
+        @Override
+        protected List<Group> doInBackground() throws Exception {
+            List<Group> groupList = groupManager.getAllGroup();
+            System.out.println(groupList.toString());
+            return groupList;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                selectionTabel.setModel((ListModel<String>) new GroupListModel(get()));
+            } catch (InterruptedException ex) {
+                throw new AssertionError("Interrupted", ex);
+            } catch (ExecutionException ex) {
+//                log.error("Execution exception in GuestListSwingWorker");
+                JOptionPane.showMessageDialog(null, I18N.getString("GroupListShow"));
+            }
+        }
+    }
+
+    private class SubjectListSwingWorker extends SwingWorker<List<Subject>, List<Subject>> {
+
+        public SubjectListSwingWorker() {
+        }
+
+        @Override
+        protected List<Subject> doInBackground() throws Exception {
+            List<Subject> subjectList = subjectManager.getAllSubject();
+            System.out.println(subjectList.toString());
+            return subjectList;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                selectionTabel.setModel((ListModel<String>) new SubjectListModel(get()));
+            } catch (InterruptedException ex) {
+                throw new AssertionError("Interrupted", ex);
+            } catch (ExecutionException ex) {
+//                log.error("Execution exception in GuestListSwingWorker");
+                JOptionPane.showMessageDialog(null, I18N.getString("SubjectListShow"));
+            }//"Error with show subject."
+        }
+    }
+
+    private class EmployeeListSwingWorker extends SwingWorker<List<Employee>, List<Employee>> {
+
+        public EmployeeListSwingWorker() {
+        }
+
+        @Override
+        protected List<Employee> doInBackground() throws Exception {
+            List<Employee> employeeList = employeeManager.getAllEmployees();
+            System.out.println(employeeList.toString());
+            return employeeList;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                selectionTabel.setModel((ListModel<String>) new EmployeeListModel(get()));
+            } catch (InterruptedException ex) {
+                throw new AssertionError("Interrupted", ex);
+            } catch (ExecutionException ex) {
+//                log.error("Execution exception in GuestListSwingWorker");
+                JOptionPane.showMessageDialog(null, I18N.getString("EmployeeListShow"));
+            }
+        }
+    }
+
+
+    private class WorkLabelListSwingWorker extends SwingWorker<List<WorkLabel>, List<WorkLabel>> {
+
+        public WorkLabelListSwingWorker() {
+        }
+
+        @Override
+        protected List<WorkLabel> doInBackground() throws Exception {
+            List<WorkLabel> workLabelList = workLabelManager.getAllWorkLabels();
+            System.out.println(workLabelList.toString());
+            return workLabelList;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                selectionTabel.setModel((ListModel<String>) new WorkLabelListModel(get()));
+            } catch (InterruptedException ex) {
+                throw new AssertionError("Interrupted", ex);
+            } catch (ExecutionException ex) {
+//                log.error("Execution exception in GuestListSwingWorker");
+                JOptionPane.showMessageDialog(null, I18N.getString("WorkLabelListShow"));
+            }
+        }
+    }
+
+}

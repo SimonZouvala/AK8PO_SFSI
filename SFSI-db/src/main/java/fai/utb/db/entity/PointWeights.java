@@ -1,5 +1,7 @@
 package fai.utb.db.entity;
-
+/**
+ * @author Šimon Zouvala
+ */
 public class PointWeights {
 
     private double lecture;

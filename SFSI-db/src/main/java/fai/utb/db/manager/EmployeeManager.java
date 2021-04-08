@@ -2,10 +2,13 @@ package fai.utb.db.manager;
 
 
 import fai.utb.db.entity.Employee;
+import fai.utb.db.entity.Group;
 
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public abstract class EmployeeManager extends BasicManager{
 
 

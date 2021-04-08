@@ -8,7 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public class WorkLabel {
 
     private UUID id;

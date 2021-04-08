@@ -12,7 +12,13 @@
     <artifactId>SFSI-gui</artifactId>
     <packaging>jar</packaging>
     <name>Software for secretary of institute GUI interface</name>
-
+    <dependencies>
+        <dependency>
+             <groupId>fai.utb</groupId>
+            <artifactId>SFSI-db</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

@@ -7,7 +7,9 @@ import fai.utb.db.entity.WorkLabel;
 
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public abstract class WorkLabelManager extends BasicManager{
 
     public abstract void generateWorkLabels();

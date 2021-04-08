@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public class Group {
 
     private UUID id;
@@ -113,7 +115,7 @@ public class Group {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return grade == group.grade && quantity == group.quantity && degree == group.degree
+        return grade == group.grade && degree == group.degree
                 && Objects.equals(fieldOfStudy, group.fieldOfStudy) && formOfStudy == group.formOfStudy
                 && semester == group.semester && language == group.language;
     }

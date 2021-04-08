@@ -20,12 +20,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @author Šimon Zouvala
+ */
 public class BasicManager {
 
-    protected static final String WORK_LABELS_XML = "WorkLabels.xml";
-    protected static final String SUBJECTS_XML = "Subjects.xml";
-    protected static final String GROUPS_XML = "Groups.xml";
-    protected static final String EMPLOYEES_XML = "Employees.xml";
+    protected static final String WORK_LABELS_XML = "xml/WorkLabels.xml";
+    protected static final String SUBJECTS_XML = "xml/Subjects.xml";
+    protected static final String GROUPS_XML = "xml/Groups.xml";
+    protected static final String EMPLOYEES_XML = "xml/Employees.xml";
 
 
     public Document getData(String xml) {
@@ -112,9 +115,9 @@ public class BasicManager {
     }
 
     public Element getItemToXML(Document document, List<String> xmlDom,
-                                List<String> items, UUID id, String mainElement) {
+                                List<String> items, String mainElement) {
         Element element = document.createElement(mainElement);
-        element.setAttribute("id", id.toString());
+        element.setAttribute("id", UUID.randomUUID().toString());
 
         for (int index = 0; index < xmlDom.size(); index++) {
             Element newElement = document.createElement(xmlDom.get(index));

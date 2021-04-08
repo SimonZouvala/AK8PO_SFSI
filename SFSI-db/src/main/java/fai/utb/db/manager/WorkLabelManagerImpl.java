@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * @author Šimon Zouvala
+ */
 public class WorkLabelManagerImpl extends WorkLabelManager {
 
     private final Document document;
@@ -34,7 +36,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     }
 
     private PointWeights getPointWeights() {
-        Document pointDocument = getData("PointWeights.xml");
+        Document pointDocument = getData("xml/PointWeights.xml");
         XPath xPath = XPathFactory.newInstance().newXPath();
         PointWeights newPointWeights = null;
 
@@ -89,7 +91,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                 document,
                 getWorkLabelXmlDomList(),
                 workLabel.getWorklabelsItemsOrIds(),
-                workLabel.getId(),
                 MAIN_ELEMENT);
         create(document, workLabelElement, WORK_LABELS_XML);
     }
@@ -322,7 +323,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                     WORK_LABELS_XML,
                     MAIN_ELEMENT);
             restNumberOfStudents -= insetNumberOfStudents;
-            System.out.println(insetNumberOfStudents + "  zbývá  " + restNumberOfStudents + "    ze   " + totalNumberOfStudents);
+//            System.out.println(insetNumberOfStudents + "  zbývá  " + restNumberOfStudents + "    ze   " + totalNumberOfStudents);
         }
     }
 
@@ -351,8 +352,11 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                workLabels.add(getWorkLabelFromXML(element));
+                if (element.hasChildNodes()) {
+                    workLabels.add(getWorkLabelFromXML(element));
+                }
             }
+
         }
         return workLabels;
     }
@@ -368,6 +372,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
+
                 if (UUID.fromString(element.getAttribute("id")) == id) {
                     return getWorkLabelFromXML(element);
                 }
@@ -378,11 +383,13 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     private WorkLabel getWorkLabelFromXML(Element element) {
 
+
         WorkLabel workLabel = new WorkLabel(
                 UUID.fromString(element.getAttribute("id")),
                 element.getElementsByTagName("name").item(0).getTextContent(),
                 Language.valueOf(element.getElementsByTagName("language").item(0).getTextContent()),
                 Integer.parseInt(element.getElementsByTagName("number_of_students").item(0).getTextContent()));
+
 
         workLabel.setEmployeeId(getEmployeeIdFromXml(element));
         workLabel.setSubject(getSubjectFormXml(element));
@@ -391,6 +398,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         workLabel.setNumberOfWeeks(getNumberOfWeeks(workLabel, element));
         workLabel.setNumberOfHours(getNumberOfHours(workLabel, element));
         workLabel.setPoints(getPointsFromXML(workLabel, element));
+
 
         return workLabel;
     }

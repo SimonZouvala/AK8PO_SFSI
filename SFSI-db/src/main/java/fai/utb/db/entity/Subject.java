@@ -4,7 +4,9 @@ import fai.utb.db.entity.entityEnum.Completion;
 import fai.utb.db.entity.entityEnum.Language;
 
 import java.util.*;
-
+/**
+ * @author Šimon Zouvala
+ */
 public class Subject {
 
 
@@ -50,6 +52,21 @@ public class Subject {
         this.numberOfWeeks = numberOfWeeks;
         this.completion = completion;
         this.groups = groups;
+        this.classroomCapacity = classroomCapacity;
+        this.language = language;
+    }
+
+    public Subject(String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity, int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity, Language language) {
+
+
+        this.acronym = acronym;
+        this.name = name;
+        this.teacher = teacher;
+        this.lectureCapacity = lectureCapacity;
+        this.seminarCapacity = seminarCapacity;
+        this.exerciseCapacity = exerciseCapacity;
+        this.numberOfWeeks = numberOfWeeks;
+        this.completion = completion;
         this.classroomCapacity = classroomCapacity;
         this.language = language;
     }
