@@ -35,7 +35,6 @@ public class SubjectManagerImpl extends SubjectManager {
                 document,
                 getSubjectXmlDomList(),
                 subject.getSubjectItems(),
-                subject.getId(),
                 MAIN_ELEMENT,
                 subject.getGroupsIds(),
                 "group");

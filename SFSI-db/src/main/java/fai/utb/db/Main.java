@@ -101,7 +101,7 @@ public class Main {
         employeeManager.setWorkPoints(e1);
 
         for (WorkLabel workLabel : workLabelManager.getAllWorkLabels()) {
-            workLabelManager.removeWorkLabels(workLabel);
+            workLabelManager.remove(workLabel);
         }
 
         subjectManager.remove(s1);

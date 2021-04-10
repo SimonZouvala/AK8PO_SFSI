@@ -86,7 +86,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
 
     @Override
-    public void createWorkLabel(WorkLabel workLabel) {
+    public void create(WorkLabel workLabel) {
         Element workLabelElement = getItemToXML(
                 document,
                 getWorkLabelXmlDomList(),
@@ -96,7 +96,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     }
 
     @Override
-    public void removeWorkLabels(WorkLabel workLabel) {
+    public void remove(WorkLabel workLabel) {
         remove(document, workLabel.getId(), MAIN_ELEMENT, WORK_LABELS_XML);
     }
 
@@ -224,7 +224,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
                 newWorkLabel.setNumberOfHours(getNumberOfHoursByLessonType(newWorkLabel));
                 newWorkLabel.setPoints(generatePoints(newWorkLabel));
-                createWorkLabel(newWorkLabel);
+                create(newWorkLabel);
             }
         }
     }
@@ -241,7 +241,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                     totalNumberOfStudents,
                     completion);
             newWorkLabel.setPoints(generatePoints(newWorkLabel));
-            createWorkLabel(newWorkLabel);
+            create(newWorkLabel);
         }
     }
 

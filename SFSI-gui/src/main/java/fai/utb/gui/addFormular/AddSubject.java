@@ -1,18 +1,22 @@
 package fai.utb.gui.addFormular;
 
+import fai.utb.db.entity.Group;
 import fai.utb.db.entity.Subject;
 import fai.utb.db.entity.entityEnum.Completion;
 import fai.utb.db.entity.entityEnum.Language;
 import fai.utb.db.exception.ValidationException;
+import fai.utb.db.manager.GroupManagerImpl;
 import fai.utb.db.manager.SubjectManager;
 import fai.utb.gui.I18n;
 import fai.utb.gui.checkers.CheckAddSubjectResult;
+import fai.utb.gui.listModel.GroupListModel;
 import fai.utb.gui.listModel.SubjectListModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -31,18 +35,26 @@ public class AddSubject extends JFrame {
     private JTextField lectureCapacityTextField;
     private JTextField seminarCapacityTextField;
     private JTextField exerciseCapacityTextField;
-    private JTextField numberOfWeeksTextField;
+    private JComboBox<String> numberOfWeeksComboBox;
     private JComboBox<String> completionComboBox;
     private JComboBox<String> languageComboBox;
     private JTextField classroomCapacityTextField;
-    private JButton uložitButton;
+    private JButton saveButton;
+    private JButton removeButton;
+    private JButton addButton;
+    private JTextArea groupsTextArea;
     private Language language;
     private Completion completion;
     private Subject subject;
+    private GroupListModel groupListModel;
+    private List<Group> availableGroups;
+    private int numberOfWeeks;
 
     public AddSubject(SubjectManager subjectManager, SubjectListModel subjectListModel) throws HeadlessException {
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.subjectManager = subjectManager;
         this.subjectListModel = subjectListModel;
+        groupListModel = new GroupListModel();
         createUIComponents();
         completionComboBox.addActionListener(new ActionListener() {
             @Override
@@ -54,7 +66,6 @@ public class AddSubject extends JFrame {
                     case "Zkouška" -> completion = Completion.ZK;
                     default -> completion = null;
                 }
-
             }
         });
         languageComboBox.addActionListener(new ActionListener() {
@@ -68,7 +79,18 @@ public class AddSubject extends JFrame {
                 }
             }
         });
-        uložitButton.addActionListener(new ActionListener() {
+        numberOfWeeksComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedItem = numberOfWeeksComboBox.getSelectedItem().toString();
+                if (!selectedItem.equals("")) {
+                    numberOfWeeks = Integer.parseInt(selectedItem);
+                } else {
+                    numberOfWeeks = 0;
+                }
+            }
+        });
+        saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -78,13 +100,53 @@ public class AddSubject extends JFrame {
                 String lectureCapacity = lectureCapacityTextField.getText();
                 String seminarCapacity = seminarCapacityTextField.getText();
                 String exerciseCapacity = exerciseCapacityTextField.getText();
-                String numberOfWeeks = numberOfWeeksTextField.getText();
                 String classroomCapacity = classroomCapacityTextField.getText();
                 ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(acronym, name, teacher,
-                        lectureCapacity, seminarCapacity, exerciseCapacity, numberOfWeeks, classroomCapacity);
+                        lectureCapacity, seminarCapacity, exerciseCapacity, classroomCapacity);
                 confirmSwingWorker.execute();
             }
         });
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                availableGroups = getAvailableGroups();
+                if (availableGroups.size() != 0) {
+                    SelectItemInModel dialog = new SelectItemInModel(availableGroups);
+                    dialog.setVisible(true);
+                    System.out.println(dialog.getChoicesGroup());
+                    Group group = dialog.getChoicesGroup();
+                    if (group != null) {
+                        groupListModel.addGroup(dialog.getChoicesGroup());
+                        groupsTextArea.setText(groupListModel.toString());
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, I18N.getString("AllGroupsJoined"));
+                }
+                if (groupListModel.getSize() == 0) {
+                    removeButton.setEnabled(false);
+                } else {
+                    removeButton.setEnabled(true);
+                }
+            }
+        });
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SelectItemInModel dialog = new SelectItemInModel(groupListModel.getGroupsList());
+                dialog.setVisible(true);
+//                System.out.println(dialog.getChoicesGroup());
+                Group group = dialog.getChoicesGroup();
+                if (group != null) {
+                    groupListModel.deleteGroup(dialog.getChoicesGroup());
+                    groupsTextArea.setText(groupListModel.toString());
+                }
+                if (groupListModel.getSize() == 0) {
+                    removeButton.setEnabled(false);
+                }
+//                JOptionPane.showMessageDialog(null, I18N.getString("GroupNotJoined"));
+            }
+        });
+
     }
 
     private void createUIComponents() {
@@ -98,6 +160,12 @@ public class AddSubject extends JFrame {
         completionComboBox.addItem("Klasifikovaný zápočet");
         completionComboBox.addItem("Zkouška");
 
+        numberOfWeeksComboBox.addItem("");
+        for (int i = 1; i < 16; i++) {
+            numberOfWeeksComboBox.addItem(String.valueOf(i));
+        }
+
+        removeButton.setEnabled(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setContentPane(addSubjectPanel);
         this.pack();
@@ -112,12 +180,10 @@ public class AddSubject extends JFrame {
         private String lectureCapacity;
         private String seminarCapacity;
         private String exerciseCapacity;
-        private String numberOfWeeks;
         private String classroomCapacity;
 
         public ConfirmSwingWorker(String acronym, String name, String teacher, String lectureCapacity,
-                                  String seminarCapacity, String exerciseCapacity, String numberOfWeeks,
-                                  String classroomCapacity) {
+                                  String seminarCapacity, String exerciseCapacity, String classroomCapacity) {
 
             this.acronym = acronym;
             this.name = name;
@@ -125,7 +191,6 @@ public class AddSubject extends JFrame {
             this.lectureCapacity = lectureCapacity;
             this.seminarCapacity = seminarCapacity;
             this.exerciseCapacity = exerciseCapacity;
-            this.numberOfWeeks = numberOfWeeks;
             this.classroomCapacity = classroomCapacity;
         }
 
@@ -149,8 +214,8 @@ public class AddSubject extends JFrame {
             if (exerciseCapacity == null || exerciseCapacity.length() < 1) {
                 return CheckAddSubjectResult.EXERCISE_CAPACITY_EMPTY;
             }
-            if (numberOfWeeks == null || numberOfWeeks.length() < 1) {
-                return CheckAddSubjectResult.NUMBER_OF_WEEKS_CAPACITY_EMPTY;
+            if (numberOfWeeks == 0) {
+                return CheckAddSubjectResult.NUMBER_OF_WEEKS_CAPACITY_NOT_SELECT;
             }
             if (completion == null) {
                 return CheckAddSubjectResult.COMPLETION_NOT_SELECT;
@@ -160,6 +225,9 @@ public class AddSubject extends JFrame {
             }
             if (language == null) {
                 return CheckAddSubjectResult.LANGUAGE_NOT_SELECT;
+            }
+            if (groupListModel.getSize() == 0) {
+                return CheckAddSubjectResult.GROUP_LIST_NOT_SELECT;
             }
             int lecture_cap;
             try {
@@ -188,15 +256,6 @@ public class AddSubject extends JFrame {
             if (exercise_cap < 0) {
                 return CheckAddSubjectResult.EXERCISE_CAPACITY_NEGATIVE;
             }
-            int numberOfWeeks_cap;
-            try {
-                numberOfWeeks_cap = Integer.parseInt(numberOfWeeks);
-            } catch (NumberFormatException e) {
-                return CheckAddSubjectResult.NUMBER_OF_WEEKS_CAPACITY_INVALID;
-            }
-            if (numberOfWeeks_cap < 1) {
-                return CheckAddSubjectResult.NUMBER_OF_WEEKS_CAPACITY_NEGATIVE;
-            }
             int classroom_cap;
             try {
                 classroom_cap = Integer.parseInt(classroomCapacity);
@@ -207,7 +266,8 @@ public class AddSubject extends JFrame {
                 return CheckAddSubjectResult.CLASSROOM_CAPACITY_NEGATIVE;
             }
             try {
-                subject = new Subject(acronym, name, teacher, lecture_cap, seminar_cap, exercise_cap, numberOfWeeks_cap, completion, classroom_cap, language);
+                subject = new Subject(acronym, name, teacher, lecture_cap, seminar_cap, exercise_cap,
+                        numberOfWeeks, completion, classroom_cap, language, groupListModel.getGroupsList());
                 subjectManager.create(subject);
             } catch (ValidationException e) {
                 return CheckAddSubjectResult.SUBJECT_ALREADY_EXIST;
@@ -233,10 +293,26 @@ public class AddSubject extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, I18N.getString(Objects.requireNonNull(result)));
             }
-
         }
     }
+
+    private List<Group> getAvailableGroups() {
+        List<Group> groupList = new GroupManagerImpl().getAllGroup();
+
+        if (groupListModel == null || groupListModel.getSize() == 0) {
+            return groupList;
+        }
+        for (Group group : groupListModel.getGroupsList()) {
+            if (groupList.contains(group)) {
+                groupList.remove(group);
+            }
+        }
+        System.out.println(groupList.toString());
+        return groupList;
+    }
+
 }
+
 
 
 

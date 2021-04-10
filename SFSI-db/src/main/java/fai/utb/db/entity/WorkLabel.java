@@ -52,6 +52,19 @@ public class WorkLabel {
         this.completion = completion;
     }
 
+    public WorkLabel(String name, Language language, Double points, int numberOfStudents, LessonType lessonType,
+                     Completion completion, int numberOfWeeks, int numberOfHours) {
+
+        this.name = name;
+        this.language = language;
+        this.points = points;
+        this.numberOfStudents = numberOfStudents;
+        this.lessonType = lessonType;
+        this.completion = completion;
+        this.numberOfWeeks = numberOfWeeks;
+        this.numberOfHours = numberOfHours;
+    }
+
     public UUID getId() {
         return id;
     }

@@ -25,7 +25,7 @@ public class EmployeeListModel extends AbstractListModel {
 
     @Override
     public Object getElementAt(int index) {
-        return employeeList.get(index).getName() +" "+ employeeList.get(index).getSurname();
+        return employeeList.get(index).getName().toUpperCase() +" "+ employeeList.get(index).getSurname().toUpperCase();
     }
 
     public void addEmployee(Employee employee){

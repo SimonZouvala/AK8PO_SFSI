@@ -128,10 +128,10 @@ public class BasicManager {
     }
 
     public Element getItemToXML(Document document, List<String> xmlDom,
-                                List<String> items, UUID id, String mainElement,
+                                List<String> items, String mainElement,
                                 List<UUID> idList, String entityName) {
         Element element = document.createElement(mainElement);
-        element.setAttribute("id", id.toString());
+        element.setAttribute("id", UUID.randomUUID().toString());
 
         for (int index = 0; index < xmlDom.size(); index++) {
             Element newElement = document.createElement(xmlDom.get(index));

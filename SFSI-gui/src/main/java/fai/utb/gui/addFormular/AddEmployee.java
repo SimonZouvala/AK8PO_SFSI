@@ -36,7 +36,7 @@ public class AddEmployee extends JFrame {
     private double jobTime = 0.0;
 
     public AddEmployee(EmployeeManager employeeManager, EmployeeListModel employeeListModel) {
-
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.employeeManager = employeeManager;
         this.employeeListModel = employeeListModel;
         createUIComponents();

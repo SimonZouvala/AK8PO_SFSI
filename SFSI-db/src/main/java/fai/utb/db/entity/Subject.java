@@ -56,9 +56,7 @@ public class Subject {
         this.language = language;
     }
 
-    public Subject(String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity, int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity, Language language) {
-
-
+    public Subject(String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity, int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity, Language language, List<Group> groups) {
         this.acronym = acronym;
         this.name = name;
         this.teacher = teacher;
@@ -69,6 +67,7 @@ public class Subject {
         this.completion = completion;
         this.classroomCapacity = classroomCapacity;
         this.language = language;
+        this.groups = groups;
     }
 
     public UUID getId() {

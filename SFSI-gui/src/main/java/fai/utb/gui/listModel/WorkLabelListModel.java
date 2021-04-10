@@ -32,7 +32,7 @@ public class WorkLabelListModel extends AbstractListModel {
         fireIntervalAdded(workLabel, lastRow, lastRow);
     }
 
-    public void deleteGroup(WorkLabel workLabel) {
+    public void deleteWorkLabel(WorkLabel workLabel) {
         workLabelList.remove(workLabel);
         int lastRow = workLabelList.size() - 1;
         if (lastRow < 0) {

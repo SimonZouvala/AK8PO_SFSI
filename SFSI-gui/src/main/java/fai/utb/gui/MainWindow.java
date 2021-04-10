@@ -41,22 +41,44 @@ public class MainWindow extends JFrame {
     private JButton joinButton;
     private JTextArea showTextArea;
     private JList<String> selectionTabel;
-    private GroupManager groupManager;
+    private JButton generateButton;
+    private JButton emptyWorkLabelButton;
+    private JButton allButton;
+    private JButton withoutStudentsButton;
+    private final GroupManager groupManager;
     private Group group;
-    private EmployeeManager employeeManager;
-    private WorkLabelManager workLabelManager;
-    private SubjectManager subjectManager;
+    private final EmployeeManager employeeManager;
+    private final WorkLabelManager workLabelManager;
+    private final SubjectManager subjectManager;
     private Subject subject;
     private Employee employee;
     private WorkLabel workLabel;
 
     public MainWindow(GroupManager groupManager, SubjectManager subjectManager, EmployeeManager employeeManager, WorkLabelManager workLabelManager) {
         super("Hello World");
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.groupManager = groupManager;
         this.subjectManager = subjectManager;
         this.employeeManager = employeeManager;
         this.workLabelManager = workLabelManager;
         createUIComponents();
+
+    }
+
+
+    private void createUIComponents() {
+        showTextArea.setText("");
+        selectionTabel.setVisible(false);
+        joinButton.setVisible(false);
+        addButton.setVisible(false);
+        removeButton.setVisible(false);
+        generateButton.setVisible(false);
+        emptyWorkLabelButton.setVisible(false);
+        allButton.setVisible(false);
+        withoutStudentsButton.setVisible(false);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setContentPane(mainPanel);
+        this.pack();
 
         joinButton.addActionListener(new ActionListener() {
             @Override
@@ -67,6 +89,19 @@ public class MainWindow extends JFrame {
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                showTextArea.setText("");
+                RemoveSwingWorker removeSwingWorker;
+                int indexOfValue = selectionTabel.getSelectedIndex();
+                if ((selectionTabel.getModel() instanceof GroupListModel)) {
+                    removeSwingWorker = new RemoveSwingWorker(groupManager, indexOfValue);
+                } else if ((selectionTabel.getModel() instanceof SubjectListModel)) {
+                    removeSwingWorker = new RemoveSwingWorker(subjectManager, indexOfValue);
+                } else if ((selectionTabel.getModel() instanceof EmployeeListModel)) {
+                    removeSwingWorker = new RemoveSwingWorker(employeeManager, indexOfValue);
+                } else
+                    removeSwingWorker = new RemoveSwingWorker(workLabelManager, indexOfValue);
+
+                removeSwingWorker.execute();
 
             }
         });
@@ -80,9 +115,12 @@ public class MainWindow extends JFrame {
                 addButton.setVisible(true);
                 removeButton.setVisible(true);
                 selectionTabel.setVisible(true);
-                joinButton.setVisible(true);
-                joinButton.setEnabled(false);
+                joinButton.setVisible(false);
                 removeButton.setEnabled(false);
+                generateButton.setVisible(false);
+                emptyWorkLabelButton.setVisible(false);
+                allButton.setVisible(false);
+                withoutStudentsButton.setVisible(false);
 
             }
         });
@@ -96,9 +134,12 @@ public class MainWindow extends JFrame {
                 addButton.setVisible(true);
                 removeButton.setVisible(true);
                 selectionTabel.setVisible(true);
-                joinButton.setVisible(true);
-                joinButton.setEnabled(false);
+                joinButton.setVisible(false);
                 removeButton.setEnabled(false);
+                generateButton.setVisible(false);
+                emptyWorkLabelButton.setVisible(false);
+                allButton.setVisible(false);
+                withoutStudentsButton.setVisible(false);
 
             }
         });
@@ -115,29 +156,12 @@ public class MainWindow extends JFrame {
                 joinButton.setVisible(true);
                 joinButton.setEnabled(false);
                 removeButton.setEnabled(false);
+                generateButton.setVisible(true);
+                emptyWorkLabelButton.setVisible(true);
+                allButton.setVisible(true);
+                withoutStudentsButton.setVisible(true);
             }
         });
-        selectionTabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                showTextArea.setText("");
-                PrintSwingWorker printSwingWorker;
-                int indexOfValue = selectionTabel.getSelectedIndex();
-                if ((selectionTabel.getModel() instanceof GroupListModel)) {
-                    printSwingWorker = new PrintSwingWorker(groupManager, indexOfValue);
-                }
-                else if ((selectionTabel.getModel() instanceof SubjectListModel)) {
-                    printSwingWorker = new PrintSwingWorker(subjectManager, indexOfValue);
-                }
-                else if ((selectionTabel.getModel() instanceof EmployeeListModel)) {
-                    printSwingWorker = new PrintSwingWorker(employeeManager, indexOfValue);
-                } else
-                    printSwingWorker = new PrintSwingWorker(workLabelManager, indexOfValue);
-
-                printSwingWorker.execute();
-            }
-        });
-
 
         groupButton.addActionListener(new ActionListener() {
             @Override
@@ -151,8 +175,33 @@ public class MainWindow extends JFrame {
                 selectionTabel.setVisible(true);
                 joinButton.setVisible(false);
                 removeButton.setEnabled(false);
+                generateButton.setVisible(false);
+                emptyWorkLabelButton.setVisible(false);
+                allButton.setVisible(false);
+                withoutStudentsButton.setVisible(false);
             }
         });
+
+
+        selectionTabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                showTextArea.setText("");
+                PrintSwingWorker printSwingWorker;
+                int indexOfValue = selectionTabel.getSelectedIndex();
+                if ((selectionTabel.getModel() instanceof GroupListModel)) {
+                    printSwingWorker = new PrintSwingWorker(groupManager, indexOfValue);
+                } else if ((selectionTabel.getModel() instanceof SubjectListModel)) {
+                    printSwingWorker = new PrintSwingWorker(subjectManager, indexOfValue);
+                } else if ((selectionTabel.getModel() instanceof EmployeeListModel)) {
+                    printSwingWorker = new PrintSwingWorker(employeeManager, indexOfValue);
+                } else
+                    printSwingWorker = new PrintSwingWorker(workLabelManager, indexOfValue);
+
+                printSwingWorker.execute();
+            }
+        });
+
 
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -175,19 +224,34 @@ public class MainWindow extends JFrame {
                 }
             }
         });
-    }
+        generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(true);
+                workLabelListSwingWorker.execute();
+                showTextArea.setText("");
+                joinButton.setEnabled(false);
+                removeButton.setEnabled(false);
+            }
+        });
+        allButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
+            }
+        });
+        emptyWorkLabelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-        showTextArea.setText("");
-        selectionTabel.setVisible(false);
-        joinButton.setVisible(false);
-        addButton.setVisible(false);
-        removeButton.setVisible(false);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setContentPane(mainPanel);
-        this.pack();
+            }
+        });
+        withoutStudentsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     private class PrintSwingWorker extends SwingWorker<Object, Object> {
@@ -248,14 +312,14 @@ public class MainWindow extends JFrame {
                 return workLabel;
 
             }
-
         }
+
 
         @Override
         protected void done() {
             try {
                 showTextArea.append(get().toString());
-                if (group == get()) {
+                if (workLabel == get()) {
                     joinButton.setEnabled(true);
                 } else {
                     joinButton.setEnabled(false);
@@ -266,6 +330,99 @@ public class MainWindow extends JFrame {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private class RemoveSwingWorker extends SwingWorker<Object, Void> {
+
+        private final GroupManager groupManager;
+        private final EmployeeManager employeeManager;
+        private final SubjectManager subjectManager;
+        private final WorkLabelManager workLabelManager;
+        private final int index;
+
+        public RemoveSwingWorker(GroupManager groupManager, int index) {
+            this.groupManager = groupManager;
+            this.index = index;
+            this.employeeManager = null;
+            this.subjectManager = null;
+            this.workLabelManager = null;
+        }
+
+        public RemoveSwingWorker(EmployeeManager employeeManager, int index) {
+            this.employeeManager = employeeManager;
+            this.index = index;
+            this.subjectManager = null;
+            this.workLabelManager = null;
+            this.groupManager = null;
+        }
+
+        public RemoveSwingWorker(WorkLabelManager workLabelManager, int index) {
+            this.workLabelManager = workLabelManager;
+            this.index = index;
+            this.employeeManager = null;
+            this.subjectManager = null;
+            this.groupManager = null;
+        }
+
+        public RemoveSwingWorker(SubjectManager subjectManager, int index) {
+            this.subjectManager = subjectManager;
+            this.index = index;
+            this.workLabelManager = null;
+            this.groupManager = null;
+            this.employeeManager = null;
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            if (groupManager != null) {
+                group = groupManager.getAllGroup().get(index);
+                groupManager.remove(group);
+                return group;
+            }
+            if (subjectManager != null) {
+                subject = subjectManager.getAllSubject().get(index);
+                subjectManager.remove(subject);
+                return subject;
+            }
+            if (employeeManager != null) {
+                employee = employeeManager.getAllEmployees().get(index);
+                employeeManager.remove(employee);
+                return employee;
+            } else {
+                workLabel = workLabelManager.getAllWorkLabels().get(index);
+                workLabelManager.remove(workLabel);
+                return workLabel;
+
+            }
+        }
+
+        @Override
+        protected void done() {
+
+            try {
+                if (group == get()) {
+                    GroupListModel model = (GroupListModel) selectionTabel.getModel();
+                    model.deleteGroup(group);
+                } else if (subject == get()) {
+                    SubjectListModel model = (SubjectListModel) selectionTabel.getModel();
+                    model.deleteSubject(subject);
+                } else if (employee == get()) {
+                    EmployeeListModel model = (EmployeeListModel) selectionTabel.getModel();
+                    model.deleteEmployee(employee);
+                } else if (workLabel == get()) {
+                    WorkLabelListModel model = (WorkLabelListModel) selectionTabel.getModel();
+                    model.deleteWorkLabel(workLabel);
+                }
+            } catch (
+                    InterruptedException ex) {
+                throw new AssertionError("Interrupted", ex);
+            } catch (ExecutionException ex) {
+
+                JOptionPane.showMessageDialog(null, "Error with remove room.");
+            }
+            removeButton.setEnabled(false);
+            showTextArea.setText("");
         }
     }
 
@@ -348,11 +505,19 @@ public class MainWindow extends JFrame {
 
     private class WorkLabelListSwingWorker extends SwingWorker<List<WorkLabel>, List<WorkLabel>> {
 
+        private boolean generate = false;
+
         public WorkLabelListSwingWorker() {
+        }
+        public WorkLabelListSwingWorker(boolean generate) {
+            this.generate = generate;
         }
 
         @Override
         protected List<WorkLabel> doInBackground() throws Exception {
+            if (generate){
+                workLabelManager.generateWorkLabels();
+            }
             List<WorkLabel> workLabelList = workLabelManager.getAllWorkLabels();
             System.out.println(workLabelList.toString());
             return workLabelList;

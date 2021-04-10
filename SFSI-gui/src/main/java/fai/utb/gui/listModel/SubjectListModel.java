@@ -22,7 +22,7 @@ public class SubjectListModel extends AbstractListModel {
 
     @Override
     public Object getElementAt(int index) {
-        return subjectList.get(index).getAcronym();
+        return subjectList.get(index).getAcronym().toUpperCase();
     }
 
     public void addSubject(Subject subject) {
@@ -31,7 +31,7 @@ public class SubjectListModel extends AbstractListModel {
         fireIntervalAdded(subject, lastRow, lastRow);
     }
 
-    public void deleteGroup(Subject subject) {
+    public void deleteSubject(Subject subject) {
         subjectList.remove(subject);
         int lastRow = subjectList.size() - 1;
         if (lastRow < 0) {

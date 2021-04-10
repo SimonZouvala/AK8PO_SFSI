@@ -12,12 +12,11 @@ public enum CheckAddSubjectResult {
     SEMINAR_CAPACITY_INVALID(String.class),
     EXERCISE_CAPACITY_INVALID(String.class),
     CLASSROOM_CAPACITY_INVALID(String.class),
-    NUMBER_OF_WEEKS_CAPACITY_INVALID(String.class),
     LECTURE_CAPACITY_EMPTY(String.class),
     SEMINAR_CAPACITY_EMPTY(String.class),
     EXERCISE_CAPACITY_EMPTY(String.class),
     CLASSROOM_CAPACITY_EMPTY(String.class),
-    NUMBER_OF_WEEKS_CAPACITY_EMPTY(String.class),
+    NUMBER_OF_WEEKS_CAPACITY_NOT_SELECT(String.class),
     TEACHER_EMPTY(String.class),
     SUBJECT_ADD(String.class),
     SUBJECT_ALREADY_EXIST(String.class),
@@ -25,8 +24,7 @@ public enum CheckAddSubjectResult {
     SEMINAR_CAPACITY_NEGATIVE(String.class),
     EXERCISE_CAPACITY_NEGATIVE(String.class),
     CLASSROOM_CAPACITY_NEGATIVE(String.class),
-    NUMBER_OF_WEEKS_CAPACITY_NEGATIVE(String.class);
-
+    GROUP_LIST_NOT_SELECT(String.class);
 
     private final Class<?> type;
 

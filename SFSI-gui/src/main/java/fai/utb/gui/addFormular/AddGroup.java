@@ -48,6 +48,7 @@ public class AddGroup extends JFrame {
         this.groupManager = groupManager;
         this.groupListModel = groupListModel;
         createUIComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 
         degreeComboBox.addActionListener(new ActionListener() {
@@ -133,6 +134,34 @@ public class AddGroup extends JFrame {
             }
         });
     }
+    private void createUIComponents() {
+        degreeComboBox.addItem("");
+        degreeComboBox.addItem("Bakalářský");
+        degreeComboBox.addItem("Magisterský");
+        degreeComboBox.addItem("Doktorský");
+
+        formOfStudyComboBox.addItem("");
+        formOfStudyComboBox.addItem("Prezenční");
+        formOfStudyComboBox.addItem("Kombinované");
+
+        languageComboBox.addItem("");
+        languageComboBox.addItem("Čeština");
+        languageComboBox.addItem("Angličtina");
+
+        semesterComboBox.addItem("");
+        semesterComboBox.addItem("Zimní");
+        semesterComboBox.addItem("Letní");
+
+        gradeComboBox.addItem("");
+        for (int i = 1; i < 6; i++) {
+            gradeComboBox.addItem(String.valueOf(i));
+        }
+
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setContentPane(addGroupPanel);
+        this.pack();
+
+    }
 
     private class ConfirmSwingWorker extends SwingWorker<CheckAddGroupResult, CheckAddGroupResult> {
 
@@ -208,34 +237,6 @@ public class AddGroup extends JFrame {
         }
     }
 
-    private void createUIComponents() {
-        degreeComboBox.addItem("");
-        degreeComboBox.addItem("Bakalářský");
-        degreeComboBox.addItem("Magisterský");
-        degreeComboBox.addItem("Doktorský");
-
-        formOfStudyComboBox.addItem("");
-        formOfStudyComboBox.addItem("Prezenční");
-        formOfStudyComboBox.addItem("Kombinované");
-
-        languageComboBox.addItem("");
-        languageComboBox.addItem("Čeština");
-        languageComboBox.addItem("Angličtina");
-
-        semesterComboBox.addItem("");
-        semesterComboBox.addItem("Zimní");
-        semesterComboBox.addItem("Letní");
-
-        gradeComboBox.addItem("");
-        for (int i = 1; i < 6; i++) {
-            gradeComboBox.addItem(String.valueOf(i));
-        }
-
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setContentPane(addGroupPanel);
-        this.pack();
-
-    }
 
 
 
