@@ -4,6 +4,7 @@ import fai.utb.db.entity.entityEnum.Completion;
 import fai.utb.db.entity.entityEnum.Language;
 
 import java.util.*;
+
 /**
  * @author Šimon Zouvala
  */
@@ -179,12 +180,9 @@ public class Subject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject aSubject = (Subject) o;
-        return lectureCapacity == aSubject.lectureCapacity && seminarCapacity == aSubject.seminarCapacity
-                && exerciseCapacity == aSubject.exerciseCapacity && numberOfWeeks == aSubject.numberOfWeeks
-                && classroomCapacity == aSubject.classroomCapacity && Objects.equals(acronym, aSubject.acronym)
+        return numberOfWeeks == aSubject.numberOfWeeks && Objects.equals(acronym, aSubject.acronym)
                 && Objects.equals(name, aSubject.name) && Objects.equals(teacher, aSubject.teacher)
-                && completion == aSubject.completion && language == aSubject.language
-                && Objects.equals(groups, aSubject.groups);
+                && completion == aSubject.completion && language == aSubject.language;
     }
 
     @Override
@@ -209,19 +207,17 @@ public class Subject {
 
     @Override
     public String toString() {
-        return "Subject{" +
-                "id=" + id +
-                ", acronym='" + acronym + '\'' +
-                ", name='" + name + '\'' +
-                ", teacher='" + teacher + '\'' +
-                ", lectureCapacity=" + lectureCapacity +
-                ", seminarCapacity=" + seminarCapacity +
-                ", exerciseCapacity=" + exerciseCapacity +
-                ", numberOfWeeks=" + numberOfWeeks +
-                ", completion=" + completion +
-                ", classroomCapacity=" + classroomCapacity +
-                ", language=" + language +
-                ", groups=" + groups +
-                '}';
+        return     name + " \n"+
+                acronym + " \n"+
+                teacher + " \n"+
+                lectureCapacity +" \n"+
+                seminarCapacity + " \n"+
+                 exerciseCapacity + " \n"+
+                numberOfWeeks + " \n"+
+                completion + " \n"+
+                classroomCapacity + " \n"+
+                language + " \n"+
+                groups + " \n";
+
     }
 }

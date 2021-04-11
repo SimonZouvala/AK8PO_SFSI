@@ -4,6 +4,7 @@ import fai.utb.db.entity.*;
 import fai.utb.db.entity.entityEnum.Completion;
 import fai.utb.db.entity.entityEnum.Language;
 import fai.utb.db.entity.entityEnum.LessonType;
+import fai.utb.db.exception.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
 /**
  * @author Šimon Zouvala
  */
@@ -27,11 +29,11 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     private static final String MAIN_ELEMENT = "worklabel";
 
     public WorkLabelManagerImpl() {
-        this.document = getWorklabelsDocument();
+        this.document = getWorkLabelsDocument();
         this.pointWeights = getPointWeights();
     }
 
-    private Document getWorklabelsDocument() {
+    private Document getWorkLabelsDocument() {
         return getData(WORK_LABELS_XML);
     }
 
@@ -87,12 +89,62 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     @Override
     public void create(WorkLabel workLabel) {
+        validate(workLabel);
         Element workLabelElement = getItemToXML(
                 document,
                 getWorkLabelXmlDomList(),
                 workLabel.getWorklabelsItemsOrIds(),
                 MAIN_ELEMENT);
         create(document, workLabelElement, WORK_LABELS_XML);
+    }
+
+    private void validate(WorkLabel workLabel) {
+        if (workLabel == null) {
+            throw new IllegalArgumentException("workLabel is null");
+        }
+        if (workLabel.getName() == null) {
+            throw new ValidationException("Name is not set");
+        }
+        if (workLabel.getPoints() < 0) {
+            throw new ValidationException("Points is negative");
+        }
+        if (workLabel.getNumberOfStudents() < 0) {
+            throw new ValidationException("Number of Students is negative");
+        }
+        if (workLabel.getLanguage() == null) {
+            throw new ValidationException("Language is not set");
+        }
+//        if (workLabel.getLessonType() == null) {
+//            throw new ValidationException("Lesson type is not set");
+//        }
+        if (workLabel.getCompletion() == null && workLabel.getLessonType() != null) {
+
+            if (workLabel.getNumberOfWeeks() < 0) {
+                throw new ValidationException("Number of weeks is negative");
+            }
+            if (workLabel.getNumberOfHours() < 0) {
+                throw new ValidationException("Number of hours is negative");
+            }
+        }else{
+            throw new ValidationException("Completion or Lesson type is not set");
+        }
+        if (isSameWorkLabelInXml(workLabel)) {
+            throw new ValidationException("WorkLabel " + workLabel.getName()
+                    + " with language " + workLabel.getLanguage()
+                    + ", lesson type " + workLabel.getLessonType()
+                    + " and completion " + workLabel.getCompletion());
+        }
+    }
+
+    private boolean isSameWorkLabelInXml(WorkLabel newWorkLabel) {
+        List<WorkLabel> workLabels = getAllWorkLabels();
+
+        for (WorkLabel oldWorkLabel : workLabels) {
+            if (oldWorkLabel.equals(newWorkLabel)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -109,10 +161,13 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                 String.valueOf(employee.getId()),
                 WORK_LABELS_XML,
                 MAIN_ELEMENT);
+        new EmployeeManagerImpl().addWorkLabelToEmployee(employee, workLabel);
     }
 
     @Override
     public void removeEmployeeFromWorkLabel(WorkLabel workLabel) {
+        new EmployeeManagerImpl().removeWorkLabelToEmployee(
+                new EmployeeManagerImpl().getEmployee(workLabel.getEmployeeId()), workLabel);
         setElement(
                 document,
                 workLabel.getId(),
@@ -140,7 +195,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
             List<WorkLabel> currentWorkLabels =
                     allWorkLabels
                             .stream()
-                            .filter(workLabel -> subject.equals(workLabel.getSubject()))
+                            .filter(workLabel -> subject.getId().equals(workLabel.getSubject().getId()))
                             .toList();
 
             if (subject.getLectureCapacity() > 0) {
@@ -373,7 +428,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
 
-                if (UUID.fromString(element.getAttribute("id")) == id) {
+                if (UUID.fromString(element.getAttribute("id")).equals(id)) {
                     return getWorkLabelFromXML(element);
                 }
             }
@@ -416,9 +471,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         if (subject.equals("")) {
             return null;
         }
-        return new SubjectManagerImpl().getSubject(
-                UUID.fromString(
-                        element.getElementsByTagName("subject").item(0).getTextContent()));
+        return new SubjectManagerImpl().getSubject(UUID.fromString(subject));
     }
 
 
@@ -533,6 +586,16 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         return pointWeights.getExercise();
     }
 
+    @Override
+    public List<WorkLabel> getWorkLabelsWithoutEmployee() {
+        return getAllWorkLabels().stream().filter(workLabel -> workLabel.getEmployeeId() == null).toList();
+    }
+
+    @Override
+    public List<WorkLabel> getWorkLabelsWithoutStudents() {
+        return getAllWorkLabels().stream().filter(workLabel -> workLabel.getNumberOfStudents() == 0).toList();
+    }
+
     private List<String> getWorkLabelXmlDomList() {
         return Arrays.asList(
                 "name",
@@ -547,3 +610,5 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                 "number_of_hours");
     }
 }
+
+

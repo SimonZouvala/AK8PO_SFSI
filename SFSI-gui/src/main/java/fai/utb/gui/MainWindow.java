@@ -4,22 +4,14 @@ import fai.utb.db.entity.Employee;
 import fai.utb.db.entity.Group;
 import fai.utb.db.entity.Subject;
 import fai.utb.db.entity.WorkLabel;
-import fai.utb.db.manager.EmployeeManager;
-import fai.utb.db.manager.GroupManager;
-import fai.utb.db.manager.SubjectManager;
-import fai.utb.db.manager.WorkLabelManager;
-import fai.utb.gui.addFormular.AddEmployee;
-import fai.utb.gui.addFormular.AddGroup;
-import fai.utb.gui.addFormular.AddSubject;
-import fai.utb.gui.addFormular.AddWorkLabel;
+import fai.utb.db.manager.*;
+import fai.utb.gui.addFormular.*;
 import fai.utb.gui.listModel.EmployeeListModel;
 import fai.utb.gui.listModel.GroupListModel;
 import fai.utb.gui.listModel.SubjectListModel;
 import fai.utb.gui.listModel.WorkLabelListModel;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -40,35 +32,26 @@ public class MainWindow extends JFrame {
     private JButton removeButton;
     private JButton joinButton;
     private JTextArea showTextArea;
-    private JList<String> selectionTabel;
+    private JList<String> selectionTable;
     private JButton generateButton;
     private JButton emptyWorkLabelButton;
     private JButton allButton;
     private JButton withoutStudentsButton;
-    private final GroupManager groupManager;
+    private JButton unJoinButton;
     private Group group;
-    private final EmployeeManager employeeManager;
-    private final WorkLabelManager workLabelManager;
-    private final SubjectManager subjectManager;
     private Subject subject;
     private Employee employee;
     private WorkLabel workLabel;
 
-    public MainWindow(GroupManager groupManager, SubjectManager subjectManager, EmployeeManager employeeManager, WorkLabelManager workLabelManager) {
+    public MainWindow() {
         super("Hello World");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.groupManager = groupManager;
-        this.subjectManager = subjectManager;
-        this.employeeManager = employeeManager;
-        this.workLabelManager = workLabelManager;
         createUIComponents();
-
     }
-
 
     private void createUIComponents() {
         showTextArea.setText("");
-        selectionTabel.setVisible(false);
+        selectionTable.setVisible(false);
         joinButton.setVisible(false);
         addButton.setVisible(false);
         removeButton.setVisible(false);
@@ -76,181 +59,167 @@ public class MainWindow extends JFrame {
         emptyWorkLabelButton.setVisible(false);
         allButton.setVisible(false);
         withoutStudentsButton.setVisible(false);
+        unJoinButton.setVisible(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
 
-        joinButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showTextArea.setText("");
-                RemoveSwingWorker removeSwingWorker;
-                int indexOfValue = selectionTabel.getSelectedIndex();
-                if ((selectionTabel.getModel() instanceof GroupListModel)) {
-                    removeSwingWorker = new RemoveSwingWorker(groupManager, indexOfValue);
-                } else if ((selectionTabel.getModel() instanceof SubjectListModel)) {
-                    removeSwingWorker = new RemoveSwingWorker(subjectManager, indexOfValue);
-                } else if ((selectionTabel.getModel() instanceof EmployeeListModel)) {
-                    removeSwingWorker = new RemoveSwingWorker(employeeManager, indexOfValue);
-                } else
-                    removeSwingWorker = new RemoveSwingWorker(workLabelManager, indexOfValue);
-
-                removeSwingWorker.execute();
-
-            }
-        });
-        subjectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SubjectListSwingWorker subjectListSwingWorker = new SubjectListSwingWorker();
-                subjectListSwingWorker.execute();
-
-                showTextArea.setText("");
-                addButton.setVisible(true);
-                removeButton.setVisible(true);
-                selectionTabel.setVisible(true);
-                joinButton.setVisible(false);
-                removeButton.setEnabled(false);
-                generateButton.setVisible(false);
-                emptyWorkLabelButton.setVisible(false);
-                allButton.setVisible(false);
-                withoutStudentsButton.setVisible(false);
-
-            }
-        });
-        employeeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                EmployeeListSwingWorker employeeListSwingWorker = new EmployeeListSwingWorker();
-                employeeListSwingWorker.execute();
-
-                showTextArea.setText("");
-                addButton.setVisible(true);
-                removeButton.setVisible(true);
-                selectionTabel.setVisible(true);
-                joinButton.setVisible(false);
-                removeButton.setEnabled(false);
-                generateButton.setVisible(false);
-                emptyWorkLabelButton.setVisible(false);
-                allButton.setVisible(false);
-                withoutStudentsButton.setVisible(false);
-
-            }
-        });
-        workLabelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker();
-                workLabelListSwingWorker.execute();
-
-                showTextArea.setText("");
-                addButton.setVisible(true);
-                removeButton.setVisible(true);
-                selectionTabel.setVisible(true);
-                joinButton.setVisible(true);
-                joinButton.setEnabled(false);
-                removeButton.setEnabled(false);
-                generateButton.setVisible(true);
-                emptyWorkLabelButton.setVisible(true);
-                allButton.setVisible(true);
-                withoutStudentsButton.setVisible(true);
+        joinButton.addActionListener(e -> {
+            showTextArea.setText("");
+            selectionTable.clearSelection();
+            joinButton.setEnabled(false);
+            SelectItemInModel dialog = new SelectItemInModel(new EmployeeManagerImpl().getAllEmployees());
+            dialog.setVisible(true);
+            System.out.println(dialog.getChoicesObject());
+            Employee employee = (Employee) dialog.getChoicesObject();
+            System.out.println(employee);
+            if (employee != null) {
+                new WorkLabelManagerImpl().addEmployeeToWorkLabel(
+                        employee, new WorkLabelManagerImpl().getAllWorkLabels().get(selectionTable.getSelectedIndex()));
             }
         });
 
-        groupButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GroupListSwingWorker groupListSwingWorker = new GroupListSwingWorker();
-                groupListSwingWorker.execute();
-
-                showTextArea.setText("");
-                addButton.setVisible(true);
-                removeButton.setVisible(true);
-                selectionTabel.setVisible(true);
-                joinButton.setVisible(false);
-                removeButton.setEnabled(false);
-                generateButton.setVisible(false);
-                emptyWorkLabelButton.setVisible(false);
-                allButton.setVisible(false);
-                withoutStudentsButton.setVisible(false);
-            }
+        unJoinButton.addActionListener(e -> {
+            showTextArea.setText("");
+            selectionTable.clearSelection();
+            unJoinButton.setEnabled(false);
+            new WorkLabelManagerImpl().removeEmployeeFromWorkLabel(
+                    new WorkLabelManagerImpl().getAllWorkLabels().get(selectionTable.getSelectedIndex()));
         });
 
+        removeButton.addActionListener(e -> {
+            showTextArea.setText("");
+            RemoveSwingWorker removeSwingWorker;
+            int indexOfValue = selectionTable.getSelectedIndex();
+            if ((selectionTable.getModel() instanceof GroupListModel)) {
+                removeSwingWorker = new RemoveSwingWorker(new GroupManagerImpl(), indexOfValue);
+            } else if ((selectionTable.getModel() instanceof SubjectListModel)) {
+                removeSwingWorker = new RemoveSwingWorker(new SubjectManagerImpl(), indexOfValue);
+            } else if ((selectionTable.getModel() instanceof EmployeeListModel)) {
+                removeSwingWorker = new RemoveSwingWorker(new EmployeeManagerImpl(), indexOfValue);
+            } else
+                removeSwingWorker = new RemoveSwingWorker(new WorkLabelManagerImpl(), indexOfValue);
 
-        selectionTabel.addMouseListener(new MouseAdapter() {
+            removeSwingWorker.execute();
+        });
+
+        subjectButton.addActionListener(e -> {
+            prepareButtons();
+            SubjectListSwingWorker subjectListSwingWorker = new SubjectListSwingWorker();
+            subjectListSwingWorker.execute();
+        });
+
+        employeeButton.addActionListener(e -> {
+            prepareButtons();
+            EmployeeListSwingWorker employeeListSwingWorker = new EmployeeListSwingWorker();
+            employeeListSwingWorker.execute();
+        });
+
+        groupButton.addActionListener(e -> {
+            prepareButtons();
+            GroupListSwingWorker groupListSwingWorker = new GroupListSwingWorker();
+            groupListSwingWorker.execute();
+        });
+
+        showAllWorkLabels(workLabelButton);
+
+        selectionTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 showTextArea.setText("");
                 PrintSwingWorker printSwingWorker;
-                int indexOfValue = selectionTabel.getSelectedIndex();
-                if ((selectionTabel.getModel() instanceof GroupListModel)) {
-                    printSwingWorker = new PrintSwingWorker(groupManager, indexOfValue);
-                } else if ((selectionTabel.getModel() instanceof SubjectListModel)) {
-                    printSwingWorker = new PrintSwingWorker(subjectManager, indexOfValue);
-                } else if ((selectionTabel.getModel() instanceof EmployeeListModel)) {
-                    printSwingWorker = new PrintSwingWorker(employeeManager, indexOfValue);
+                int indexOfValue = selectionTable.getSelectedIndex();
+                if ((selectionTable.getModel() instanceof GroupListModel)) {
+                    printSwingWorker = new PrintSwingWorker(new GroupManagerImpl(), indexOfValue);
+                } else if ((selectionTable.getModel() instanceof SubjectListModel)) {
+                    printSwingWorker = new PrintSwingWorker(new SubjectManagerImpl(), indexOfValue);
+                } else if ((selectionTable.getModel() instanceof EmployeeListModel)) {
+                    printSwingWorker = new PrintSwingWorker(new EmployeeManagerImpl(), indexOfValue);
                 } else
-                    printSwingWorker = new PrintSwingWorker(workLabelManager, indexOfValue);
+                    printSwingWorker = new PrintSwingWorker(new WorkLabelManagerImpl(), indexOfValue);
 
                 printSwingWorker.execute();
             }
         });
 
-
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (selectionTabel.getModel() instanceof GroupListModel) {
-                    AddGroup newGroup = new AddGroup(groupManager, (GroupListModel) selectionTabel.getModel());
-                    newGroup.setVisible(true);
-                }
-                if (selectionTabel.getModel() instanceof SubjectListModel) {
-                    AddSubject newSubject = new AddSubject(subjectManager, (SubjectListModel) selectionTabel.getModel());
-                    newSubject.setVisible(true);
-                }
-                if (selectionTabel.getModel() instanceof EmployeeListModel) {
-                    AddEmployee newEmployee = new AddEmployee(employeeManager, (EmployeeListModel) selectionTabel.getModel());
-                    newEmployee.setVisible(true);
-                }
-                if (selectionTabel.getModel() instanceof WorkLabelListModel) {
-                    AddWorkLabel newWorkLabel = new AddWorkLabel(workLabelManager, (WorkLabelListModel) selectionTabel.getModel());
-                    newWorkLabel.setVisible(true);
-                }
+        addButton.addActionListener(e -> {
+            if (selectionTable.getModel() instanceof GroupListModel) {
+                AddGroup newGroup = new AddGroup(new GroupManagerImpl(), (GroupListModel) selectionTable.getModel());
+                newGroup.setVisible(true);
+            }
+            if (selectionTable.getModel() instanceof SubjectListModel) {
+                AddSubject newSubject = new AddSubject(new SubjectManagerImpl(), (SubjectListModel) selectionTable.getModel());
+                newSubject.setVisible(true);
+            }
+            if (selectionTable.getModel() instanceof EmployeeListModel) {
+                AddEmployee newEmployee = new AddEmployee(new EmployeeManagerImpl(), (EmployeeListModel) selectionTable.getModel());
+                newEmployee.setVisible(true);
+            }
+            if (selectionTable.getModel() instanceof WorkLabelListModel) {
+                AddWorkLabel newWorkLabel = new AddWorkLabel(new WorkLabelManagerImpl(), (WorkLabelListModel) selectionTable.getModel());
+                newWorkLabel.setVisible(true);
             }
         });
-        generateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(true);
-                workLabelListSwingWorker.execute();
-                showTextArea.setText("");
-                joinButton.setEnabled(false);
-                removeButton.setEnabled(false);
-            }
-        });
-        allButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
+        generateButton.addActionListener(e -> {
+            prepareButtonsWorkLabel();
+            WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(1);
+            workLabelListSwingWorker.execute();
         });
-        emptyWorkLabelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
+        showAllWorkLabels(allButton);
+        emptyWorkLabelButton.addActionListener(e -> {
+            prepareButtonsWorkLabel();
+            WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(2);
+            workLabelListSwingWorker.execute();
         });
-        withoutStudentsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
+        withoutStudentsButton.addActionListener(e -> {
+            prepareButtonsWorkLabel();
+            WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(3);
+            workLabelListSwingWorker.execute();
+        });
+    }
+
+    private void prepareButtonsWorkLabel() {
+        showTextArea.setText("");
+        joinButton.setEnabled(false);
+        removeButton.setEnabled(false);
+        selectionTable.clearSelection();
+    }
+
+    private void prepareButtons() {
+        showTextArea.setText("");
+        addButton.setVisible(true);
+        removeButton.setVisible(true);
+        selectionTable.setVisible(true);
+        joinButton.setVisible(false);
+        removeButton.setEnabled(false);
+        generateButton.setVisible(false);
+        emptyWorkLabelButton.setVisible(false);
+        allButton.setVisible(false);
+        withoutStudentsButton.setVisible(false);
+        unJoinButton.setVisible(false);
+    }
+
+    private void showAllWorkLabels(JButton button) {
+        button.addActionListener(e -> {
+            WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(0);
+            workLabelListSwingWorker.execute();
+
+            showTextArea.setText("");
+            addButton.setVisible(true);
+            removeButton.setVisible(true);
+            selectionTable.setVisible(true);
+            joinButton.setVisible(true);
+            joinButton.setEnabled(false);
+            removeButton.setEnabled(false);
+            generateButton.setVisible(true);
+            emptyWorkLabelButton.setVisible(true);
+            allButton.setVisible(true);
+            withoutStudentsButton.setVisible(true);
+            unJoinButton.setVisible(true);
+            unJoinButton.setEnabled(false);
         });
     }
 
@@ -320,7 +289,14 @@ public class MainWindow extends JFrame {
             try {
                 showTextArea.append(get().toString());
                 if (workLabel == get()) {
-                    joinButton.setEnabled(true);
+                    if (workLabel.getEmployeeId() == null) {
+                        joinButton.setEnabled(true);
+                        unJoinButton.setEnabled(false);
+                    } else {
+                        unJoinButton.setEnabled(true);
+                        joinButton.setEnabled(false);
+                    }
+
                 } else {
                     joinButton.setEnabled(false);
                 }
@@ -402,16 +378,16 @@ public class MainWindow extends JFrame {
 
             try {
                 if (group == get()) {
-                    GroupListModel model = (GroupListModel) selectionTabel.getModel();
+                    GroupListModel model = (GroupListModel) selectionTable.getModel();
                     model.deleteGroup(group);
                 } else if (subject == get()) {
-                    SubjectListModel model = (SubjectListModel) selectionTabel.getModel();
+                    SubjectListModel model = (SubjectListModel) selectionTable.getModel();
                     model.deleteSubject(subject);
                 } else if (employee == get()) {
-                    EmployeeListModel model = (EmployeeListModel) selectionTabel.getModel();
+                    EmployeeListModel model = (EmployeeListModel) selectionTable.getModel();
                     model.deleteEmployee(employee);
                 } else if (workLabel == get()) {
-                    WorkLabelListModel model = (WorkLabelListModel) selectionTabel.getModel();
+                    WorkLabelListModel model = (WorkLabelListModel) selectionTable.getModel();
                     model.deleteWorkLabel(workLabel);
                 }
             } catch (
@@ -434,7 +410,7 @@ public class MainWindow extends JFrame {
 
         @Override
         protected List<Group> doInBackground() throws Exception {
-            List<Group> groupList = groupManager.getAllGroup();
+            List<Group> groupList = new GroupManagerImpl().getAllGroup();
             System.out.println(groupList.toString());
             return groupList;
         }
@@ -442,7 +418,7 @@ public class MainWindow extends JFrame {
         @Override
         protected void done() {
             try {
-                selectionTabel.setModel((ListModel<String>) new GroupListModel(get()));
+                selectionTable.setModel((ListModel<String>) new GroupListModel(get()));
             } catch (InterruptedException ex) {
                 throw new AssertionError("Interrupted", ex);
             } catch (ExecutionException ex) {
@@ -459,7 +435,7 @@ public class MainWindow extends JFrame {
 
         @Override
         protected List<Subject> doInBackground() throws Exception {
-            List<Subject> subjectList = subjectManager.getAllSubject();
+            List<Subject> subjectList = new SubjectManagerImpl().getAllSubject();
             System.out.println(subjectList.toString());
             return subjectList;
         }
@@ -467,7 +443,7 @@ public class MainWindow extends JFrame {
         @Override
         protected void done() {
             try {
-                selectionTabel.setModel((ListModel<String>) new SubjectListModel(get()));
+                selectionTable.setModel((ListModel<String>) new SubjectListModel(get()));
             } catch (InterruptedException ex) {
                 throw new AssertionError("Interrupted", ex);
             } catch (ExecutionException ex) {
@@ -484,7 +460,7 @@ public class MainWindow extends JFrame {
 
         @Override
         protected List<Employee> doInBackground() throws Exception {
-            List<Employee> employeeList = employeeManager.getAllEmployees();
+            List<Employee> employeeList = new EmployeeManagerImpl().getAllEmployees();
             System.out.println(employeeList.toString());
             return employeeList;
         }
@@ -492,7 +468,7 @@ public class MainWindow extends JFrame {
         @Override
         protected void done() {
             try {
-                selectionTabel.setModel((ListModel<String>) new EmployeeListModel(get()));
+                selectionTable.setModel((ListModel<String>) new EmployeeListModel(get()));
             } catch (InterruptedException ex) {
                 throw new AssertionError("Interrupted", ex);
             } catch (ExecutionException ex) {
@@ -504,29 +480,30 @@ public class MainWindow extends JFrame {
 
 
     private class WorkLabelListSwingWorker extends SwingWorker<List<WorkLabel>, List<WorkLabel>> {
+        private final int number;
 
-        private boolean generate = false;
-
-        public WorkLabelListSwingWorker() {
-        }
-        public WorkLabelListSwingWorker(boolean generate) {
-            this.generate = generate;
+        public WorkLabelListSwingWorker(int number) {
+            this.number = number;
         }
 
         @Override
         protected List<WorkLabel> doInBackground() throws Exception {
-            if (generate){
-                workLabelManager.generateWorkLabels();
+            if (number == 2) {
+                return new WorkLabelManagerImpl().getWorkLabelsWithoutEmployee();
             }
-            List<WorkLabel> workLabelList = workLabelManager.getAllWorkLabels();
-            System.out.println(workLabelList.toString());
-            return workLabelList;
+            if (number == 3) {
+                return new WorkLabelManagerImpl().getWorkLabelsWithoutStudents();
+            }
+            if (number == 1) {
+                new WorkLabelManagerImpl().generateWorkLabels();
+            }
+            return new WorkLabelManagerImpl().getAllWorkLabels();
         }
 
         @Override
         protected void done() {
             try {
-                selectionTabel.setModel((ListModel<String>) new WorkLabelListModel(get()));
+                selectionTable.setModel((ListModel<String>) new WorkLabelListModel(get()));
             } catch (InterruptedException ex) {
                 throw new AssertionError("Interrupted", ex);
             } catch (ExecutionException ex) {

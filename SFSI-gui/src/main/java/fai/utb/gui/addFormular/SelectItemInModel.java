@@ -1,7 +1,7 @@
 package fai.utb.gui.addFormular;
 
+import fai.utb.db.entity.Employee;
 import fai.utb.db.entity.Group;
-import fai.utb.db.manager.GroupManagerImpl;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -12,93 +12,56 @@ public class SelectItemInModel extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JComboBox<Object> choicesComboBox;
-    private Group choicesGroup;
+    private Object choicesObject;
 
-
-    public SelectItemInModel(List<Group> groups) {
+    public SelectItemInModel(List<?> objects) {
         createUIComponents();
-        addItemsToComboBox(groups);
+        addItemsToComboBox(objects);
         this.setContentPane(contentPane);
         this.pack();
         this.setModal(true);
     }
 
     private void createUIComponents() {
-
         getRootPane().setDefaultButton(buttonOK);
-
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() when cross is clicked
+        buttonOK.addActionListener(e -> onOK());
+        buttonCancel.addActionListener(e -> onCancel());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
         });
+        contentPane.registerKeyboardAction(e -> onCancel(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
 
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
+    public Object getChoicesObject() {
+        return choicesObject;
+    }
+
+    private void addItemsToComboBox(List<?> objects) {
+        if (objects.get(0) instanceof Employee) {
+            List<Employee> employeeList = (List<Employee>) objects;
+            for (Employee employee : employeeList) {
+                choicesComboBox.addItem(employee);
             }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-
-    }
-
-
-    public SelectItemInModel() {
-        createUIComponents();
-//        addItemsToComboBox(groups);
-        this.setContentPane(contentPane);
-        this.pack();
-        this.setModal(true);
-
-    }
-
-    public Group getChoicesGroup() {
-        return choicesGroup;
-    }
-
-    private void addItemsToComboBox(List<Group> groups) {
-        for (Group group : groups) {
-            choicesComboBox.addItem(group);
+        } else if (objects.get(0) instanceof Group) {
+            List<Group> groupLis = (List<Group>) objects;
+            for (Group group : groupLis) {
+                choicesComboBox.addItem(group);
+            }
         }
     }
 
-
     private void onOK() {
-        choicesGroup = (Group) choicesComboBox.getSelectedItem();
-        System.out.println(choicesGroup);
-
-//        setVisible(true);
-//        return result;
-
-
+        choicesObject = choicesComboBox.getSelectedItem();
+        System.out.println(choicesObject);
         dispose();
-
     }
 
     private void onCancel() {
-        choicesGroup =null;
-        // add your code here if necessary
+        choicesObject = null;
         dispose();
-    }
-
-    public static void main(String[] args) {
-        SelectItemInModel dialog = new SelectItemInModel( new GroupManagerImpl().getAllGroup());
-        dialog.setVisible(true);
-        System.exit(0);
     }
 }

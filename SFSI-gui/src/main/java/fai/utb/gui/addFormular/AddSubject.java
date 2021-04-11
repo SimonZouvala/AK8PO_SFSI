@@ -14,8 +14,7 @@ import fai.utb.gui.listModel.SubjectListModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -26,8 +25,8 @@ import java.util.concurrent.ExecutionException;
 public class AddSubject extends JFrame {
 
     private static final I18n I18N = new I18n(AddSubject.class);
-    private SubjectManager subjectManager;
-    private SubjectListModel subjectListModel;
+    private final SubjectManager subjectManager;
+    private final SubjectListModel subjectListModel;
     private JPanel addSubjectPanel;
     private JTextField acronymTextField;
     private JTextField nameOfSubjectTextField;
@@ -46,7 +45,7 @@ public class AddSubject extends JFrame {
     private Language language;
     private Completion completion;
     private Subject subject;
-    private GroupListModel groupListModel;
+    private final GroupListModel groupListModel;
     private List<Group> availableGroups;
     private int numberOfWeeks;
 
@@ -56,95 +55,73 @@ public class AddSubject extends JFrame {
         this.subjectListModel = subjectListModel;
         groupListModel = new GroupListModel();
         createUIComponents();
-        completionComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = Objects.requireNonNull(completionComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Zápočet" -> completion = Completion.Z;
-                    case "Klasifikovaný zápočet" -> completion = Completion.KL;
-                    case "Zkouška" -> completion = Completion.ZK;
-                    default -> completion = null;
-                }
+        completionComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(completionComboBox.getSelectedItem()).toString();
+            switch (selectedItem) {
+                case "Zápočet" -> completion = Completion.Z;
+                case "Klasifikovaný zápočet" -> completion = Completion.KL;
+                case "Zkouška" -> completion = Completion.ZK;
+                default -> completion = null;
             }
         });
-        languageComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = Objects.requireNonNull(languageComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Čeština" -> language = Language.CZ;
-                    case "Angličtina" -> language = Language.EN;
-                    default -> language = null;
-                }
+        languageComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(languageComboBox.getSelectedItem()).toString();
+            switch (selectedItem) {
+                case "Čeština" -> language = Language.CZ;
+                case "Angličtina" -> language = Language.EN;
+                default -> language = null;
             }
         });
-        numberOfWeeksComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = numberOfWeeksComboBox.getSelectedItem().toString();
-                if (!selectedItem.equals("")) {
-                    numberOfWeeks = Integer.parseInt(selectedItem);
-                } else {
-                    numberOfWeeks = 0;
-                }
+        numberOfWeeksComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(numberOfWeeksComboBox.getSelectedItem()).toString();
+            if (!selectedItem.equals("")) {
+                numberOfWeeks = Integer.parseInt(selectedItem);
+            } else {
+                numberOfWeeks = 0;
             }
         });
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        saveButton.addActionListener(e -> {
 
-                String acronym = acronymTextField.getText();
-                String name = nameOfSubjectTextField.getText();
-                String teacher = teacherTextField.getText();
-                String lectureCapacity = lectureCapacityTextField.getText();
-                String seminarCapacity = seminarCapacityTextField.getText();
-                String exerciseCapacity = exerciseCapacityTextField.getText();
-                String classroomCapacity = classroomCapacityTextField.getText();
-                ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(acronym, name, teacher,
-                        lectureCapacity, seminarCapacity, exerciseCapacity, classroomCapacity);
-                confirmSwingWorker.execute();
-            }
+            String acronym = acronymTextField.getText();
+            String name = nameOfSubjectTextField.getText();
+            String teacher = teacherTextField.getText();
+            String lectureCapacity = lectureCapacityTextField.getText();
+            String seminarCapacity = seminarCapacityTextField.getText();
+            String exerciseCapacity = exerciseCapacityTextField.getText();
+            String classroomCapacity = classroomCapacityTextField.getText();
+            ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(acronym, name, teacher,
+                    lectureCapacity, seminarCapacity, exerciseCapacity, classroomCapacity);
+            confirmSwingWorker.execute();
         });
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                availableGroups = getAvailableGroups();
-                if (availableGroups.size() != 0) {
-                    SelectItemInModel dialog = new SelectItemInModel(availableGroups);
-                    dialog.setVisible(true);
-                    System.out.println(dialog.getChoicesGroup());
-                    Group group = dialog.getChoicesGroup();
-                    if (group != null) {
-                        groupListModel.addGroup(dialog.getChoicesGroup());
-                        groupsTextArea.setText(groupListModel.toString());
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, I18N.getString("AllGroupsJoined"));
-                }
-                if (groupListModel.getSize() == 0) {
-                    removeButton.setEnabled(false);
-                } else {
-                    removeButton.setEnabled(true);
-                }
-            }
-        });
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SelectItemInModel dialog = new SelectItemInModel(groupListModel.getGroupsList());
+        addButton.addActionListener(e -> {
+            availableGroups = getAvailableGroups();
+            if (availableGroups.size() != 0) {
+                SelectItemInModel dialog = new SelectItemInModel(availableGroups);
                 dialog.setVisible(true);
-//                System.out.println(dialog.getChoicesGroup());
-                Group group = dialog.getChoicesGroup();
+                System.out.println(dialog.getChoicesObject());
+                Group group = (Group) dialog.getChoicesObject();
                 if (group != null) {
-                    groupListModel.deleteGroup(dialog.getChoicesGroup());
+                    groupListModel.addGroup(group);
                     groupsTextArea.setText(groupListModel.toString());
                 }
-                if (groupListModel.getSize() == 0) {
-                    removeButton.setEnabled(false);
-                }
-//                JOptionPane.showMessageDialog(null, I18N.getString("GroupNotJoined"));
+            } else {
+                JOptionPane.showMessageDialog(null, I18N.getString("AllGroupsJoined"));
             }
+            removeButton.setEnabled(groupListModel.getSize() != 0);
+        });
+        removeButton.addActionListener(e -> {
+            SelectItemInModel dialog = new SelectItemInModel(groupListModel.getGroupsList());
+            dialog.setVisible(true);
+//                System.out.println(dialog.getChoicesGroup());
+            Group group = (Group) dialog.getChoicesObject();
+            if (group != null) {
+                groupListModel.deleteGroup(group);
+                groupsTextArea.setText(groupListModel.toString());
+            }
+            if (groupListModel.getSize() == 0) {
+                removeButton.setEnabled(false);
+            }
+//                JOptionPane.showMessageDialog(null, I18N.getString("GroupNotJoined"));
         });
 
     }
@@ -174,13 +151,13 @@ public class AddSubject extends JFrame {
     private class ConfirmSwingWorker extends SwingWorker<CheckAddSubjectResult, CheckAddSubjectResult> {
 
 
-        private String acronym;
-        private String name;
-        private String teacher;
-        private String lectureCapacity;
-        private String seminarCapacity;
-        private String exerciseCapacity;
-        private String classroomCapacity;
+        private final String acronym;
+        private final String name;
+        private final String teacher;
+        private final String lectureCapacity;
+        private final String seminarCapacity;
+        private final String exerciseCapacity;
+        private final String classroomCapacity;
 
         public ConfirmSwingWorker(String acronym, String name, String teacher, String lectureCapacity,
                                   String seminarCapacity, String exerciseCapacity, String classroomCapacity) {

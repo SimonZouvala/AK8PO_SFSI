@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
 /**
  * @author Šimon Zouvala
  */
@@ -173,9 +174,8 @@ public class WorkLabel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkLabel workLabel = (WorkLabel) o;
-        return Objects.equals(id, workLabel.id)
-                && Objects.equals(name, workLabel.name)
-                && language == workLabel.language;
+        return Objects.equals(name, workLabel.name) && language == workLabel.language
+                && lessonType == workLabel.lessonType && completion == workLabel.completion;
     }
 
     @Override
@@ -185,18 +185,15 @@ public class WorkLabel {
 
     @Override
     public String toString() {
-        return "WorkLabel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", language=" + language +
-                ", numberOfStudents=" + numberOfStudents +
-                ", lessonType=" + lessonType +
-                ", completion=" + completion +
-                ", numberOfWeeks=" + numberOfWeeks +
-                ", numberOfHours=" + numberOfHours +
-                ", points=" + points +
-                ", employeeId=" + employeeId +
-                ", subject=" + subject +
-                '}';
+        return name + " \n"+
+                language + " \n"+
+                numberOfStudents + " \n"+
+                lessonType + " \n"+
+                completion + " \n"+
+                numberOfWeeks + " \n"+
+                numberOfHours + " \n"+
+                points + " \n"+
+                employeeId + " \n"+
+                subject + " \n";
     }
 }

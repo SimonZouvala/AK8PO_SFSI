@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
 /**
  * @author Šimon Zouvala
  */
@@ -138,15 +139,12 @@ public class Group {
 
     @Override
     public String toString() {
-        return "Group{" +
-                "id=" + id +
-                ", degree=" + degree +
-                ", fieldOfStudy='" + fieldOfStudy + '\'' +
-                ", formOfStudy=" + formOfStudy +
-                ", semester=" + semester +
-                ", grade=" + grade +
-                ", quantity=" + quantity +
-                ", language=" + language +
-                '}';
+        return fieldOfStudy + " \n" +
+                degree + " \n" +
+                formOfStudy + " \n"+
+                semester + " \n"+
+                grade + " \n"+
+                quantity + " \n"+
+                language + " \n";
     }
 }

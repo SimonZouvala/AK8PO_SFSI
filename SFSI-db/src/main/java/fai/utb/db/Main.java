@@ -29,7 +29,7 @@ public class Main {
         SubjectManager subjectManager = new SubjectManagerImpl();
 
         Group g1 = new Group(
-                UUID.randomUUID(),
+
                 Degree.MGR,
                 "SWI",
                 FormOfStudy.K,
@@ -39,7 +39,6 @@ public class Main {
                 Language.CZ);
 
         Group g2 = new Group(
-                UUID.randomUUID(),
                 Degree.MGR,
                 "SWI",
                 FormOfStudy.P,
@@ -52,21 +51,22 @@ public class Main {
 
         groupManager.create(g2);
 
-        List<Group> groupList = new ArrayList<>(Arrays.asList(g1, g2));
+        List<Group> groupList = new ArrayList<>();
+        groupList.add(g1);
+        groupList.add(g2);
 
         Subject s1 = new Subject(
-                UUID.randomUUID(),
-                "Pokročilé programování",
                 "AK8PO",
+                "Pokročilé programování",
                 "Vařacha Pavel",
                 0,
                 0,
                 15,
-                23,
                 1,
                 Completion.KL,
+                23,
                 Language.CZ,
-                groupList);
+                groupManager.getAllGroup());
 
         subjectManager.create(s1);
 
@@ -97,17 +97,17 @@ public class Main {
         for (WorkLabel workLabel : workLabelManager.getAllWorkLabels()) {
             workLabelManager.addEmployeeToWorkLabel(employeeManager.getAllEmployees().get(0), workLabel);
         }
-
-        employeeManager.setWorkPoints(e1);
+        System.out.println(workLabelManager.getAllWorkLabels());
+//        employeeManager.setWorkPoints(e1);
 
         for (WorkLabel workLabel : workLabelManager.getAllWorkLabels()) {
             workLabelManager.remove(workLabel);
         }
 
-        subjectManager.remove(s1);
-        groupManager.remove(g1);
-        groupManager.remove(g2);
-        employeeManager.remove(e1);
+        subjectManager.remove(subjectManager.getAllSubject().get(subjectManager.getAllSubject().size()-1));
+        groupManager.remove(groupManager.getAllGroup().get(groupManager.getAllGroup().size()-1));
+        groupManager.remove(groupManager.getAllGroup().get(groupManager.getAllGroup().size()-1));
+        employeeManager.remove(employeeManager.getAllEmployees().get(employeeManager.getAllEmployees().size()-1));
 
 //        subjectManager.setSubjectCapacity(subjectManager.getSubject(1L),33);
 //        groupManager.setQuantity(groupManager.getGroup(1L),111);

@@ -20,7 +20,7 @@ public enum CheckAddWorkLabelResult {
     NUMBER_OF_HOURS_NEGATIVE(String.class),
     LESSON_TYPE_AND_COMPLETION_NOT_SELECT(String.class),
     WORKLABEL_ALREADY_EXIST(String.class),
-    WORKLABEL_ADD(String.class);
+    WORKLABEL_ADD(String.class), WORKLABEL_ALREADY_EXIST_Lesson(String.class);
 
 
 

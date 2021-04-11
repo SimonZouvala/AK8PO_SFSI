@@ -163,6 +163,5 @@ public class GroupManagerImpl extends GroupManager {
                 "grade",
                 "quantity",
                 "language");
-
     }
 }

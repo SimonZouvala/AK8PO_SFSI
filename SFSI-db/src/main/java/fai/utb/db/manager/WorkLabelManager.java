@@ -30,4 +30,8 @@ public abstract class WorkLabelManager extends BasicManager{
 
     public abstract List<WorkLabel> getAllWorkLabels();
 
+    public abstract List<WorkLabel> getWorkLabelsWithoutEmployee();
+
+    public abstract List<WorkLabel> getWorkLabelsWithoutStudents();
+
 }

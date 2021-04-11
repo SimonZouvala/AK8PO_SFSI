@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
 
         EventQueue.invokeLater(() -> {
-            new MainWindow(new GroupManagerImpl(), new SubjectManagerImpl(), new EmployeeManagerImpl(), new WorkLabelManagerImpl()).setVisible(true);
+            new MainWindow().setVisible(true);
         });
 
 

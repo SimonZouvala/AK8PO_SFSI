@@ -1,8 +1,10 @@
 package fai.utb.db.manager;
 
+import fai.utb.db.entity.Employee;
 import fai.utb.db.entity.Group;
 import fai.utb.db.entity.Subject;
 import fai.utb.db.entity.entityEnum.*;
+import fai.utb.db.exception.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
 /**
  * @author Šimon Zouvala
  */
@@ -31,6 +34,7 @@ public class SubjectManagerImpl extends SubjectManager {
 
     @Override
     public void create(Subject subject) {
+        validate(subject);
         Element subjectElement = getItemToXML(
                 document,
                 getSubjectXmlDomList(),
@@ -39,6 +43,64 @@ public class SubjectManagerImpl extends SubjectManager {
                 subject.getGroupsIds(),
                 "group");
         create(document, subjectElement, SUBJECTS_XML);
+    }
+
+    private void validate(Subject subject) {
+        if (subject == null) {
+            throw new IllegalArgumentException("subject is null");
+        }
+        if (subject.getName() == null) {
+            throw new ValidationException("Name is not set");
+        }
+        if (subject.getAcronym() == null) {
+            throw new ValidationException("Acronym is not set");
+        }
+        if (subject.getTeacher() == null) {
+            throw new ValidationException("Teacher is not set");
+        }
+        if (subject.getLectureCapacity() < 0) {
+            throw new ValidationException("Lecture capacity is negative");
+        }
+        if (subject.getSeminarCapacity() < 0) {
+            throw new ValidationException("Seminar capacity is negative");
+        }
+        if (subject.getExerciseCapacity() < 0) {
+            throw new ValidationException("Exercise capacity is negative");
+        }
+        if (subject.getNumberOfWeeks() < 0) {
+            throw new ValidationException("Number of weeks capacity is negative");
+        }
+        if (subject.getCompletion() == null) {
+            throw new ValidationException("Completion is not set");
+        }
+        if (subject.getClassroomCapacity() < 0) {
+            throw new ValidationException("Classroom capacity is negative");
+        }
+        if (subject.getLanguage() == null) {
+            throw new ValidationException("Language is not set");
+        }
+        if (subject.getGroups() == null || subject.getGroups().size() == 0) {
+            throw new ValidationException("Group is zero or not set");
+        }
+        if (isSameSubjectInXml(subject)) {
+            throw new ValidationException(
+                    "Subject " + subject.getName() + " (" + subject.getAcronym() + ")"
+                            + " with teacher " + subject.getTeacher() + ", completion " + subject.getCompletion()
+                            + ", language " + subject.getLanguage() + " and number of weeks "
+                            + subject.getNumberOfWeeks() + " is already exist.");
+        }
+
+    }
+
+    private boolean isSameSubjectInXml(Subject newSubject) {
+        List<Subject> subjects = getAllSubject();
+
+        for (Subject oldSubject : subjects) {
+            if (oldSubject.equals(newSubject)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -93,7 +155,7 @@ public class SubjectManagerImpl extends SubjectManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (UUID.fromString(element.getAttribute("id")) == id) {
+                if (UUID.fromString(element.getAttribute("id")).equals(id)) {
                     return getSubjectFromXML(element);
                 }
             }
@@ -140,7 +202,7 @@ public class SubjectManagerImpl extends SubjectManager {
                 .stream()
                 .filter(subject -> subject.getGroups().contains(group))
                 .toList();
-        for (Subject subject: currentSubjects) {
+        for (Subject subject : currentSubjects) {
             remove(subject);
             List<Group> oldGroup = subject.getGroups();
             oldGroup.remove(group);

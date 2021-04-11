@@ -186,7 +186,7 @@ public class AddWorkLabel extends JFrame {
             } catch (NumberFormatException e) {
                 return CheckAddWorkLabelResult.NUMBER_OF_STUDENTS_INVALID;
             }
-            if (numberOfStudents_int <= 0) {
+            if (numberOfStudents_int < 0) {
                 return CheckAddWorkLabelResult.NUMBER_OF_STUDENTS_NEGATIVE;
             }
 
@@ -213,7 +213,7 @@ public class AddWorkLabel extends JFrame {
                     workLabel = new WorkLabel(name, language, points_int, numberOfStudents_int, lessonType, null, numberOfWeeks, numberOfHours_int);
                     workLabelManager.create(workLabel);
                 } catch (ValidationException e) {
-                    return CheckAddWorkLabelResult.WORKLABEL_ALREADY_EXIST;
+                    return CheckAddWorkLabelResult.WORKLABEL_ALREADY_EXIST_Lesson;
                 }
             } else {
                 try {

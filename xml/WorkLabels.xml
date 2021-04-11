@@ -1,3 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><worklabels>
 
-<worklabel id="927bd2b8-3e12-4cd4-9f80-e05d29382506"><name>Test</name><employee/><subject/><language>CZ</language><point>5.0</point><number_of_students>10</number_of_students><lesson_type/><completion>Z</completion><number_of_weeks>0</number_of_weeks><number_of_hours>0</number_of_hours></worklabel></worklabels>
+
+    <worklabel id="874cc0a9-5237-437e-a8b0-5deb21267a26">
+        <name>EXERCISE Pokročilé programování 1</name>
+        <employee/>
+        <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
+        <language>CZ</language>
+        <point>18.0</point>
+        <number_of_students>5</number_of_students>
+        <lesson_type>EXERCISE</lesson_type>
+        <completion/>
+        <number_of_weeks>1</number_of_weeks>
+        <number_of_hours>15</number_of_hours>
+    </worklabel>
+
+    <worklabel id="6711d341-2dcd-4548-9500-45cec48e0482">
+        <name>KL Pokročilé programování</name>
+        <employee/>
+        <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
+        <language>CZ</language>
+        <point>1.5</point>
+        <number_of_students>5</number_of_students>
+        <lesson_type/>
+        <completion>KL</completion>
+        <number_of_weeks>0</number_of_weeks>
+        <number_of_hours>0</number_of_hours>
+    </worklabel>
+    <worklabel id="da4ac62c-b66d-47dd-ac39-ec4ed91bf3e0">
+        <name>sss</name>
+        <employee>dda84559-7bfa-4ce9-8a3d-333150d7e5c2</employee>
+        <subject/>
+        <language>CZ</language>
+        <point>5.0</point>
+        <number_of_students>20</number_of_students>
+        <lesson_type/>
+        <completion>ZK</completion>
+        <number_of_weeks>0</number_of_weeks>
+        <number_of_hours>0</number_of_hours>
+    </worklabel>
+<worklabel id="3b4bb155-91dd-4103-91ce-13a4ff48b032"><name>popop</name><employee/><subject/><language>CZ</language><point>5.0</point><number_of_students>0</number_of_students><lesson_type>LECTURE</lesson_type><completion/><number_of_weeks>4</number_of_weeks><number_of_hours>5</number_of_hours></worklabel></worklabels>

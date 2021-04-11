@@ -20,6 +20,6 @@ public abstract class EmployeeManager extends BasicManager{
 
     public abstract Employee getEmployee(UUID id);
 
-    public abstract void setWorkPoints(Employee employee);
+//    public abstract void setWorkPoints(Employee employee);
 
 }

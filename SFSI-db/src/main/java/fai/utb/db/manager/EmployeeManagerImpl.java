@@ -1,9 +1,7 @@
 package fai.utb.db.manager;
 
 import fai.utb.db.entity.Employee;
-import fai.utb.db.entity.Group;
 import fai.utb.db.entity.WorkLabel;
-import fai.utb.db.entity.entityEnum.Language;
 import fai.utb.db.exception.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -14,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
 /**
  * @author Šimon Zouvala
  */
@@ -25,7 +24,6 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
     public EmployeeManagerImpl() {
         this.document = getEmployeesDocument();
-
     }
 
     private Document getEmployeesDocument() {
@@ -46,9 +44,11 @@ public class EmployeeManagerImpl extends EmployeeManager {
     private void validate(Employee employee) {
         if (employee == null) {
             throw new IllegalArgumentException("group is null");
-        }if (employee.getName() == null) {
+        }
+        if (employee.getName() == null) {
             throw new ValidationException("Name is not set");
-        }if (employee.getSurname() == null) {
+        }
+        if (employee.getSurname() == null) {
             throw new ValidationException("Surname is not set");
         }
         if (employee.getPhone() == null) {
@@ -57,25 +57,24 @@ public class EmployeeManagerImpl extends EmployeeManager {
         if (employee.getEmail() == null) {
             throw new ValidationException("Email is not set");
         }
-        if (employee.getJobTime() <= 0.0 || employee.getJobTime() ==null) {
+        if (employee.getJobTime() <= 0.0 || employee.getJobTime() == null) {
             throw new ValidationException("JobTime  is not set or is negative or zero");
         }
         if (employee.getIsEmployee() == null) {
             throw new ValidationException("Is Employee is not set");
         }
-        if (isSameEmployeeInXml(employee)){
+        if (isSameEmployeeInXml(employee)) {
             throw new ValidationException(
-                    "Employee "+ employee.getName() +" "+employee.getSurname() +" with email "+ employee.getEmail() +
-                            " and phone number "+employee.getPhone() + "is already exist");
-
+                    "Employee " + employee.getName() + " " + employee.getSurname() + " with email " + employee.getEmail() +
+                            " and phone number " + employee.getPhone() + "is already exist");
         }
     }
 
     private boolean isSameEmployeeInXml(Employee newEmployee) {
         List<Employee> employees = getAllEmployees();
 
-        for (Employee oldEmployee: employees){
-            if (oldEmployee.equals(newEmployee)){
+        for (Employee oldEmployee : employees) {
+            if (oldEmployee.equals(newEmployee)) {
                 return true;
             }
         }
@@ -97,13 +96,10 @@ public class EmployeeManagerImpl extends EmployeeManager {
             Node node = nodeList.item(index);
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-
                 Element element = (Element) node;
-
                 employees.add(getEmployeeFromXML(element));
             }
         }
-
         return employees;
     }
 
@@ -117,16 +113,13 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                if (UUID.fromString(element.getAttribute("id")) == id) {
+                if (UUID.fromString(element.getAttribute("id")).equals(id)) {
                     return getEmployeeFromXML(element);
                 }
             }
         }
-
-
         return null;
     }
-
 
     private Employee getEmployeeFromXML(Element element) {
         return new Employee(
@@ -140,7 +133,6 @@ public class EmployeeManagerImpl extends EmployeeManager {
                 Double.parseDouble(element.getElementsByTagName("workpoint").item(0).getTextContent()),
                 Double.parseDouble(element.getElementsByTagName("workpoint_without_en").item(0).getTextContent()),
                 getWorkLabels((Element) element.getElementsByTagName("worklabels").item(0)));
-
     }
 
     private boolean getIsEmployee(Element element) {
@@ -160,57 +152,114 @@ public class EmployeeManagerImpl extends EmployeeManager {
                         new WorkLabelManagerImpl().getWorkLabel(UUID.fromString(workLabel.getAttribute("id"))));
             }
         }
-
         return workLabels;
     }
 
-    private List<WorkLabel> getWorkLabels(Employee employee) {
-        return new WorkLabelManagerImpl()
-                .getAllWorkLabels()
-                .stream()
-                .filter(workLabel -> employee.getId().equals(workLabel.getEmployeeId()))
-                .toList();
-    }
 
-    @Override
-    public void setWorkPoints(Employee employee) {
-        setElement(
-                document,
-                employee.getId(),
-                "workpoint",
-                String.valueOf(getNumberOfWorkPoint(employee)),
-                EMPLOYEES_XML,
-                MAIN_ELEMENT);
-        setElement(
-                document,
-                employee.getId(),
-                "workpoint_without_en",
-                String.valueOf(getNumberOfWorkPointWithoutEn(employee)),
-                EMPLOYEES_XML,
-                MAIN_ELEMENT);
+    public void addWorkLabelToEmployee(Employee employee, WorkLabel workLabel) {
 
-    }
+        NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
-    private double getNumberOfWorkPoint(Employee employee) {
-        return calculateWorkPoints(getWorkLabels(employee));
-    }
+        for (int index = 0; index < nodeList.getLength(); index++) {
+            Node node = nodeList.item(index);
 
-    private double calculateWorkPoints(List<WorkLabel> workLabels) {
-        double workPoints = 0.0;
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
 
-        for (WorkLabel workLabel : workLabels) {
-            workPoints += workLabel.getPoints();
+                if (UUID.fromString(element.getAttribute("id")).equals(employee.getId())) {
+                    Element workLabelsElement = (Element) element.getElementsByTagName("worklabels").item(0);
+                    Element newElement = document.createElement("worklabel");
+                    newElement.setAttribute("id", workLabel.getId().toString());
+                    workLabelsElement.appendChild(newElement);
+                    break;
+                }
+            }
         }
-        return workPoints;
+        document.getDocumentElement().normalize();
+        saveChangesToXML(document, EMPLOYEES_XML);
+    }
+
+    public void removeWorkLabelToEmployee(Employee employee, WorkLabel workLabel) {
+        NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
+
+        for (int index = 0; index < nodeList.getLength(); index++) {
+            Node node = nodeList.item(index);
+
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+
+                if (UUID.fromString(element.getAttribute("id")).equals(employee.getId())) {
+                    Node workLabels = element.getElementsByTagName("worklabels").item(0);
+                    NodeList nodeListWorkLabels = element.getElementsByTagName("worklabel");
+                    for (int i = 0; i < nodeListWorkLabels.getLength(); i++) {
+                        Node workLabelNode = nodeListWorkLabels.item(i);
+                        if (node.getNodeType() == Node.ELEMENT_NODE) {
+                            Element workLabelElement = (Element) workLabelNode;
+                            if (UUID.fromString(workLabelElement.getAttribute("id")).equals(workLabel.getId())) {
+                                workLabels.removeChild(workLabelElement);
+                                break;
+                            }
+                        }
+//                    Element workLabelsElement = (Element) element.getElementsByTagName("worklabels").item(0);
+//                    Element newElement = document.createElement("worklabel");
+//                    newElement.setAttribute("id", workLabel.getId().toString());
+//                    workLabelsElement.appendChild(newElement);
+                    }
+                }
+            }
+            document.getDocumentElement().normalize();
+            saveChangesToXML(document, EMPLOYEES_XML);
+        }
     }
 
 
-    private double getNumberOfWorkPointWithoutEn(Employee employee) {
-        return calculateWorkPoints(getWorkLabels(employee)
-                .stream()
-                .filter(workLabel -> Language.CZ.equals(workLabel.getLanguage()))
-                .toList());
-    }
+//    private List<WorkLabel> getWorkLabels(Employee employee) {
+//        return new WorkLabelManagerImpl()
+//                .getAllWorkLabels()
+//                .stream()
+//                .filter(workLabel -> employee.getId().equals(workLabel.getEmployeeId()))
+//                .toList();
+//    }
+
+//    @Override
+//    public void setWorkPoints(Employee employee) {
+//        setElement(
+//                document,
+//                employee.getId(),
+//                "workpoint",
+//                String.valueOf(getNumberOfWorkPoint(employee)),
+//                EMPLOYEES_XML,
+//                MAIN_ELEMENT);
+//        setElement(
+//                document,
+//                employee.getId(),
+//                "workpoint_without_en",
+//                String.valueOf(getNumberOfWorkPointWithoutEn(employee)),
+//                EMPLOYEES_XML,
+//                MAIN_ELEMENT);
+//
+//    }
+
+//    private double getNumberOfWorkPoint(Employee employee) {
+//        return calculateWorkPoints(getWorkLabels(employee));
+//    }
+
+//    private double calculateWorkPoints(List<WorkLabel> workLabels) {
+//        double workPoints = 0.0;
+//
+//        for (WorkLabel workLabel : workLabels) {
+//            workPoints += workLabel.getPoints();
+//        }
+//        return workPoints;
+//    }
+
+
+//    private double getNumberOfWorkPointWithoutEn(Employee employee) {
+//        return calculateWorkPoints(getWorkLabels(employee)
+//                .stream()
+//                .filter(workLabel -> Language.CZ.equals(workLabel.getLanguage()))
+//                .toList());
+//    }
 
     private List<String> getEmployeeXmlDomList() {
         return Arrays.asList(
@@ -223,6 +272,5 @@ public class EmployeeManagerImpl extends EmployeeManager {
                 "workpoint",
                 "workpoint_without_en",
                 "worklabels");
-
     }
 }

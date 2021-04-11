@@ -1,6 +1,9 @@
 package fai.utb.db.entity;
 
+import fai.utb.db.entity.entityEnum.Language;
+
 import java.util.*;
+
 /**
  * @author Šimon Zouvala
  */
@@ -15,7 +18,7 @@ public class Employee {
     private Boolean isEmployee;
     private double workPoint;
     private double workPointWithoutEN;
-    private List<WorkLabel> workLabels;
+    private List<WorkLabel> workLabels = new ArrayList<>();
 
     public Employee(UUID id, String name, String surname, String phone, String email, Double jobTime,
                     Boolean isEmployee, double workPoint, double workPointWithoutEN, List<WorkLabel> workLabels) {
@@ -100,6 +103,10 @@ public class Employee {
     }
 
     public double getWorkPoint() {
+        workPoint = 0.0;
+        for (WorkLabel workLabel : workLabels) {
+            workPoint += workLabel.getPoints();
+        }
         return workPoint;
     }
 
@@ -108,6 +115,12 @@ public class Employee {
     }
 
     public double getWorkPointWithoutEN() {
+        workPointWithoutEN = 0.0;
+        for (WorkLabel workLabel : workLabels) {
+            if (workLabel.getLanguage() == Language.CZ) {
+                workPointWithoutEN += workLabel.getPoints();
+            }
+        }
         return workPointWithoutEN;
     }
 
@@ -160,17 +173,13 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", jobTime=" + jobTime +
-                ", isEmployee=" + isEmployee +
-                ", workPoint=" + workPoint +
-                ", workPointWithoutEN=" + workPointWithoutEN +
-                ", workLabels=" + workLabels +
-                '}';
+        return "" +
+                name + " " + surname + " \n" +
+                phone + " \n" +
+                email + " \n" +
+                jobTime + " \n" +
+                isEmployee + " \n" +
+                getWorkPoint() + " \n" +
+                getWorkPointWithoutEN() + " \n";
     }
 }
