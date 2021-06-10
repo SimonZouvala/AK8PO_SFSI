@@ -104,6 +104,7 @@ public class Employee {
 
     public double getWorkPoint() {
         workPoint = 0.0;
+
         for (WorkLabel workLabel : workLabels) {
             workPoint += workLabel.getPoints();
         }
@@ -116,6 +117,7 @@ public class Employee {
 
     public double getWorkPointWithoutEN() {
         workPointWithoutEN = 0.0;
+
         for (WorkLabel workLabel : workLabels) {
             if (workLabel.getLanguage() == Language.CZ) {
                 workPointWithoutEN += workLabel.getPoints();
@@ -173,13 +175,18 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "" +
-                name + " " + surname + " \n" +
-                phone + " \n" +
-                email + " \n" +
-                jobTime + " \n" +
-                isEmployee + " \n" +
-                getWorkPoint() + " \n" +
-                getWorkPointWithoutEN() + " \n";
+        return "---Zaměstanec---: \n" +
+                "Jméno: \t\t " + name + " " + surname + " \n" +
+                "Tel.: \t\t " + phone + " \n" +
+                "Email: \t\t " + email + " \n" +
+                "Úvazek: \t\t " + jobTime + " \n" +
+                "Zaměstnanec: \t " + isEmployee + " \n" +
+                "Body: \t\t " + getWorkPoint() + " \n" +
+                "Body bez EN: \t\t " + getWorkPointWithoutEN() + " \n";
+    }
+
+    public String toStringOnlyName(){
+        return "---Zaměstanec---: \n" +
+                "Jméno: \t\t " + name + " " + surname + " \n";
     }
 }

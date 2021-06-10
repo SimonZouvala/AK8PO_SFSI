@@ -41,4 +41,5 @@ public class WorkLabelListModel extends AbstractListModel {
         fireIntervalAdded(workLabel, lastRow, lastRow);
     }
 
+    public List<WorkLabel> getWorkLabelList(){return workLabelList;}
 }

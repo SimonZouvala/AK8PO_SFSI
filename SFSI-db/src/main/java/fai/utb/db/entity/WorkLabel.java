@@ -3,6 +3,7 @@ package fai.utb.db.entity;
 import fai.utb.db.entity.entityEnum.Completion;
 import fai.utb.db.entity.entityEnum.Language;
 import fai.utb.db.entity.entityEnum.LessonType;
+import fai.utb.db.manager.EmployeeManagerImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -185,15 +186,26 @@ public class WorkLabel {
 
     @Override
     public String toString() {
-        return name + " \n"+
-                language + " \n"+
-                numberOfStudents + " \n"+
-                lessonType + " \n"+
-                completion + " \n"+
-                numberOfWeeks + " \n"+
-                numberOfHours + " \n"+
-                points + " \n"+
-                employeeId + " \n"+
-                subject + " \n";
+        String employeeString = "";
+        String subjectString = "";
+
+        if (getEmployeeId() != null) {
+            System.out.println(getEmployeeId());
+            employeeString = new EmployeeManagerImpl().getEmployee(getEmployeeId()).toStringOnlyName();
+        }
+        if (getSubject() != null){
+            subjectString = getSubject().toStringWithoutGroups();
+        }
+        return "---Pracovní štítek--- \n" +
+                "Název: \t\t " + name + " \n" +
+                "Jazky: \t\t " + language + " \n" +
+                "Počet studentů: \t " + numberOfStudents + " \n" +
+                "Druh výuky: \t\t " + lessonType + " \n" +
+                "Ukončení: \t\t " + completion + " \n" +
+                "Počet týdnů: \t\t " + numberOfWeeks + " \n" +
+                "Počet hodin: \t\t " + numberOfHours + " \n" +
+                "Body: \t\t " + points + " \n" +
+                employeeString +
+                 subjectString;
     }
 }

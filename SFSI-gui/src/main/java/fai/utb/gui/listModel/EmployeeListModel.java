@@ -2,6 +2,7 @@ package fai.utb.gui.listModel;
 
 import fai.utb.db.entity.Employee;
 import fai.utb.db.entity.Group;
+import fai.utb.db.entity.Subject;
 
 import javax.swing.*;
 import java.util.List;
@@ -42,5 +43,8 @@ public class EmployeeListModel extends AbstractListModel {
         }
         fireIntervalRemoved(employee,lastRow,lastRow);
 
+    }
+    public List<Employee> getEmployeesList(){
+        return employeeList;
     }
 }

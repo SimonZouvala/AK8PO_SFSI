@@ -39,4 +39,9 @@ public class SubjectListModel extends AbstractListModel {
         }
         fireIntervalAdded(subject, lastRow, lastRow);
     }
+
+    public List<Subject> getSubjectList(){
+        return subjectList;
+    }
+
 }

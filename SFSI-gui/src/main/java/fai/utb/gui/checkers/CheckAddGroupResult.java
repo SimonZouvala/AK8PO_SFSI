@@ -16,7 +16,6 @@ public enum CheckAddGroupResult {
     GROUP_ADD(String.class),
     GROUP_ALREADY_EXIST(String.class);
 
-
     private final Class<?> type;
 
     private CheckAddGroupResult(Class<?> type) {

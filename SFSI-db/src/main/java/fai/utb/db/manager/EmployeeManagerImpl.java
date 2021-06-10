@@ -177,6 +177,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
         }
         document.getDocumentElement().normalize();
         saveChangesToXML(document, EMPLOYEES_XML);
+        setWorkPoints(getEmployee(employee.getId()));
     }
 
     public void removeWorkLabelToEmployee(Employee employee, WorkLabel workLabel) {
@@ -209,6 +210,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
             }
             document.getDocumentElement().normalize();
             saveChangesToXML(document, EMPLOYEES_XML);
+            setWorkPoints(getEmployee(employee.getId()));
         }
     }
 
@@ -221,24 +223,24 @@ public class EmployeeManagerImpl extends EmployeeManager {
 //                .toList();
 //    }
 
-//    @Override
-//    public void setWorkPoints(Employee employee) {
-//        setElement(
-//                document,
-//                employee.getId(),
-//                "workpoint",
-//                String.valueOf(getNumberOfWorkPoint(employee)),
-//                EMPLOYEES_XML,
-//                MAIN_ELEMENT);
-//        setElement(
-//                document,
-//                employee.getId(),
-//                "workpoint_without_en",
-//                String.valueOf(getNumberOfWorkPointWithoutEn(employee)),
-//                EMPLOYEES_XML,
-//                MAIN_ELEMENT);
-//
-//    }
+
+    private void setWorkPoints(Employee employee) {
+        setElement(
+                document,
+                employee.getId(),
+                "workpoint",
+                String.valueOf(employee.getWorkPoint()),
+                EMPLOYEES_XML,
+                MAIN_ELEMENT);
+        setElement(
+                document,
+                employee.getId(),
+                "workpoint_without_en",
+                String.valueOf(employee.getWorkPointWithoutEN()),
+                EMPLOYEES_XML,
+                MAIN_ELEMENT);
+
+    }
 
 //    private double getNumberOfWorkPoint(Employee employee) {
 //        return calculateWorkPoints(getWorkLabels(employee));

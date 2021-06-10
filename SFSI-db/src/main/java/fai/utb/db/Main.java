@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+
 /**
  * @author Šimon Zouvala
  */
@@ -56,8 +57,8 @@ public class Main {
         groupList.add(g2);
 
         Subject s1 = new Subject(
-                "AK8PO",
-                "Pokročilé programování",
+                "NECO",
+                "Test předmět",
                 "Vařacha Pavel",
                 0,
                 0,
@@ -95,21 +96,22 @@ public class Main {
 //        workLabelManager.addEmployeeToWorkLabel(employeeManager.getEmployee(1L),workLabelManager.getWorkLabel(1L));
         System.out.println(workLabelManager.getAllWorkLabels());
         for (WorkLabel workLabel : workLabelManager.getAllWorkLabels()) {
-            workLabelManager.addEmployeeToWorkLabel(employeeManager.getAllEmployees().get(0), workLabel);
+            workLabelManager.addEmployeeToWorkLabel(employeeManager.getAllEmployees().get(employeeManager.getAllEmployees().size()-1), workLabel);
         }
         System.out.println(workLabelManager.getAllWorkLabels());
+        System.out.println(employeeManager.getAllEmployees());
 //        employeeManager.setWorkPoints(e1);
+//
+//        for (WorkLabel workLabel : workLabelManager.getAllWorkLabels()) {
+//            workLabelManager.remove(workLabel);
+//        }
 
-        for (WorkLabel workLabel : workLabelManager.getAllWorkLabels()) {
-            workLabelManager.remove(workLabel);
-        }
+//        subjectManager.remove(subjectManager.getAllSubject().get(subjectManager.getAllSubject().size()-1));
+//        groupManager.remove(groupManager.getAllGroup().get(groupManager.getAllGroup().size()-1));
+//        groupManager.remove(groupManager.getAllGroup().get(groupManager.getAllGroup().size()-1));
+//        employeeManager.remove(employeeManager.getAllEmployees().get(employeeManager.getAllEmployees().size()-1));
 
-        subjectManager.remove(subjectManager.getAllSubject().get(subjectManager.getAllSubject().size()-1));
-        groupManager.remove(groupManager.getAllGroup().get(groupManager.getAllGroup().size()-1));
-        groupManager.remove(groupManager.getAllGroup().get(groupManager.getAllGroup().size()-1));
-        employeeManager.remove(employeeManager.getAllEmployees().get(employeeManager.getAllEmployees().size()-1));
-
-//        subjectManager.setSubjectCapacity(subjectManager.getSubject(1L),33);
+        subjectManager.setSubjectCapacity(subjectManager.getAllSubject().get(subjectManager.getAllSubject().size()-1),33);
 //        groupManager.setQuantity(groupManager.getGroup(1L),111);
     }
 }

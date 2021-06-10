@@ -139,12 +139,13 @@ public class Group {
 
     @Override
     public String toString() {
-        return fieldOfStudy + " \n" +
-                degree + " \n" +
-                formOfStudy + " \n"+
-                semester + " \n"+
-                grade + " \n"+
-                quantity + " \n"+
-                language + " \n";
+        return "---Skupina---: \n" +
+                "Obor: \t\t " + fieldOfStudy + " \n" +
+                "Stupeň: \t\t " + degree + " \n" +
+                "Forma: \t\t " + formOfStudy + " \n" +
+                "Semestr: \t\t " + semester + " \n" +
+                "Ročník: \t\t " + grade + " \n" +
+                "Počet studentů: \t " + quantity + " \n" +
+                "Jazky: \t\t " + language + " \n";
     }
 }

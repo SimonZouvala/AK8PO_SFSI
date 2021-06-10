@@ -105,6 +105,10 @@ public class SubjectManagerImpl extends SubjectManager {
 
     @Override
     public void setSubjectCapacity(Subject subject, int newCapacity) {
+
+        System.out.println(subject);
+        System.out.println(newCapacity);
+
         setElement(
                 document,
                 subject.getId(),
@@ -112,7 +116,6 @@ public class SubjectManagerImpl extends SubjectManager {
                 String.valueOf(newCapacity),
                 SUBJECTS_XML,
                 MAIN_ELEMENT);
-
         new WorkLabelManagerImpl().generateWorkLabelsAfterUpgrade(getSubject(subject.getId()));
 
     }

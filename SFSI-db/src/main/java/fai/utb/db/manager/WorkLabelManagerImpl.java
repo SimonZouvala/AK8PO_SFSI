@@ -114,9 +114,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         if (workLabel.getLanguage() == null) {
             throw new ValidationException("Language is not set");
         }
-//        if (workLabel.getLessonType() == null) {
-//            throw new ValidationException("Lesson type is not set");
-//        }
         if (workLabel.getCompletion() == null && workLabel.getLessonType() != null) {
 
             if (workLabel.getNumberOfWeeks() < 0) {
@@ -125,7 +122,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
             if (workLabel.getNumberOfHours() < 0) {
                 throw new ValidationException("Number of hours is negative");
             }
-        }else{
+        }else if (workLabel.getLessonType() == null && workLabel.getCompletion() == null){
             throw new ValidationException("Completion or Lesson type is not set");
         }
         if (isSameWorkLabelInXml(workLabel)) {
@@ -195,7 +192,8 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
             List<WorkLabel> currentWorkLabels =
                     allWorkLabels
                             .stream()
-                            .filter(workLabel -> subject.getId().equals(workLabel.getSubject().getId()))
+                            .filter(workLabel -> workLabel.getSubject() != null)
+                            .filter(workLabel -> workLabel.getSubject().getId().equals(subject.getId()))
                             .toList();
 
             if (subject.getLectureCapacity() > 0) {
@@ -264,7 +262,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                         (int) Math.ceil((double) restNumberOfStudents / (numberOfLessonType - numberOfLabels - index));
                 WorkLabel newWorkLabel = new WorkLabel(
                         UUID.randomUUID(),
-                        lessonType.toString() + " " + subject.getName() + " " + (numberOfLabels + index + 1),
+                        lessonType.toString() + " " + subject.getName() + " " + (numberOfLabels + index + 1) + " " +(subject.getNumberOfWeeks() == 1? "K":"P"),
                         subject,
                         subject.getLanguage(),
                         lessonType,
@@ -279,6 +277,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
                 newWorkLabel.setNumberOfHours(getNumberOfHoursByLessonType(newWorkLabel));
                 newWorkLabel.setPoints(generatePoints(newWorkLabel));
+                System.out.println(newWorkLabel.toString());
                 create(newWorkLabel);
             }
         }
@@ -296,6 +295,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                     totalNumberOfStudents,
                     completion);
             newWorkLabel.setPoints(generatePoints(newWorkLabel));
+            System.out.println(newWorkLabel.toString());
             create(newWorkLabel);
         }
     }
@@ -308,18 +308,19 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                         .stream()
                         .filter(subject -> subject.getGroups().contains(group))
                         .toList();
-        for (Subject subject : subjects) {
+        System.out.println(subjects.toString() +"     ---- předměty");
+        for (Subject subject : subjects){
             generateWorkLabelsAfterUpgrade(subject);
         }
     }
 
     @Override
     public void generateWorkLabelsAfterUpgrade(Subject subject) {
-
         List<WorkLabel> currentWorkLabels = getAllWorkLabels()
                 .stream()
-                .filter(workLabel -> workLabel.getSubject().equals(subject))
+                .filter(workLabel -> subject.equals(workLabel.getSubject()))
                 .toList();
+        System.out.println(currentWorkLabels);
         int totalNumberOfStudentsInSubject = 0;
 
         for (Group group : subject.getGroups()) {
@@ -385,6 +386,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     private void changeNumberOfStudentsInWorkLabel(List<WorkLabel> workLabels, int totalNumberOfStudents) {
 
         for (WorkLabel workLabel : workLabels) {
+            System.out.println(workLabel + " ---------- Tento se mění");
             setElement(
                     document,
                     workLabel.getId(),

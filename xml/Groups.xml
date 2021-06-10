@@ -15,7 +15,7 @@
         <form_of_study>P</form_of_study>
         <semester>LS</semester>
         <grade>2</grade>
-        <quantity>2</quantity>
+        <quantity>500</quantity>
         <language>EN</language>
     </group>
     <group id="b60f5270-b2cd-4a0f-83de-1dfb221738ef">
@@ -27,4 +27,5 @@
         <quantity>5</quantity>
         <language>EN</language>
     </group>
+
 </groups>

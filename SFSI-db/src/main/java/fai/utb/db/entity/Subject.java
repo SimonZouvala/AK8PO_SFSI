@@ -179,16 +179,13 @@ public class Subject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Subject aSubject = (Subject) o;
-        return numberOfWeeks == aSubject.numberOfWeeks && Objects.equals(acronym, aSubject.acronym)
-                && Objects.equals(name, aSubject.name) && Objects.equals(teacher, aSubject.teacher)
-                && completion == aSubject.completion && language == aSubject.language;
+        Subject subject = (Subject) o;
+        return Objects.equals(id, subject.id) && Objects.equals(acronym, subject.acronym);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(acronym, name, teacher, lectureCapacity, seminarCapacity,
-                exerciseCapacity, numberOfWeeks, completion, classroomCapacity, language, groups);
+        return Objects.hash(id, acronym);
     }
 
     public List<String> getSubjectItems() {
@@ -207,17 +204,34 @@ public class Subject {
 
     @Override
     public String toString() {
-        return     name + " \n"+
-                acronym + " \n"+
-                teacher + " \n"+
-                lectureCapacity +" \n"+
-                seminarCapacity + " \n"+
-                 exerciseCapacity + " \n"+
-                numberOfWeeks + " \n"+
-                completion + " \n"+
-                classroomCapacity + " \n"+
-                language + " \n"+
+        return "---Předmět--- \n" +
+                "Název: \t\t " + name + " \n" +
+                "Zkratka: \t\t " + acronym + " \n" +
+                "Vyučující: \t\t " + teacher + " \n" +
+                "Kapacity:\n" +
+                " Přednáška: \t\t " + lectureCapacity + " \n" +
+                " Seminář: \t\t " + seminarCapacity + " \n" +
+                " Cvičení: \t\t " + exerciseCapacity + " \n" +
+                "Počet týdnů: \t\t " + numberOfWeeks + " \n" +
+                "Ukončení: \t\t " + completion + " \n" +
+                "Velikost třídy: \t " + classroomCapacity + " \n" +
+                "Jazyk: \t\t " + language + " \n" +
                 groups + " \n";
 
+    }
+
+    public String toStringWithoutGroups(){
+        return "---Předmět--- \n" +
+                "Název: \t\t " + name + " \n" +
+                "Zkratka: \t\t " + acronym + " \n" +
+                "Vyučující: \t\t " + teacher + " \n" +
+                "Kapacity:\n" +
+                " Přednáška:\t\t  " + lectureCapacity + " \n" +
+                " Seminář: \t\t " + seminarCapacity + " \n" +
+                " Cvičení: \t\t " + exerciseCapacity + " \n" +
+                "Počet týdnů: \t\t " + numberOfWeeks + " \n" +
+                "Ukončení: \t\t " + completion + " \n" +
+                "Velikost třídy: \t " + classroomCapacity + " \n" +
+                "Jazyk: \t\t " + language + " \n";
     }
 }
