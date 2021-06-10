@@ -1,6 +1,8 @@
 package fai.utb.db.exception;
 
 /**
+ * This exception is thrown when validation of entity fails.
+ *
  * @author Šimon Zouvala
  */
 public class ValidationException extends RuntimeException {

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * Implementation of abstract class {@link EmployeeManager}
+ *
  * @author Šimon Zouvala
  */
 public class EmployeeManagerImpl extends EmployeeManager {
@@ -21,9 +23,18 @@ public class EmployeeManagerImpl extends EmployeeManager {
     private final Document document;
     private static final String MAIN_ELEMENT = "employee";
 
-
+    /**
+     * Constructor for get current DOM of Employees.xml.
+     */
     public EmployeeManagerImpl() {
         this.document = getEmployeesDocument();
+    }
+
+    /**
+     * Constructor for get current DOM of relevant XML file.
+     */
+    public EmployeeManagerImpl(String xml) {
+        this.document = getData(xml);
     }
 
     private Document getEmployeesDocument() {
@@ -33,6 +44,12 @@ public class EmployeeManagerImpl extends EmployeeManager {
     @Override
     public void create(Employee employee) {
         validate(employee);
+        if (isSameEmployeeInXml(employee)) {
+            throw new ValidationException(
+                    "Employee " + employee.getName() + " " + employee.getSurname() + " with email "
+                            + employee.getEmail() +" and phone number " + employee.getPhone() + "is already exist");
+        }
+
         Element employeeElement = getItemToXML(
                 document,
                 getEmployeeXmlDomList(),
@@ -63,11 +80,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
         if (employee.getIsEmployee() == null) {
             throw new ValidationException("Is Employee is not set");
         }
-        if (isSameEmployeeInXml(employee)) {
-            throw new ValidationException(
-                    "Employee " + employee.getName() + " " + employee.getSurname() + " with email " + employee.getEmail() +
-                            " and phone number " + employee.getPhone() + "is already exist");
-        }
+
     }
 
     private boolean isSameEmployeeInXml(Employee newEmployee) {
@@ -83,12 +96,12 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
     @Override
     public void remove(Employee employee) {
+        validate(employee);
         remove(document, employee.getId(), MAIN_ELEMENT, EMPLOYEES_XML);
     }
 
     @Override
     public List<Employee> getAllEmployees() {
-//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
         List<Employee> employees = new ArrayList<>();
 
@@ -105,7 +118,9 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
     @Override
     public Employee getEmployee(UUID id) {
-//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+        if (id == null){
+            throw new IllegalArgumentException("Employee id is null");
+        }
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -155,8 +170,14 @@ public class EmployeeManagerImpl extends EmployeeManager {
         return workLabels;
     }
 
-
+    /**
+     * Add {@link WorkLabel} to required {@link Employee}, set work points and all save to xml file.
+     *
+     * @param employee  where will be save {@link WorkLabel}
+     * @param workLabel save to {@link Employee}
+     */
     public void addWorkLabelToEmployee(Employee employee, WorkLabel workLabel) {
+        validate(employee);
 
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
@@ -180,6 +201,12 @@ public class EmployeeManagerImpl extends EmployeeManager {
         setWorkPoints(getEmployee(employee.getId()));
     }
 
+    /**
+     * Remove required {@link WorkLabel} from {@Employee}, set work points and save all changes to xml file
+     *
+     * @param employee  where will be remove {@link WorkLabel}
+     * @param workLabel remove from {@link Employee}
+     */
     public void removeWorkLabelToEmployee(Employee employee, WorkLabel workLabel) {
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
@@ -201,10 +228,6 @@ public class EmployeeManagerImpl extends EmployeeManager {
                                 break;
                             }
                         }
-//                    Element workLabelsElement = (Element) element.getElementsByTagName("worklabels").item(0);
-//                    Element newElement = document.createElement("worklabel");
-//                    newElement.setAttribute("id", workLabel.getId().toString());
-//                    workLabelsElement.appendChild(newElement);
                     }
                 }
             }
@@ -215,15 +238,6 @@ public class EmployeeManagerImpl extends EmployeeManager {
     }
 
 
-//    private List<WorkLabel> getWorkLabels(Employee employee) {
-//        return new WorkLabelManagerImpl()
-//                .getAllWorkLabels()
-//                .stream()
-//                .filter(workLabel -> employee.getId().equals(workLabel.getEmployeeId()))
-//                .toList();
-//    }
-
-
     private void setWorkPoints(Employee employee) {
         setElement(
                 document,
@@ -232,6 +246,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
                 String.valueOf(employee.getWorkPoint()),
                 EMPLOYEES_XML,
                 MAIN_ELEMENT);
+
         setElement(
                 document,
                 employee.getId(),
@@ -241,27 +256,6 @@ public class EmployeeManagerImpl extends EmployeeManager {
                 MAIN_ELEMENT);
 
     }
-
-//    private double getNumberOfWorkPoint(Employee employee) {
-//        return calculateWorkPoints(getWorkLabels(employee));
-//    }
-
-//    private double calculateWorkPoints(List<WorkLabel> workLabels) {
-//        double workPoints = 0.0;
-//
-//        for (WorkLabel workLabel : workLabels) {
-//            workPoints += workLabel.getPoints();
-//        }
-//        return workPoints;
-//    }
-
-
-//    private double getNumberOfWorkPointWithoutEn(Employee employee) {
-//        return calculateWorkPoints(getWorkLabels(employee)
-//                .stream()
-//                .filter(workLabel -> Language.CZ.equals(workLabel.getLanguage()))
-//                .toList());
-//    }
 
     private List<String> getEmployeeXmlDomList() {
         return Arrays.asList(

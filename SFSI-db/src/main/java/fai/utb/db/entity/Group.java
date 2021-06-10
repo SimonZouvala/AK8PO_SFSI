@@ -11,17 +11,19 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
+ * Class represent all item of Group entity
+ *
  * @author Šimon Zouvala
  */
 public class Group {
 
     private UUID id;
-    private Degree degree;
-    private String fieldOfStudy;
-    private FormOfStudy formOfStudy;
-    private Semester semester;
-    private int grade;
-    private int quantity;
+    private final Degree degree;
+    private final String fieldOfStudy;
+    private final FormOfStudy formOfStudy;
+    private final Semester semester;
+    private final int grade;
+    private final int quantity;
     private Language language;
 
     public Group(UUID id, Degree degree, String fieldOfStudy, FormOfStudy formOfStudy, Semester semester, int grade,
@@ -59,48 +61,24 @@ public class Group {
         return degree;
     }
 
-    public void setDegree(Degree degree) {
-        this.degree = degree;
-    }
-
     public String getFieldOfStudy() {
         return fieldOfStudy;
-    }
-
-    public void setFieldOfStudy(String fieldOfStudy) {
-        this.fieldOfStudy = fieldOfStudy;
     }
 
     public FormOfStudy getFormOfStudy() {
         return formOfStudy;
     }
 
-    public void setFormOfStudy(FormOfStudy formOfStudy) {
-        this.formOfStudy = formOfStudy;
-    }
-
     public Semester getSemester() {
         return semester;
-    }
-
-    public void setSemester(Semester semester) {
-        this.semester = semester;
     }
 
     public int getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public Language getLanguage() {

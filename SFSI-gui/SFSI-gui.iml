@@ -13,5 +13,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="MigLayout" level="project" />
     <orderEntry type="module" module-name="SFSI-db" />
+    <orderEntry type="library" name="Maven: org.assertj:assertj-core:3.9.1" level="project" />
   </component>
 </module>

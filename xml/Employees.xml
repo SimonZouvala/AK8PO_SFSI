@@ -7,11 +7,11 @@
         <email>s@s.ss</email>
         <jobtime>0.1</jobtime>
         <isemployee>true</isemployee>
-        <workpoint>16.0</workpoint>
-        <workpoint_without_en>16.0</workpoint_without_en>
+        <workpoint>8.0</workpoint>
+        <workpoint_without_en>8.0</workpoint_without_en>
         <worklabels>
             
-        <worklabel id="da4ac62c-b66d-47dd-ac39-ec4ed91bf3e0"/><worklabel id="da4ac62c-b66d-47dd-ac39-ec4ed91bf3e0"/></worklabels>
+        <worklabel id="da4ac62c-b66d-47dd-ac39-ec4ed91bf3e0"/></worklabels>
     </employee>
 
 </employees>

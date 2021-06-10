@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<points>
+    <hour>
+        <lecture>1.8</lecture>
+        <seminar>1.2</seminar>
+        <exercise>1.2</exercise>
+    </hour>
+    <completions>
+        <z>0.2</z>
+        <kl>0.3</kl>>
+        <zk>0.4</zk>
+    </completions>
+    <en>
+        <hour>
+            <lecture>2.4</lecture>
+            <seminar>1.8</seminar>
+            <exercise>1.8</exercise>
+        </hour>
+        <completions>
+            <z>0.2</z>
+            <kl>0.3</kl>>
+            <zk>0.4</zk>
+        </completions>
+    </en>
+</points>

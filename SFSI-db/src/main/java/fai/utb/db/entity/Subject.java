@@ -6,21 +6,23 @@ import fai.utb.db.entity.entityEnum.Language;
 import java.util.*;
 
 /**
+ * Class represent all item of Subject entity.
+ *
  * @author Šimon Zouvala
  */
 public class Subject {
 
 
     private UUID id;
-    private String acronym;
+    private final String acronym;
     private String name;
-    private String teacher;
-    private int lectureCapacity;
-    private int seminarCapacity;
-    private int exerciseCapacity;
-    private int numberOfWeeks;
+    private final String teacher;
+    private final int lectureCapacity;
+    private final int seminarCapacity;
+    private final int exerciseCapacity;
+    private final int numberOfWeeks;
     private Completion completion;
-    private int classroomCapacity;
+    private final int classroomCapacity;
     private Language language;
     private List<Group> groups;
 
@@ -57,7 +59,9 @@ public class Subject {
         this.language = language;
     }
 
-    public Subject(String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity, int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity, Language language, List<Group> groups) {
+    public Subject(String acronym, String name, String teacher, int lectureCapacity, int seminarCapacity,
+                   int exerciseCapacity, int numberOfWeeks, Completion completion, int classroomCapacity,
+                   Language language, List<Group> groups) {
         this.acronym = acronym;
         this.name = name;
         this.teacher = teacher;
@@ -83,10 +87,6 @@ public class Subject {
         return acronym;
     }
 
-    public void setAcronym(String acronym) {
-        this.acronym = acronym;
-    }
-
     public String getName() {
         return name;
     }
@@ -99,40 +99,20 @@ public class Subject {
         return teacher;
     }
 
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }
-
     public int getLectureCapacity() {
         return lectureCapacity;
-    }
-
-    public void setLectureCapacity(int lectureCapacity) {
-        this.lectureCapacity = lectureCapacity;
     }
 
     public int getSeminarCapacity() {
         return seminarCapacity;
     }
 
-    public void setSeminarCapacity(int seminarCapacity) {
-        this.seminarCapacity = seminarCapacity;
-    }
-
     public int getExerciseCapacity() {
         return exerciseCapacity;
     }
 
-    public void setExerciseCapacity(int exerciseCapacity) {
-        this.exerciseCapacity = exerciseCapacity;
-    }
-
     public int getNumberOfWeeks() {
         return numberOfWeeks;
-    }
-
-    public void setNumberOfWeeks(int numberOfWeeks) {
-        this.numberOfWeeks = numberOfWeeks;
     }
 
     public Completion getCompletion() {
@@ -145,10 +125,6 @@ public class Subject {
 
     public int getClassroomCapacity() {
         return classroomCapacity;
-    }
-
-    public void setClassroomCapacity(int classroomCapacity) {
-        this.classroomCapacity = classroomCapacity;
     }
 
     public Language getLanguage() {
@@ -180,12 +156,14 @@ public class Subject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
-        return Objects.equals(id, subject.id) && Objects.equals(acronym, subject.acronym);
+        return Objects.equals(acronym, subject.acronym) && Objects.equals(name, subject.name) &&
+                Objects.equals(teacher, subject.teacher) && completion == subject.completion &&
+                language == subject.language;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, acronym);
+        return Objects.hash(acronym, name, teacher, completion, language);
     }
 
     public List<String> getSubjectItems() {

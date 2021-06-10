@@ -5,17 +5,19 @@ import fai.utb.db.entity.entityEnum.Language;
 import java.util.*;
 
 /**
+ * Class represent all item of Group entity
+ *
  * @author Šimon Zouvala
  */
 public class Employee {
 
     private UUID id;
     private String name;
-    private String surname;
-    private String phone;
-    private String email;
-    private Double jobTime;
-    private Boolean isEmployee;
+    private final String surname;
+    private final String phone;
+    private final String email;
+    private final Double jobTime;
+    private final Boolean isEmployee;
     private double workPoint;
     private double workPointWithoutEN;
     private List<WorkLabel> workLabels = new ArrayList<>();
@@ -66,40 +68,20 @@ public class Employee {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public String getPhone() {
         return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Double getJobTime() {
         return jobTime;
     }
 
-    public void setJobTime(Double jobTime) {
-        this.jobTime = jobTime;
-    }
-
     public Boolean getIsEmployee() {
         return isEmployee;
-    }
-
-    public void setIsEmployee(Boolean isEmployee) {
-        this.isEmployee = isEmployee;
     }
 
     public double getWorkPoint() {
@@ -111,10 +93,6 @@ public class Employee {
         return workPoint;
     }
 
-    public void setWorkPoint(double workPoint) {
-        this.workPoint = workPoint;
-    }
-
     public double getWorkPointWithoutEN() {
         workPointWithoutEN = 0.0;
 
@@ -124,26 +102,6 @@ public class Employee {
             }
         }
         return workPointWithoutEN;
-    }
-
-    public void setWorkPointWithoutEN(double workPointWithoutEN) {
-        this.workPointWithoutEN = workPointWithoutEN;
-    }
-
-    public List<WorkLabel> getWorkLabels() {
-        return workLabels;
-    }
-
-    public void setWorkLabels(List<WorkLabel> workLabels) {
-        this.workLabels = workLabels;
-    }
-
-    public List<UUID> getWorkLablesId() {
-        List<UUID> ids = new ArrayList<>();
-        for (WorkLabel workLabel : getWorkLabels()) {
-            ids.add(workLabel.getId());
-        }
-        return ids;
     }
 
     public List<String> getEmployeeItems() {
@@ -175,7 +133,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "---Zaměstanec---: \n" +
+        return "---Zaměstnanec---: \n" +
                 "Jméno: \t\t " + name + " " + surname + " \n" +
                 "Tel.: \t\t " + phone + " \n" +
                 "Email: \t\t " + email + " \n" +
@@ -186,7 +144,7 @@ public class Employee {
     }
 
     public String toStringOnlyName(){
-        return "---Zaměstanec---: \n" +
+        return "---Zaměstnanec---: \n" +
                 "Jméno: \t\t " + name + " " + surname + " \n";
     }
 }

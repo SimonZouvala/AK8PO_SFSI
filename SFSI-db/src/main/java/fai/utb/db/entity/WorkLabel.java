@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
+ * Class represent all item of WorkLabel entity.
+ *
  * @author Šimon Zouvala
  */
 public class WorkLabel {

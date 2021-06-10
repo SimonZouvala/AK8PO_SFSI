@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * Implementation of abstract class {@link SubjectManager}
+ *
  * @author Šimon Zouvala
  */
 public class SubjectManagerImpl extends SubjectManager {
@@ -23,9 +25,18 @@ public class SubjectManagerImpl extends SubjectManager {
     private final Document document;
     private static final String MAIN_ELEMENT = "subject";
 
-
+    /**
+     * Constructor for get current DOM of Subjects.xml.
+     */
     public SubjectManagerImpl() {
         this.document = getSubjectsDocument();
+    }
+
+    /**
+     * Constructor for get current DOM of relevant XML file.
+     */
+    public SubjectManagerImpl(String xml) {
+        this.document = getData(xml);
     }
 
     private Document getSubjectsDocument() {
@@ -35,6 +46,15 @@ public class SubjectManagerImpl extends SubjectManager {
     @Override
     public void create(Subject subject) {
         validate(subject);
+
+        if (isSameSubjectInXml(subject)) {
+            throw new ValidationException(
+                    "Subject " + subject.getName() + " (" + subject.getAcronym() + ")"
+                            + " with teacher " + subject.getTeacher() + ", completion " + subject.getCompletion()
+                            + ", language " + subject.getLanguage() + " and number of weeks "
+                            + subject.getNumberOfWeeks() + " is already exist.");
+        }
+
         Element subjectElement = getItemToXML(
                 document,
                 getSubjectXmlDomList(),
@@ -82,13 +102,7 @@ public class SubjectManagerImpl extends SubjectManager {
         if (subject.getGroups() == null || subject.getGroups().size() == 0) {
             throw new ValidationException("Group is zero or not set");
         }
-        if (isSameSubjectInXml(subject)) {
-            throw new ValidationException(
-                    "Subject " + subject.getName() + " (" + subject.getAcronym() + ")"
-                            + " with teacher " + subject.getTeacher() + ", completion " + subject.getCompletion()
-                            + ", language " + subject.getLanguage() + " and number of weeks "
-                            + subject.getNumberOfWeeks() + " is already exist.");
-        }
+
 
     }
 
@@ -105,10 +119,10 @@ public class SubjectManagerImpl extends SubjectManager {
 
     @Override
     public void setSubjectCapacity(Subject subject, int newCapacity) {
-
-        System.out.println(subject);
-        System.out.println(newCapacity);
-
+        if (newCapacity < 0) {
+            throw new ValidationException("new capacity to set is negative");
+        }
+        validate(subject);
         setElement(
                 document,
                 subject.getId(),
@@ -116,18 +130,18 @@ public class SubjectManagerImpl extends SubjectManager {
                 String.valueOf(newCapacity),
                 SUBJECTS_XML,
                 MAIN_ELEMENT);
-        new WorkLabelManagerImpl().generateWorkLabelsAfterUpgrade(getSubject(subject.getId()));
 
+        new WorkLabelManagerImpl().generateWorkLabelsAfterUpgrade(getSubject(subject.getId()));
     }
 
     @Override
     public void remove(Subject subject) {
+        validate(subject);
         remove(document, subject.getId(), MAIN_ELEMENT, SUBJECTS_XML);
     }
 
     @Override
     public List<Subject> getAllSubject() {
-//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
         List<Subject> subjects = new ArrayList<>();
 
@@ -144,13 +158,10 @@ public class SubjectManagerImpl extends SubjectManager {
 
 
     @Override
-    public Subject getSubjectByAcronym(String acronym) {
-        return null;
-    }
-
-    @Override
     public Subject getSubject(UUID id) {
-//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+        if (id == null) {
+            throw new IllegalArgumentException("Employee id is null");
+        }
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -198,22 +209,20 @@ public class SubjectManagerImpl extends SubjectManager {
         return groups;
     }
 
-
-    @Override
-    public void removeGroupFromSubjects(Group group) {
-        List<Subject> currentSubjects = getAllSubject()
-                .stream()
-                .filter(subject -> subject.getGroups().contains(group))
-                .toList();
-        for (Subject subject : currentSubjects) {
-            remove(subject);
-            List<Group> oldGroup = subject.getGroups();
-            oldGroup.remove(group);
-            subject.setGroups(oldGroup);
-            create(subject);
-        }
-    }
-
+    //    @Override
+//    public void removeGroupFromSubjects(Group group) {
+//        List<Subject> currentSubjects = getAllSubject()
+//                .stream()
+//                .filter(subject -> subject.getGroups().contains(group))
+//                .toList();
+//        for (Subject subject : currentSubjects) {
+//            remove(subject);
+//            List<Group> oldGroup = subject.getGroups();
+//            oldGroup.remove(group);
+//            subject.setGroups(oldGroup);
+//            create(subject);
+//        }
+//    }
     private List<String> getSubjectXmlDomList() {
         return Arrays.asList(
                 "name",

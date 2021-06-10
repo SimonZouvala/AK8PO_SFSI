@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * Implementation of abstract class {@link WorkLabelManager}
+ *
  * @author Šimon Zouvala
  */
 public class WorkLabelManagerImpl extends WorkLabelManager {
@@ -28,8 +30,19 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     private final PointWeights pointWeights;
     private static final String MAIN_ELEMENT = "worklabel";
 
+    /**
+     * Constructor for get current DOM of WorkLabels.xml.
+     */
     public WorkLabelManagerImpl() {
         this.document = getWorkLabelsDocument();
+        this.pointWeights = getPointWeights();
+    }
+
+    /**
+     * Constructor for get current DOM of relevant XML file.
+     */
+    public WorkLabelManagerImpl(String xml) {
+        this.document = getData(xml);
         this.pointWeights = getPointWeights();
     }
 
@@ -90,6 +103,14 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     @Override
     public void create(WorkLabel workLabel) {
         validate(workLabel);
+
+        if (isSameWorkLabelInXml(workLabel)) {
+            throw new ValidationException("WorkLabel " + workLabel.getName()
+                    + " with language " + workLabel.getLanguage()
+                    + ", lesson type " + workLabel.getLessonType()
+                    + " and completion " + workLabel.getCompletion());
+        }
+
         Element workLabelElement = getItemToXML(
                 document,
                 getWorkLabelXmlDomList(),
@@ -122,15 +143,10 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
             if (workLabel.getNumberOfHours() < 0) {
                 throw new ValidationException("Number of hours is negative");
             }
-        }else if (workLabel.getLessonType() == null && workLabel.getCompletion() == null){
+        } else if (workLabel.getLessonType() == null && workLabel.getCompletion() == null) {
             throw new ValidationException("Completion or Lesson type is not set");
         }
-        if (isSameWorkLabelInXml(workLabel)) {
-            throw new ValidationException("WorkLabel " + workLabel.getName()
-                    + " with language " + workLabel.getLanguage()
-                    + ", lesson type " + workLabel.getLessonType()
-                    + " and completion " + workLabel.getCompletion());
-        }
+
     }
 
     private boolean isSameWorkLabelInXml(WorkLabel newWorkLabel) {
@@ -146,11 +162,16 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     @Override
     public void remove(WorkLabel workLabel) {
+        validate(workLabel);
         remove(document, workLabel.getId(), MAIN_ELEMENT, WORK_LABELS_XML);
     }
 
     @Override
     public void addEmployeeToWorkLabel(Employee employee, WorkLabel workLabel) {
+        validate(workLabel);
+        if (employee == null || employee.getId() == null){
+            throw new IllegalArgumentException("Employee to add to work label is null");
+        }
         setElement(
                 document,
                 workLabel.getId(),
@@ -163,6 +184,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     @Override
     public void removeEmployeeFromWorkLabel(WorkLabel workLabel) {
+        validate(workLabel);
         new EmployeeManagerImpl().removeWorkLabelToEmployee(
                 new EmployeeManagerImpl().getEmployee(workLabel.getEmployeeId()), workLabel);
         setElement(
@@ -262,7 +284,8 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                         (int) Math.ceil((double) restNumberOfStudents / (numberOfLessonType - numberOfLabels - index));
                 WorkLabel newWorkLabel = new WorkLabel(
                         UUID.randomUUID(),
-                        lessonType.toString() + " " + subject.getName() + " " + (numberOfLabels + index + 1) + " " +(subject.getNumberOfWeeks() == 1? "K":"P"),
+                        lessonType.toString() + " " + subject.getName() + " " +
+                                (numberOfLabels + index + 1) + " " + (subject.getNumberOfWeeks() == 1 ? "K" : "P"),
                         subject,
                         subject.getLanguage(),
                         lessonType,
@@ -277,7 +300,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
                 newWorkLabel.setNumberOfHours(getNumberOfHoursByLessonType(newWorkLabel));
                 newWorkLabel.setPoints(generatePoints(newWorkLabel));
-                System.out.println(newWorkLabel.toString());
                 create(newWorkLabel);
             }
         }
@@ -295,7 +317,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                     totalNumberOfStudents,
                     completion);
             newWorkLabel.setPoints(generatePoints(newWorkLabel));
-            System.out.println(newWorkLabel.toString());
             create(newWorkLabel);
         }
     }
@@ -308,8 +329,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                         .stream()
                         .filter(subject -> subject.getGroups().contains(group))
                         .toList();
-        System.out.println(subjects.toString() +"     ---- předměty");
-        for (Subject subject : subjects){
+        for (Subject subject : subjects) {
             generateWorkLabelsAfterUpgrade(subject);
         }
     }
@@ -320,7 +340,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                 .stream()
                 .filter(workLabel -> subject.equals(workLabel.getSubject()))
                 .toList();
-        System.out.println(currentWorkLabels);
+
         int totalNumberOfStudentsInSubject = 0;
 
         for (Group group : subject.getGroups()) {
@@ -330,7 +350,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         int numberOfLabels =
                 (int) Math.ceil((double) totalNumberOfStudentsInSubject / subject.getClassroomCapacity());
 
-        System.out.println(numberOfLabels);
         changeNumberOfStudentsInWorkLabels(currentWorkLabels, totalNumberOfStudentsInSubject, numberOfLabels);
     }
 
@@ -379,14 +398,11 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                     WORK_LABELS_XML,
                     MAIN_ELEMENT);
             restNumberOfStudents -= insetNumberOfStudents;
-//            System.out.println(insetNumberOfStudents + "  zbývá  " + restNumberOfStudents + "    ze   " + totalNumberOfStudents);
         }
     }
 
     private void changeNumberOfStudentsInWorkLabel(List<WorkLabel> workLabels, int totalNumberOfStudents) {
-
         for (WorkLabel workLabel : workLabels) {
-            System.out.println(workLabel + " ---------- Tento se mění");
             setElement(
                     document,
                     workLabel.getId(),
@@ -400,7 +416,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     @Override
     public List<WorkLabel> getAllWorkLabels() {
-//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
         List<WorkLabel> workLabels = new ArrayList<>();
 
@@ -413,7 +428,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                     workLabels.add(getWorkLabelFromXML(element));
                 }
             }
-
         }
         return workLabels;
     }
@@ -421,7 +435,9 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     @Override
     public WorkLabel getWorkLabel(UUID id) {
-//        System.out.println("In XML are " + document.getDocumentElement().getTagName());
+        if (id == null){
+            throw new IllegalArgumentException("Employee id is null");
+        }
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -439,8 +455,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     }
 
     private WorkLabel getWorkLabelFromXML(Element element) {
-
-
         WorkLabel workLabel = new WorkLabel(
                 UUID.fromString(element.getAttribute("id")),
                 element.getElementsByTagName("name").item(0).getTextContent(),
@@ -455,7 +469,6 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         workLabel.setNumberOfWeeks(getNumberOfWeeks(workLabel, element));
         workLabel.setNumberOfHours(getNumberOfHours(workLabel, element));
         workLabel.setPoints(getPointsFromXML(workLabel, element));
-
 
         return workLabel;
     }
