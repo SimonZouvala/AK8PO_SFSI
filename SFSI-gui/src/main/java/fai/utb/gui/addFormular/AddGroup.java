@@ -12,21 +12,19 @@ import fai.utb.gui.checkers.CheckAddGroupResult;
 import fai.utb.gui.listModel.GroupListModel;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
+ * Form for create new {@link Group}
  * @author Šimon Zouvala
  */
 public class AddGroup extends JFrame {
 
     private static final I18n I18N = new I18n(AddGroup.class);
 
-    private GroupManager groupManager;
-    private GroupListModel groupListModel;
+    private final GroupManager groupManager;
+    private final GroupListModel groupListModel;
     private JPanel addGroupPanel;
     private JComboBox<String> degreeComboBox;
     private JComboBox<String> formOfStudyComboBox;
@@ -36,14 +34,18 @@ public class AddGroup extends JFrame {
     private JTextField quantityTextField;
     private JComboBox<String> gradeComboBox;
     private JButton saveButton;
-    private JLabel test;
     private Degree degree;
     private FormOfStudy formOfStudy;
     private Semester semester;
     private Language language;
     private int grade;
 
-    public AddGroup(GroupManager groupManager, GroupListModel groupListModel) throws HeadlessException {
+    /**
+     *
+     * @param groupManager current group manager
+     * @param groupListModel current employee list model
+     */
+    public AddGroup(GroupManager groupManager, GroupListModel groupListModel) {
         super();
         this.groupManager = groupManager;
         this.groupListModel = groupListModel;
@@ -51,87 +53,63 @@ public class AddGroup extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 
-        degreeComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                JComboBox cb = (JComboBox)e.getSource();
-//                String degreeName = (String) cb.getI();
-                String selectedItem = Objects.requireNonNull(degreeComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Bakalářský" -> degree = Degree.BC;
-                    case "Magisterský" -> degree = Degree.MGR;
-                    case "Doktorský" -> degree = Degree.DC;
-                    default -> degree = null;
-                }
+        degreeComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(degreeComboBox.getSelectedItem()).toString();
 
-
-                test.setText(degree.toString());
-//                System.out.println(degreeComboBox);
-//                System.out.println(degreeString);
-
+            switch (selectedItem) {
+                case "Bakalářský" -> degree = Degree.BC;
+                case "Magisterský" -> degree = Degree.MGR;
+                case "Doktorský" -> degree = Degree.DC;
+                default -> degree = null;
             }
         });
 
-        formOfStudyComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = Objects.requireNonNull(formOfStudyComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Prezenční" -> formOfStudy = FormOfStudy.P;
-                    case "Kombinované" -> formOfStudy = FormOfStudy.K;
-                    default -> formOfStudy = null;
-                }
+        formOfStudyComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(formOfStudyComboBox.getSelectedItem()).toString();
 
-
+            switch (selectedItem) {
+                case "Prezenční" -> formOfStudy = FormOfStudy.P;
+                case "Kombinované" -> formOfStudy = FormOfStudy.K;
+                default -> formOfStudy = null;
             }
         });
-        gradeComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = gradeComboBox.getSelectedItem().toString();
-                if (!selectedItem.equals("")) {
-                    grade = Integer.parseInt(selectedItem);
-                } else {
-                    grade = 0;
-                }
 
+        gradeComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(gradeComboBox.getSelectedItem()).toString();
 
+            if (!selectedItem.equals("")) {
+                grade = Integer.parseInt(selectedItem);
+            } else {
+                grade = 0;
             }
         });
-        semesterComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = Objects.requireNonNull(semesterComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Zimní" -> semester = Semester.ZS;
-                    case "Letní" -> semester = Semester.LS;
-                    default -> semester = null;
-                }
 
+        semesterComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(semesterComboBox.getSelectedItem()).toString();
+
+            switch (selectedItem) {
+                case "Zimní" -> semester = Semester.ZS;
+                case "Letní" -> semester = Semester.LS;
+                default -> semester = null;
             }
         });
-        languageComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = Objects.requireNonNull(languageComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Čeština" -> language = Language.CZ;
-                    case "Angličtina" -> language = Language.EN;
-                    default -> language = null;
-                }
 
+        languageComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(languageComboBox.getSelectedItem()).toString();
+
+            switch (selectedItem) {
+                case "Čeština" -> language = Language.CZ;
+                case "Angličtina" -> language = Language.EN;
+                default -> language = null;
             }
         });
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(quantityTextField.getText());
-                String fieldOfStudy = fieldOfStudyTextField.getText();
-                String quantity = quantityTextField.getText();
-                ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(fieldOfStudy, quantity);
-                confirmSwingWorker.execute();
-//                test.setText(degreeComboBox.getSelectedItem().toString());
-            }
+
+        saveButton.addActionListener(e -> {
+            System.out.println(quantityTextField.getText());
+            String fieldOfStudy = fieldOfStudyTextField.getText();
+            String quantity = quantityTextField.getText();
+            ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(fieldOfStudy, quantity);
+            confirmSwingWorker.execute();
         });
     }
     private void createUIComponents() {
@@ -151,8 +129,8 @@ public class AddGroup extends JFrame {
         semesterComboBox.addItem("");
         semesterComboBox.addItem("Zimní");
         semesterComboBox.addItem("Letní");
-
         gradeComboBox.addItem("");
+
         for (int i = 1; i < 6; i++) {
             gradeComboBox.addItem(String.valueOf(i));
         }
@@ -194,18 +172,22 @@ public class AddGroup extends JFrame {
             if (quantity == null || quantity.length() < 1) {
                 return CheckAddGroupResult.QUANTITY_EMPTY;
             }
+
             int quantity_int;
+
             try {
                 quantity_int = Integer.parseInt(quantity);
             } catch (NumberFormatException e) {
                 return CheckAddGroupResult.QUANTITY_INVALID;
             }
+
             if (quantity_int <= 0) {
                 return CheckAddGroupResult.QUANTITY_NEGATIVE;
             }
             if (language == null) {
                 return CheckAddGroupResult.LANGUAGE_NOT_SELECT;
             }
+
             try {
                 group = new Group(degree, fieldOdStudy, formOfStudy, semester, grade, quantity_int, language);
                 groupManager.create(group);
@@ -218,14 +200,15 @@ public class AddGroup extends JFrame {
         @Override
         protected void done() {
             CheckAddGroupResult result = null;
-            try {
 
+            try {
                 result = get();
             } catch (InterruptedException e) {
                 throw new AssertionError("Interrupted", e);
             } catch (ExecutionException e) {
                 JOptionPane.showMessageDialog(null, "ExecutionException");
             }
+
             if (result == CheckAddGroupResult.GROUP_ADD) {
                 groupListModel.addGroup(group);
                 setVisible(false);
@@ -233,11 +216,6 @@ public class AddGroup extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, I18N.getString(Objects.requireNonNull(result)));
             }
-//            super.done();
         }
     }
-
-
-
-
 }

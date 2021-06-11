@@ -7,6 +7,10 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.List;
 
+/**
+ * Form for select group or employee
+ * @author Šimon Zouvala
+ */
 public class SelectItemInModel extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -14,6 +18,10 @@ public class SelectItemInModel extends JDialog {
     private JComboBox<Object> choicesComboBox;
     private Object choicesObject;
 
+    /**
+     *
+     * @param objects to select ({@link Group} or {@link Employee})
+     */
     public SelectItemInModel(List<?> objects) {
         createUIComponents();
         addItemsToComboBox(objects);

@@ -47,7 +47,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
         if (isSameEmployeeInXml(employee)) {
             throw new ValidationException(
                     "Employee " + employee.getName() + " " + employee.getSurname() + " with email "
-                            + employee.getEmail() +" and phone number " + employee.getPhone() + "is already exist");
+                            + employee.getEmail() + " and phone number " + employee.getPhone() + "is already exist");
         }
 
         Element employeeElement = getItemToXML(
@@ -118,7 +118,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
 
     @Override
     public Employee getEmployee(UUID id) {
-        if (id == null){
+        if (id == null) {
             throw new IllegalArgumentException("Employee id is null");
         }
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
@@ -133,7 +133,7 @@ public class EmployeeManagerImpl extends EmployeeManager {
                 }
             }
         }
-        return null;
+        throw new IllegalArgumentException("Employee not exist");
     }
 
     private Employee getEmployeeFromXML(Element element) {

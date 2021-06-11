@@ -13,13 +13,13 @@ import fai.utb.gui.listModel.GroupListModel;
 import fai.utb.gui.listModel.SubjectListModel;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
+ * Form for create new {@link Subject}
+ *
  * @author Šimon Zouvala
  */
 public class AddSubject extends JFrame {
@@ -49,14 +49,20 @@ public class AddSubject extends JFrame {
     private List<Group> availableGroups;
     private int numberOfWeeks;
 
-    public AddSubject(SubjectManager subjectManager, SubjectListModel subjectListModel) throws HeadlessException {
+    /**
+     * @param subjectManager   current subject manager
+     * @param subjectListModel current subject list model
+     */
+    public AddSubject(SubjectManager subjectManager, SubjectListModel subjectListModel) {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.subjectManager = subjectManager;
         this.subjectListModel = subjectListModel;
         groupListModel = new GroupListModel();
         createUIComponents();
+
         completionComboBox.addActionListener(e -> {
             String selectedItem = Objects.requireNonNull(completionComboBox.getSelectedItem()).toString();
+
             switch (selectedItem) {
                 case "Zápočet" -> completion = Completion.Z;
                 case "Klasifikovaný zápočet" -> completion = Completion.KL;
@@ -64,24 +70,28 @@ public class AddSubject extends JFrame {
                 default -> completion = null;
             }
         });
+
         languageComboBox.addActionListener(e -> {
             String selectedItem = Objects.requireNonNull(languageComboBox.getSelectedItem()).toString();
+
             switch (selectedItem) {
                 case "Čeština" -> language = Language.CZ;
                 case "Angličtina" -> language = Language.EN;
                 default -> language = null;
             }
         });
+
         numberOfWeeksComboBox.addActionListener(e -> {
             String selectedItem = Objects.requireNonNull(numberOfWeeksComboBox.getSelectedItem()).toString();
+
             if (!selectedItem.equals("")) {
                 numberOfWeeks = Integer.parseInt(selectedItem);
             } else {
                 numberOfWeeks = 0;
             }
         });
-        saveButton.addActionListener(e -> {
 
+        saveButton.addActionListener(e -> {
             String acronym = acronymTextField.getText();
             String name = nameOfSubjectTextField.getText();
             String teacher = teacherTextField.getText();
@@ -89,17 +99,21 @@ public class AddSubject extends JFrame {
             String seminarCapacity = seminarCapacityTextField.getText();
             String exerciseCapacity = exerciseCapacityTextField.getText();
             String classroomCapacity = classroomCapacityTextField.getText();
+
             ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(acronym, name, teacher,
                     lectureCapacity, seminarCapacity, exerciseCapacity, classroomCapacity);
             confirmSwingWorker.execute();
         });
+
         addButton.addActionListener(e -> {
             availableGroups = getAvailableGroups();
+
             if (availableGroups.size() != 0) {
                 SelectItemInModel dialog = new SelectItemInModel(availableGroups);
                 dialog.setVisible(true);
                 System.out.println(dialog.getChoicesObject());
                 Group group = (Group) dialog.getChoicesObject();
+
                 if (group != null) {
                     groupListModel.addGroup(group);
                     groupsTextArea.setText(groupListModel.toString());
@@ -107,27 +121,27 @@ public class AddSubject extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, I18N.getString("AllGroupsJoined"));
             }
+
             removeButton.setEnabled(groupListModel.getSize() != 0);
         });
+
         removeButton.addActionListener(e -> {
             SelectItemInModel dialog = new SelectItemInModel(groupListModel.getGroupsList());
             dialog.setVisible(true);
-//                System.out.println(dialog.getChoicesGroup());
             Group group = (Group) dialog.getChoicesObject();
+
             if (group != null) {
                 groupListModel.deleteGroup(group);
                 groupsTextArea.setText(groupListModel.toString());
             }
+
             if (groupListModel.getSize() == 0) {
                 removeButton.setEnabled(false);
             }
-//                JOptionPane.showMessageDialog(null, I18N.getString("GroupNotJoined"));
         });
-
     }
 
     private void createUIComponents() {
-
         languageComboBox.addItem("");
         languageComboBox.addItem("Čeština");
         languageComboBox.addItem("Angličtina");
@@ -136,8 +150,8 @@ public class AddSubject extends JFrame {
         completionComboBox.addItem("Zápočet");
         completionComboBox.addItem("Klasifikovaný zápočet");
         completionComboBox.addItem("Zkouška");
-
         numberOfWeeksComboBox.addItem("");
+
         for (int i = 1; i < 16; i++) {
             numberOfWeeksComboBox.addItem(String.valueOf(i));
         }
@@ -150,7 +164,6 @@ public class AddSubject extends JFrame {
 
     private class ConfirmSwingWorker extends SwingWorker<CheckAddSubjectResult, CheckAddSubjectResult> {
 
-
         private final String acronym;
         private final String name;
         private final String teacher;
@@ -161,7 +174,6 @@ public class AddSubject extends JFrame {
 
         public ConfirmSwingWorker(String acronym, String name, String teacher, String lectureCapacity,
                                   String seminarCapacity, String exerciseCapacity, String classroomCapacity) {
-
             this.acronym = acronym;
             this.name = name;
             this.teacher = teacher;
@@ -206,42 +218,55 @@ public class AddSubject extends JFrame {
             if (groupListModel.getSize() == 0) {
                 return CheckAddSubjectResult.GROUP_LIST_NOT_SELECT;
             }
+
             int lecture_cap;
+
             try {
                 lecture_cap = Integer.parseInt(lectureCapacity);
             } catch (NumberFormatException e) {
                 return CheckAddSubjectResult.LECTURE_CAPACITY_INVALID;
             }
+
             if (lecture_cap < 0) {
                 return CheckAddSubjectResult.LECTURE_CAPACITY_NEGATIVE;
             }
+
             int seminar_cap;
+
             try {
                 seminar_cap = Integer.parseInt(seminarCapacity);
             } catch (NumberFormatException e) {
                 return CheckAddSubjectResult.SEMINAR_CAPACITY_INVALID;
             }
+
             if (seminar_cap < 0) {
                 return CheckAddSubjectResult.SEMINAR_CAPACITY_NEGATIVE;
             }
+
             int exercise_cap;
+
             try {
                 exercise_cap = Integer.parseInt(exerciseCapacity);
             } catch (NumberFormatException e) {
                 return CheckAddSubjectResult.EXERCISE_CAPACITY_INVALID;
             }
+
             if (exercise_cap < 0) {
                 return CheckAddSubjectResult.EXERCISE_CAPACITY_NEGATIVE;
             }
+
             int classroom_cap;
+
             try {
                 classroom_cap = Integer.parseInt(classroomCapacity);
             } catch (NumberFormatException e) {
                 return CheckAddSubjectResult.CLASSROOM_CAPACITY_INVALID;
             }
+
             if (classroom_cap < 0) {
                 return CheckAddSubjectResult.CLASSROOM_CAPACITY_NEGATIVE;
             }
+
             try {
                 subject = new Subject(acronym, name, teacher, lecture_cap, seminar_cap, exercise_cap,
                         numberOfWeeks, completion, classroom_cap, language, groupListModel.getGroupsList());
@@ -259,9 +284,9 @@ public class AddSubject extends JFrame {
             try {
                 result = get();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new AssertionError("Interrupted", e);
             } catch (ExecutionException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "ExecutionException");
             }
             if (result == CheckAddSubjectResult.SUBJECT_ADD) {
                 subjectListModel.addSubject(subject);
@@ -280,9 +305,7 @@ public class AddSubject extends JFrame {
             return groupList;
         }
         for (Group group : groupListModel.getGroupsList()) {
-            if (groupList.contains(group)) {
-                groupList.remove(group);
-            }
+            groupList.remove(group);
         }
         System.out.println(groupList.toString());
         return groupList;

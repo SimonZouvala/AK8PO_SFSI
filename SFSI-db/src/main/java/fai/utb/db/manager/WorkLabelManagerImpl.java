@@ -163,13 +163,16 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
     @Override
     public void remove(WorkLabel workLabel) {
         validate(workLabel);
+        if (workLabel.getEmployeeId() != null) {
+            removeEmployeeFromWorkLabel(workLabel);
+        }
         remove(document, workLabel.getId(), MAIN_ELEMENT, WORK_LABELS_XML);
     }
 
     @Override
     public void addEmployeeToWorkLabel(Employee employee, WorkLabel workLabel) {
         validate(workLabel);
-        if (employee == null || employee.getId() == null){
+        if (employee == null || employee.getId() == null) {
             throw new IllegalArgumentException("Employee to add to work label is null");
         }
         setElement(
@@ -323,12 +326,18 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     @Override
     public void generateWorkLabelsAfterUpgrade(Group group) {
-        List<Subject> subjects =
-                new SubjectManagerImpl()
-                        .getAllSubject()
-                        .stream()
-                        .filter(subject -> subject.getGroups().contains(group))
-                        .toList();
+        List<Subject> subjects;
+
+        try {
+            subjects = new SubjectManagerImpl()
+                    .getAllSubject()
+                    .stream()
+                    .filter(subject -> subject.getGroups().contains(group))
+                    .toList();
+        } catch (IllegalArgumentException e) {
+            subjects = new ArrayList<>();
+        }
+
         for (Subject subject : subjects) {
             generateWorkLabelsAfterUpgrade(subject);
         }
@@ -435,8 +444,8 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
 
     @Override
     public WorkLabel getWorkLabel(UUID id) {
-        if (id == null){
-            throw new IllegalArgumentException("Employee id is null");
+        if (id == null) {
+            throw new IllegalArgumentException("WorkLabel id is null");
         }
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
@@ -451,7 +460,7 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
                 }
             }
         }
-        return null;
+        throw new IllegalArgumentException("WorkLabel not exist");
     }
 
     private WorkLabel getWorkLabelFromXML(Element element) {

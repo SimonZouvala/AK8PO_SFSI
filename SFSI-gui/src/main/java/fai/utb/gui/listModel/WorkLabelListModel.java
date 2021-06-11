@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.util.List;
 
 /**
+ * List model handles work label data to be displayed in the table.
  * @author Šimon Zouvala
  */
 public class WorkLabelListModel extends AbstractListModel {
@@ -26,12 +27,20 @@ public class WorkLabelListModel extends AbstractListModel {
         return workLabelList.get(index).getName();
     }
 
+    /**
+     * Add new workLabel to list model
+     * @param workLabel to create
+     */
     public void addWorkLabel(WorkLabel workLabel) {
         workLabelList.add(workLabel);
         int lastRow = workLabelList.size() - 1;
         fireIntervalAdded(workLabel, lastRow, lastRow);
     }
 
+    /**
+     * emove workLabel to list model
+     * @param workLabel to remove
+     */
     public void deleteWorkLabel(WorkLabel workLabel) {
         workLabelList.remove(workLabel);
         int lastRow = workLabelList.size() - 1;
@@ -41,5 +50,9 @@ public class WorkLabelListModel extends AbstractListModel {
         fireIntervalAdded(workLabel, lastRow, lastRow);
     }
 
+    /**
+     *
+     * @return all {@link WorkLabel}s from list model
+     */
     public List<WorkLabel> getWorkLabelList(){return workLabelList;}
 }

@@ -1,9 +1,9 @@
 package fai.utb.db.manager;
 
-import fai.utb.db.entity.Employee;
 import fai.utb.db.entity.Group;
 import fai.utb.db.entity.Subject;
-import fai.utb.db.entity.entityEnum.*;
+import fai.utb.db.entity.entityEnum.Completion;
+import fai.utb.db.entity.entityEnum.Language;
 import fai.utb.db.exception.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -174,7 +174,7 @@ public class SubjectManagerImpl extends SubjectManager {
                 }
             }
         }
-        return null;
+        throw new IllegalArgumentException("Subject not exist");
     }
 
     private Subject getSubjectFromXML(Element element) {
@@ -191,7 +191,6 @@ public class SubjectManagerImpl extends SubjectManager {
                 Completion.valueOf(element.getElementsByTagName("completion").item(0).getTextContent()),
                 Language.valueOf(element.getElementsByTagName("language").item(0).getTextContent()),
                 getGroups((Element) element.getElementsByTagName("groups").item(0)));
-
     }
 
     private List<Group> getGroups(Element element) {
@@ -209,20 +208,32 @@ public class SubjectManagerImpl extends SubjectManager {
         return groups;
     }
 
-    //    @Override
-//    public void removeGroupFromSubjects(Group group) {
-//        List<Subject> currentSubjects = getAllSubject()
-//                .stream()
-//                .filter(subject -> subject.getGroups().contains(group))
-//                .toList();
-//        for (Subject subject : currentSubjects) {
-//            remove(subject);
-//            List<Group> oldGroup = subject.getGroups();
-//            oldGroup.remove(group);
-//            subject.setGroups(oldGroup);
-//            create(subject);
-//        }
-//    }
+    @Override
+    public void removeGroupFromSubjects(Group group) {
+        if (group == null) {
+            throw new IllegalArgumentException("Group is null");
+        }
+
+        List<Subject> currentSubjects;
+
+        try {
+            currentSubjects = getAllSubject()
+                    .stream()
+                    .filter(subject -> subject.getGroups().contains(group))
+                    .toList();
+        } catch (IllegalArgumentException ignored) {
+            currentSubjects = new ArrayList<>();
+        }
+
+        for (Subject subject : currentSubjects) {
+            remove(subject);
+            List<Group> oldGroup = subject.getGroups();
+            oldGroup.remove(group);
+            subject.setGroups(oldGroup);
+            create(subject);
+        }
+    }
+
     private List<String> getSubjectXmlDomList() {
         return Arrays.asList(
                 "name",

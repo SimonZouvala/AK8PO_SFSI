@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.util.List;
 
 /**
+ * List model handles subject data to be displayed in the table.
  * @author Šimon Zouvala
  */
 public class SubjectListModel extends AbstractListModel {
@@ -25,12 +26,20 @@ public class SubjectListModel extends AbstractListModel {
         return subjectList.get(index).getAcronym().toUpperCase();
     }
 
+    /**
+     * Add new subject to list model
+     * @param subject to create
+     */
     public void addSubject(Subject subject) {
         subjectList.add(subject);
         int lastRow = subjectList.size() - 1;
         fireIntervalAdded(subject, lastRow, lastRow);
     }
 
+    /**
+     * Remove subject to list model
+     * @param subject to remove
+     */
     public void deleteSubject(Subject subject) {
         subjectList.remove(subject);
         int lastRow = subjectList.size() - 1;
@@ -40,6 +49,10 @@ public class SubjectListModel extends AbstractListModel {
         fireIntervalAdded(subject, lastRow, lastRow);
     }
 
+    /**
+     *
+     * @return all {@link Subject}s from list model
+     */
     public List<Subject> getSubjectList(){
         return subjectList;
     }

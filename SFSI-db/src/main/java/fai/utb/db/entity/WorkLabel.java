@@ -192,7 +192,6 @@ public class WorkLabel {
         String subjectString = "";
 
         if (getEmployeeId() != null) {
-            System.out.println(getEmployeeId());
             employeeString = new EmployeeManagerImpl().getEmployee(getEmployeeId()).toStringOnlyName();
         }
         if (getSubject() != null){

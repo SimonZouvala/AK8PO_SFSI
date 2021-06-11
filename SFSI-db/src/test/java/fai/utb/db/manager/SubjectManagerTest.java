@@ -76,6 +76,17 @@ public class SubjectManagerTest {
                 Language.CZ);
     }
 
+    private Group groupTwo() {
+        return new Group(
+                Degree.MGR,
+                "TWO",
+                FormOfStudy.P,
+                Semester.LS,
+                2,
+                10,
+                Language.CZ);
+    }
+
     private Subject subjectOne() {
         return new Subject(
                 "SONE",
@@ -197,5 +208,40 @@ public class SubjectManagerTest {
         subjectManager = new SubjectManagerImpl("xml/Subjects.xml");
         subjectManager.getSubject(null);
     }
+    @Test
+    public void testRemoveGroupFromSubjects() {
+        groupManager = new GroupManagerImpl("xml/Groups.xml");
+        groupManager.create(groupTwo());
 
+        subjectManager = new SubjectManagerImpl("xml/Subjects.xml");
+        subjectManager.create(subjectOne());
+
+        assertThat(subjectManager.getAllSubject().get(0).getGroups().size()).isEqualTo(2);
+
+        subjectManager.removeGroupFromSubjects(groupManager.getAllGroup().get(0));
+        assertThat(subjectManager.getAllSubject().get(0).getGroups().size()).isEqualTo(1);
+    }
+
+    @Test
+    public void testRemoveSameGroupFromSubjects() {
+        groupManager = new GroupManagerImpl("xml/Groups.xml");
+        groupManager.create(groupTwo());
+
+        subjectManager = new SubjectManagerImpl("xml/Subjects.xml");
+        subjectManager.create(subjectOne());
+
+        assertThat(subjectManager.getAllSubject().get(0).getGroups().size()).isEqualTo(2);
+        Group groupRemove = groupManager.getAllGroup().get(0);
+        subjectManager.removeGroupFromSubjects(groupRemove);
+        subjectManager.removeGroupFromSubjects(groupRemove);
+        assertThat(subjectManager.getAllSubject().get(0).getGroups().size()).isEqualTo(1);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemoveNullGroupFromSubjects() {
+        subjectManager = new SubjectManagerImpl("xml/Subjects.xml");
+        subjectManager.create(subjectOne());
+        subjectManager.removeGroupFromSubjects(null);
+    }
 }

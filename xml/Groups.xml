@@ -24,8 +24,8 @@
         <form_of_study>K</form_of_study>
         <semester>LS</semester>
         <grade>3</grade>
-        <quantity>5</quantity>
+        <quantity>50</quantity>
         <language>EN</language>
     </group>
 
-</groups>
+<group id="83e9c558-42aa-4532-b10d-79828ef998b4"><degree>MGR</degree><field_of_study>sss</field_of_study><form_of_study>K</form_of_study><semester>ZS</semester><grade>2</grade><quantity>50</quantity><language>EN</language></group></groups>

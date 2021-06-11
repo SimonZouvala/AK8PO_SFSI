@@ -47,7 +47,6 @@ public class Employee {
         this.isEmployee = isEmployee;
     }
 
-
     public UUID getId() {
         return id;
     }

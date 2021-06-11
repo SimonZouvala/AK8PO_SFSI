@@ -44,9 +44,9 @@ public abstract class SubjectManager  extends BasicManager{
      */
     public abstract Subject getSubject(UUID id);
 
-//    /**
-//     * Remove {@link Group} from required {@link Subject}
-//     * @param group to remove
-//     */
-//    public abstract void removeGroupFromSubjects(Group group);
+    /**
+     * Remove {@link Group} from required {@link Subject}
+     * @param group to remove
+     */
+    public abstract void removeGroupFromSubjects(Group group);
 }

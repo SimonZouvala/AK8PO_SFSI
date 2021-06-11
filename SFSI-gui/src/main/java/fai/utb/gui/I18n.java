@@ -3,6 +3,7 @@ package fai.utb.gui;
 import java.util.ResourceBundle;
 
 /**
+ * Internationalisation i18n
  * @author Šimon Zouvala
  */
 public class I18n {

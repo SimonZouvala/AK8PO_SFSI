@@ -23,4 +23,15 @@ public class ValidationException extends RuntimeException {
     public ValidationException(String msg) {
         super(msg);
     }
+
+    /**
+     * Constructs an instance of
+     * <code>ValidationException</code> with the specified detail message and cause.
+     *
+     * @param message the detail message.
+     * @param cause the detail of cause
+     */
+    public ValidationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

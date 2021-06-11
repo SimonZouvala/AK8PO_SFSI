@@ -15,6 +15,10 @@ import java.awt.event.WindowEvent;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Form for set number of students in group or capacity classroom in subject
+ * @author Šimon Zouvala
+ */
 public class EditQuantity extends JDialog {
 
     private static final I18n I18N = new I18n(EditQuantity.class);
@@ -28,7 +32,11 @@ public class EditQuantity extends JDialog {
     private int numberToSet;
     private final int index;
 
-
+    /**
+     *
+     * @param model relevant list model (Subject or Group list model)
+     * @param index position of relevant object (subject or group) in list model
+     */
     public EditQuantity(JList<String> model, int index) {
         this.index = index;
 
@@ -52,40 +60,32 @@ public class EditQuantity extends JDialog {
         this.getRootPane().setDefaultButton(buttonOK);
         this.pack();
         createUIComponents();
-
     }
 
     private void createUIComponents() {
         buttonCancel.addActionListener(e -> onCancel());
         buttonOK.addActionListener(e -> onOK());
-        // call onCancel() when cross is clicked
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
         });
-        // call onCancel() on ESCAPE
+
         contentPane.registerKeyboardAction(e -> onCancel(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-//    public String getNumberToSet(){
-//        return numberToSet;
-//    }
 
     private void onOK() {
-//
         ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(quantityTextField.getText());
         confirmSwingWorker.execute();
-//        numberToSet = quantityTextField.getText();
-        // add your code here
         dispose();
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 
@@ -99,25 +99,30 @@ public class EditQuantity extends JDialog {
 
         @Override
         protected CheckEditNumber doInBackground() throws Exception {
-
             if (quantity == null || quantity.length() < 1) {
                 return CheckEditNumber.QUANTITY_UNIVERSE_EMPTY;
             }
+
             int quantity_int;
+
             try {
                 quantity_int = Integer.parseInt(quantity);
             } catch (NumberFormatException e) {
                 return CheckEditNumber.QUANTITY_UNIVERSE_INVALID;
             }
+
             if (quantity_int <= 0) {
                 return CheckEditNumber.QUANTITY_UNIVERSE_NEGATIVE;
             }
+
             try {
                 numberToSet = quantity_int;
                 if (subjectListModel == null) {
-                    new GroupManagerImpl().setQuantity(groupListModel.getGroupsList().get(index), numberToSet);
+                    new GroupManagerImpl().setQuantity(groupListModel.getGroupsList().get(index),
+                            numberToSet);
                 } else if (groupListModel == null) {
-                    new SubjectManagerImpl().setSubjectCapacity(subjectListModel.getSubjectList().get(index), numberToSet);
+                    new SubjectManagerImpl().setSubjectCapacity(subjectListModel.getSubjectList().get(index),
+                            numberToSet);
                 }
             } catch (ValidationException e) {
                 return CheckEditNumber.ERROR_WITH_NUMBER;
@@ -129,6 +134,7 @@ public class EditQuantity extends JDialog {
         @Override
         protected void done() {
             CheckEditNumber result = null;
+
             try {
                 result = get();
             } catch (InterruptedException e) {
@@ -136,6 +142,7 @@ public class EditQuantity extends JDialog {
             } catch (ExecutionException e) {
                 JOptionPane.showMessageDialog(null, "ExecutionException-");
             }
+
             if (result == CheckEditNumber.OK) {
                 System.out.println("Set number is ok");
             } else {
@@ -143,5 +150,4 @@ public class EditQuantity extends JDialog {
             }
         }
     }
-
 }

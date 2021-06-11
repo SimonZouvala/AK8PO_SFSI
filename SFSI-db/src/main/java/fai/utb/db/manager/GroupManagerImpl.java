@@ -18,12 +18,14 @@ import java.util.UUID;
 
 /**
  * Implementation of abstract class {@link GroupManager}
+ *
  * @author Šimon Zouvala
  */
 public class GroupManagerImpl extends GroupManager {
 
     private final Document document;
     private static final String MAIN_ELEMENT = "group";
+
     /**
      * Constructor for get current DOM of Groups.xml.
      */
@@ -49,8 +51,8 @@ public class GroupManagerImpl extends GroupManager {
         if (isSameGroupInXml(group)) {
             throw new ValidationException(
                     "Group " + group.getFieldOfStudy() + " with form of study " + group.getFormOfStudy() + ", "
-                            + group.getGrade()+   ". grade, "+ "semester " + group.getSemester()
-                            + " and language " + group.getLanguage()+ "is already exist");
+                            + group.getGrade() + ". grade, " + "semester " + group.getSemester()
+                            + " and language " + group.getLanguage() + "is already exist");
 
         }
 
@@ -104,12 +106,13 @@ public class GroupManagerImpl extends GroupManager {
     @Override
     public void remove(Group group) {
         validate(group);
+        new SubjectManagerImpl().removeGroupFromSubjects(group);
         remove(document, group.getId(), MAIN_ELEMENT, GROUPS_XML);
     }
 
     @Override
     public void setQuantity(Group group, int quantity) {
-        if (quantity < 0){
+        if (quantity < 0) {
             throw new ValidationException("Quantity to set is negative");
         }
         validate(group);
@@ -149,14 +152,14 @@ public class GroupManagerImpl extends GroupManager {
                 Integer.parseInt(element.getElementsByTagName("grade").item(0).getTextContent()),
                 Integer.parseInt(element.getElementsByTagName("quantity").item(0).getTextContent()),
                 Language.valueOf(element.getElementsByTagName("language").item(0).getTextContent()));
-
     }
 
     @Override
     public Group getGroup(UUID id) {
-        if (id == null){
+        if (id == null) {
             throw new IllegalArgumentException("Employee id is null");
         }
+
         NodeList nodeList = document.getElementsByTagName(MAIN_ELEMENT);
 
         for (int index = 0; index < nodeList.getLength(); index++) {
@@ -169,7 +172,7 @@ public class GroupManagerImpl extends GroupManager {
                 }
             }
         }
-        return null;
+        throw new IllegalArgumentException("Group not exist");
     }
 
     private List<String> getGroupXmlDomList() {

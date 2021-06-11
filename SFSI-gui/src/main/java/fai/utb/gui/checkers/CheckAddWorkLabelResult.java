@@ -1,6 +1,7 @@
 package fai.utb.gui.checkers;
 
 /**
+ * Handles warning messages when adding work label for language mutations
  * @author Šimon Zouvala
  */
 public enum CheckAddWorkLabelResult {

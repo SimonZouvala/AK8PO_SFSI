@@ -1,13 +1,13 @@
 package fai.utb.gui.listModel;
 
 import fai.utb.db.entity.Employee;
-import fai.utb.db.entity.Group;
-import fai.utb.db.entity.Subject;
 
 import javax.swing.*;
 import java.util.List;
 
 /**
+ * List model handles employee data to be displayed in the table.
+ *
  * @author Šimon Zouvala
  */
 public class EmployeeListModel extends AbstractListModel {
@@ -29,12 +29,20 @@ public class EmployeeListModel extends AbstractListModel {
         return employeeList.get(index).getName().toUpperCase() +" "+ employeeList.get(index).getSurname().toUpperCase();
     }
 
+    /**
+     * Add new employee to list model
+     * @param employee to create
+     */
     public void addEmployee(Employee employee){
         employeeList.add(employee);
         int lastRow = employeeList.size()-1;
         fireIntervalAdded(employee,lastRow,lastRow);
     }
 
+    /**
+     * Remove employee to list model
+     * @param employee to remove
+     */
     public void deleteEmployee(Employee employee){
         employeeList.remove(employee);
         int lastRow = employeeList.size()-1;
@@ -44,6 +52,11 @@ public class EmployeeListModel extends AbstractListModel {
         fireIntervalRemoved(employee,lastRow,lastRow);
 
     }
+
+    /**
+     *
+     * @return all {@link Employee}s from list model
+     */
     public List<Employee> getEmployeesList(){
         return employeeList;
     }

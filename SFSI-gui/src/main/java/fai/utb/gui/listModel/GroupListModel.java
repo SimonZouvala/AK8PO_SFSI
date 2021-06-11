@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * List model handles group data to be displayed in the table.
  * @author Šimon Zouvala
  */
 public class GroupListModel extends AbstractListModel {
@@ -43,16 +44,28 @@ public class GroupListModel extends AbstractListModel {
         return print.toString();
     }
 
+    /**
+     *
+     * @return all {@link Group}s from list model
+     */
     public List<Group> getGroupsList() {
         return groupsList;
     }
 
+    /**
+     * Add new group to list model
+     * @param group to create
+     */
     public void addGroup(Group group) {
         groupsList.add(group);
         int lastRow = groupsList.size() - 1;
         fireIntervalAdded(group, lastRow, lastRow);
     }
 
+    /**
+     * Remove group to list model
+     * @param group to remove
+     */
     public void deleteGroup(Group group) {
         groupsList.remove(group);
         int lastRow = groupsList.size() - 1;

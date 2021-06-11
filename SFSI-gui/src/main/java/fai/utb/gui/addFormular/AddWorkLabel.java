@@ -11,12 +11,12 @@ import fai.utb.gui.checkers.CheckAddWorkLabelResult;
 import fai.utb.gui.listModel.WorkLabelListModel;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
+ * Form for create new {@link WorkLabel}
+ *
  * @author Šimon Zouvala
  */
 public class AddWorkLabel extends JFrame {
@@ -40,6 +40,10 @@ public class AddWorkLabel extends JFrame {
     private WorkLabel workLabel;
     private LessonType lessonType;
 
+    /**
+     * @param workLabelManager   current workLabel manager
+     * @param workLabelListModel current workLabel list model
+     */
     public AddWorkLabel(WorkLabelManager workLabelManager, WorkLabelListModel workLabelListModel) {
         this.workLabelManager = workLabelManager;
         this.workLabelListModel = workLabelListModel;
@@ -47,7 +51,6 @@ public class AddWorkLabel extends JFrame {
     }
 
     private void createUIComponents() {
-
         completionComboBox.addItem("");
         completionComboBox.addItem("Zápočet");
         completionComboBox.addItem("Klasifikovaný zápočet");
@@ -70,76 +73,73 @@ public class AddWorkLabel extends JFrame {
         this.pack();
 
         numberOfWeeksComboBox.addItem("");
+
         for (int i = 1; i < 16; i++) {
             numberOfWeeksComboBox.addItem(String.valueOf(i));
         }
-        languageComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = Objects.requireNonNull(languageComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Čeština" -> language = Language.CZ;
-                    case "Angličtina" -> language = Language.EN;
-                    default -> language = null;
-                }
+
+        languageComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(languageComboBox.getSelectedItem()).toString();
+
+            switch (selectedItem) {
+                case "Čeština" -> language = Language.CZ;
+                case "Angličtina" -> language = Language.EN;
+                default -> language = null;
             }
         });
-        lessonTypeComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = Objects.requireNonNull(lessonTypeComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Přednáška" -> lessonType = LessonType.LECTURE;
-                    case "Seminář" -> lessonType = LessonType.SEMINAR;
-                    case "Cvičení" -> lessonType = LessonType.EXERCISE;
-                    default -> lessonType = null;
-                }
-                if (lessonType != null){
-                    numberOfWeeksComboBox.setEnabled(true);
-                    numberOfHoursTextField.setEnabled(true);
-                    completionComboBox.setEnabled(false);
-                }else {
-                    numberOfWeeksComboBox.setEnabled(false);
-                    numberOfHoursTextField.setEnabled(false);
-                    completionComboBox.setEnabled(true);
-                }
-            }
-        });
-        completionComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = Objects.requireNonNull(completionComboBox.getSelectedItem()).toString();
-                switch (selectedItem) {
-                    case "Zápočet" -> completion = Completion.Z;
-                    case "Klasifikovaný zápočet" -> completion = Completion.KL;
-                    case "Zkouška" -> completion = Completion.ZK;
-                    default -> completion = null;
-                }
-                lessonTypeComboBox.setEnabled(completion == null);
-            }
-        });
-        numberOfWeeksComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = numberOfWeeksComboBox.getSelectedItem().toString();
-                if (!selectedItem.equals("")) {
-                    numberOfWeeks = Integer.parseInt(selectedItem);
-                } else {
-                    numberOfWeeks = 0;
-                }
+
+        lessonTypeComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(lessonTypeComboBox.getSelectedItem()).toString();
+
+            switch (selectedItem) {
+                case "Přednáška" -> lessonType = LessonType.LECTURE;
+                case "Seminář" -> lessonType = LessonType.SEMINAR;
+                case "Cvičení" -> lessonType = LessonType.EXERCISE;
+                default -> lessonType = null;
             }
 
-        });
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = nameTextField.getText();
-                String points = pointsTextField.getText();
-                String numberOfStudents = numberOfStudentsTestField.getText();
-                String numberOfHours = numberOfHoursTextField.getText();
-                ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(name, points, numberOfStudents, numberOfHours);
-                confirmSwingWorker.execute();
+            if (lessonType != null) {
+                numberOfWeeksComboBox.setEnabled(true);
+                numberOfHoursTextField.setEnabled(true);
+                completionComboBox.setEnabled(false);
+            } else {
+                numberOfWeeksComboBox.setEnabled(false);
+                numberOfHoursTextField.setEnabled(false);
+                completionComboBox.setEnabled(true);
             }
+        });
+
+        completionComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(completionComboBox.getSelectedItem()).toString();
+
+            switch (selectedItem) {
+                case "Zápočet" -> completion = Completion.Z;
+                case "Klasifikovaný zápočet" -> completion = Completion.KL;
+                case "Zkouška" -> completion = Completion.ZK;
+                default -> completion = null;
+            }
+
+            lessonTypeComboBox.setEnabled(completion == null);
+        });
+
+        numberOfWeeksComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(numberOfWeeksComboBox.getSelectedItem()).toString();
+
+            if (!selectedItem.equals("")) {
+                numberOfWeeks = Integer.parseInt(selectedItem);
+            } else {
+                numberOfWeeks = 0;
+            }
+        });
+
+        saveButton.addActionListener(e -> {
+            String name = nameTextField.getText();
+            String points = pointsTextField.getText();
+            String numberOfStudents = numberOfStudentsTestField.getText();
+            String numberOfHours = numberOfHoursTextField.getText();
+            ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(
+                    name, points, numberOfStudents, numberOfHours);
+            confirmSwingWorker.execute();
         });
     }
 
@@ -171,21 +171,27 @@ public class AddWorkLabel extends JFrame {
             if (numberOfStudents == null || numberOfStudents.length() < 1) {
                 return CheckAddWorkLabelResult.NUMBER_OF_STUDENTS_EMPTY;
             }
+
             double points_int;
+
             try {
                 points_int = Double.parseDouble(points);
             } catch (NumberFormatException e) {
                 return CheckAddWorkLabelResult.POINTS_INVALID;
             }
+
             if (points_int <= 0.0) {
                 return CheckAddWorkLabelResult.POINTS_NEGATIVE;
             }
+
             int numberOfStudents_int;
+
             try {
                 numberOfStudents_int = Integer.parseInt(numberOfStudents);
             } catch (NumberFormatException e) {
                 return CheckAddWorkLabelResult.NUMBER_OF_STUDENTS_INVALID;
             }
+
             if (numberOfStudents_int < 0) {
                 return CheckAddWorkLabelResult.NUMBER_OF_STUDENTS_NEGATIVE;
             }
@@ -200,29 +206,35 @@ public class AddWorkLabel extends JFrame {
                 if (numberOfHours == null || numberOfHours.length() < 1) {
                     return CheckAddWorkLabelResult.NUMBER_OF_HOURS_EMPTY;
                 }
+
                 int numberOfHours_int;
+
                 try {
                     numberOfHours_int = Integer.parseInt(numberOfHours);
                 } catch (NumberFormatException e) {
                     return CheckAddWorkLabelResult.NUMBER_OF_HOURS_INVALID;
                 }
+
                 if (numberOfHours_int <= 0) {
                     return CheckAddWorkLabelResult.NUMBER_OF_HOURS_NEGATIVE;
                 }
+
                 try {
-                    workLabel = new WorkLabel(name, language, points_int, numberOfStudents_int, lessonType, null, numberOfWeeks, numberOfHours_int);
+                    workLabel = new WorkLabel(name, language, points_int, numberOfStudents_int,
+                            lessonType, null, numberOfWeeks, numberOfHours_int);
                     workLabelManager.create(workLabel);
                 } catch (ValidationException e) {
                     return CheckAddWorkLabelResult.WORKLABEL_ALREADY_EXIST_Lesson;
                 }
+
             } else {
                 try {
-                    workLabel = new WorkLabel(name, language, points_int, numberOfStudents_int, null, completion, 0, 0);
+                    workLabel = new WorkLabel(name, language, points_int, numberOfStudents_int,
+                            null, completion, 0, 0);
                     workLabelManager.create(workLabel);
                 } catch (ValidationException e) {
                     return CheckAddWorkLabelResult.WORKLABEL_ALREADY_EXIST;
                 }
-
             }
             return CheckAddWorkLabelResult.WORKLABEL_ADD;
         }
@@ -233,10 +245,11 @@ public class AddWorkLabel extends JFrame {
             try {
                 result = get();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new AssertionError("Interrupted", e);
             } catch (ExecutionException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "ExecutionException");
             }
+
             if (result == CheckAddWorkLabelResult.WORKLABEL_ADD) {
                 workLabelListModel.addWorkLabel(workLabel);
                 setVisible(false);
@@ -245,6 +258,5 @@ public class AddWorkLabel extends JFrame {
                 JOptionPane.showMessageDialog(null, I18N.getString(Objects.requireNonNull(result)));
             }
         }
-
     }
 }
