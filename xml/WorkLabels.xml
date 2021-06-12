@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<worklabels>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><worklabels>
 
 
     <worklabel id="da4ac62c-b66d-47dd-ac39-ec4ed91bf3e0">
@@ -16,7 +15,7 @@
     </worklabel>
     <worklabel id="3b4bb155-91dd-4103-91ce-13a4ff48b032">
         <name>popop</name>
-        <employee>dda84559-7bfa-4ce9-8a3d-333150d7e5c2</employee>
+        <employee/>
         <subject/>
         <language>CZ</language>
         <point>5.0</point>
@@ -28,7 +27,7 @@
     </worklabel>
     <worklabel id="cdc936ae-6d63-477b-bf39-71d86733f165">
         <name>EXERCISE Pokročilé programování 1 K</name>
-        <employee>dda84559-7bfa-4ce9-8a3d-333150d7e5c2</employee>
+        <employee/>
         <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
         <language>CZ</language>
         <point>18.0</point>
@@ -38,18 +37,7 @@
         <number_of_weeks>1</number_of_weeks>
         <number_of_hours>15</number_of_hours>
     </worklabel>
-    <worklabel id="ffc2d621-a4c8-410c-aa18-c52db6a818dc">
-        <name>KL Pokročilé programování</name>
-        <employee>dda84559-7bfa-4ce9-8a3d-333150d7e5c2</employee>
-        <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
-        <language>CZ</language>
-        <point>1.5</point>
-        <number_of_students>50</number_of_students>
-        <lesson_type/>
-        <completion>KL</completion>
-        <number_of_weeks>0</number_of_weeks>
-        <number_of_hours>0</number_of_hours>
-    </worklabel>
+    
     <worklabel id="ff0dce83-1df6-4a71-82ee-5c3876c13fe3">
         <name>EXERCISE Pokročilé programování 2 K</name>
         <employee/>
@@ -64,7 +52,7 @@
     </worklabel>
     <worklabel id="d968a89b-9f0a-4a4f-9f47-7ee7211f36c0">
         <name>EXERCISE Pokročilé programování 3 K</name>
-        <employee/>
+        <employee>dda84559-7bfa-4ce9-8a3d-333150d7e5c2</employee>
         <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
         <language>CZ</language>
         <point>18.0</point>
@@ -98,4 +86,4 @@
         <number_of_weeks>1</number_of_weeks>
         <number_of_hours>15</number_of_hours>
     </worklabel>
-</worklabels>
+<worklabel id="0eda3c52-e589-43e2-ae5c-d74ee25cb769"><name>KL Pokročilé programování</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>15.0</point><number_of_students>50</number_of_students><lesson_type/><completion>KL</completion><number_of_weeks>0</number_of_weeks><number_of_hours>0</number_of_hours></worklabel></worklabels>

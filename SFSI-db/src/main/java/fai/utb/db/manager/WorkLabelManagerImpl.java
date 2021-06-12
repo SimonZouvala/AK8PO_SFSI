@@ -620,6 +620,11 @@ public class WorkLabelManagerImpl extends WorkLabelManager {
         return getAllWorkLabels().stream().filter(workLabel -> workLabel.getNumberOfStudents() == 0).toList();
     }
 
+    @Override
+    public List<WorkLabel> getWorkLabelsWithoutSubject() {
+        return getAllWorkLabels().stream().filter(workLabel -> workLabel.getSubject() == null).toList();
+    }
+
     private List<String> getWorkLabelXmlDomList() {
         return Arrays.asList(
                 "name",

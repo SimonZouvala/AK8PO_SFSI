@@ -80,4 +80,12 @@ public abstract class WorkLabelManager extends BasicManager{
      */
     public abstract List<WorkLabel> getWorkLabelsWithoutStudents();
 
+    /**
+     * Get all {@link WorkLabel}s from relevant XML file where is no connection with Subject.
+     * @return list of  {@link WorkLabel}s
+     */
+    public abstract List<WorkLabel> getWorkLabelsWithoutSubject();
+
+
+
 }

@@ -45,6 +45,7 @@ public class MainWindow extends JFrame {
     private JButton withoutStudentsButton;
     private JButton unJoinButton;
     private JButton editButton;
+    private JButton withoutSubjectButton;
     private Group group;
     private Subject subject;
     private Employee employee;
@@ -54,6 +55,7 @@ public class MainWindow extends JFrame {
         super("Software, pro tajemníka ústavu:");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         createUIComponents();
+
     }
 
     private void createUIComponents() {
@@ -68,6 +70,7 @@ public class MainWindow extends JFrame {
         withoutStudentsButton.setVisible(false);
         unJoinButton.setVisible(false);
         editButton.setVisible(false);
+        withoutSubjectButton.setVisible(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
@@ -184,6 +187,13 @@ public class MainWindow extends JFrame {
             WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(3);
             workLabelListSwingWorker.execute();
         });
+
+        withoutSubjectButton.addActionListener(e -> {
+            prepareButtonsWorkLabel();
+            WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(4);
+            workLabelListSwingWorker.execute();
+        });
+
         editButton.addActionListener(e -> {
             showTextArea.setText("");
             joinButton.setEnabled(false);
@@ -215,6 +225,7 @@ public class MainWindow extends JFrame {
         allButton.setVisible(false);
         withoutStudentsButton.setVisible(false);
         unJoinButton.setVisible(false);
+        withoutSubjectButton.setVisible(false);
 
     }
 
@@ -236,6 +247,7 @@ public class MainWindow extends JFrame {
             withoutStudentsButton.setVisible(true);
             unJoinButton.setVisible(true);
             unJoinButton.setEnabled(false);
+            withoutSubjectButton.setVisible(true);
         });
     }
 
@@ -468,6 +480,9 @@ public class MainWindow extends JFrame {
             if (number == 3) {
                 return new WorkLabelManagerImpl().getWorkLabelsWithoutStudents();
             }
+            if (number == 4) {
+                return new WorkLabelManagerImpl().getWorkLabelsWithoutSubject();
+            }
             if (number == 1) {
                 new WorkLabelManagerImpl().generateWorkLabels();
             }
@@ -478,6 +493,8 @@ public class MainWindow extends JFrame {
         protected void done() {
             try {
                 selectionTable.setModel(new WorkLabelListModel(get()));
+                unJoinButton.setEnabled(false);
+                joinButton.setEnabled(false);
             } catch (InterruptedException ex) {
                 throw new AssertionError("Interrupted", ex);
             } catch (ExecutionException ex) {

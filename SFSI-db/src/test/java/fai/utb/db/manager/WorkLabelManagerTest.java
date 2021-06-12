@@ -346,8 +346,7 @@ public class WorkLabelManagerTest {
         workLabelManager.create(workLabelOne());
         workLabelManager.create(workLabelTwo());
         List<WorkLabel> workLabelList = workLabelManager.getAllWorkLabels();
-        workLabelManager.addEmployeeToWorkLabel(employeeManager.getAllEmployees().get(0),
-                workLabelManager.getAllWorkLabels().get(0));
+        workLabelManager.addEmployeeToWorkLabel(employeeManager.getAllEmployees().get(0), workLabelList.get(0));
         assertThat(workLabelManager.getWorkLabelsWithoutEmployee().get(0)).isEqualTo(workLabelList.get(1));
         assertThat(workLabelManager.getWorkLabelsWithoutEmployee().size()).isEqualTo(1);
     }
@@ -364,5 +363,13 @@ public class WorkLabelManagerTest {
                 workLabelManager.getAllWorkLabels().get(0));
         assertThat(workLabelManager.getWorkLabelsWithoutStudents().size()).isEqualTo(1);
         assertThat(workLabelManager.getWorkLabelsWithoutStudents().get(0)).isEqualTo(workLabelList.get(2));
+    }
+    @Test
+    public void testGetWorkLabelsWithoutSubject() {
+        workLabelManager = new WorkLabelManagerImpl("xml/WorkLabels.xml");
+        workLabelManager.create(workLabelOne());
+        List<WorkLabel> workLabelWithoutSubject = workLabelManager.getAllWorkLabels();
+        workLabelManager.generateWorkLabels();
+        assertThat(workLabelManager.getWorkLabelsWithoutSubject()).isEqualTo(workLabelWithoutSubject);
     }
 }
