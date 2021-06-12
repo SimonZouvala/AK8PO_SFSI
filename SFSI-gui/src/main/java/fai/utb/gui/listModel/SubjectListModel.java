@@ -10,7 +10,7 @@ import java.util.List;
  * @author Šimon Zouvala
  */
 public class SubjectListModel extends AbstractListModel {
-    private List<Subject> subjectList;
+    private final List<Subject> subjectList;
 
     public SubjectListModel(List<Subject> subjectList) {
         this.subjectList = subjectList;

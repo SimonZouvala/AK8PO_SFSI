@@ -105,7 +105,6 @@ public class AddGroup extends JFrame {
         });
 
         saveButton.addActionListener(e -> {
-            System.out.println(quantityTextField.getText());
             String fieldOfStudy = fieldOfStudyTextField.getText();
             String quantity = quantityTextField.getText();
             ConfirmSwingWorker confirmSwingWorker = new ConfirmSwingWorker(fieldOfStudy, quantity);

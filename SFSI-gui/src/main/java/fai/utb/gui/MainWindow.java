@@ -55,7 +55,6 @@ public class MainWindow extends JFrame {
         super("Software, pro tajemníka ústavu:");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         createUIComponents();
-
     }
 
     private void createUIComponents() {

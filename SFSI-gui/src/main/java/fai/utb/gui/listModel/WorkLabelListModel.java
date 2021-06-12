@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class WorkLabelListModel extends AbstractListModel {
 
-    private List<WorkLabel> workLabelList;
+    private final List<WorkLabel> workLabelList;
 
     public WorkLabelListModel(List<WorkLabel> workLabelList) {
         this.workLabelList = workLabelList;

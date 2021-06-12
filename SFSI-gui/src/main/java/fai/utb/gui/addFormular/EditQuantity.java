@@ -143,9 +143,7 @@ public class EditQuantity extends JDialog {
                 JOptionPane.showMessageDialog(null, "ExecutionException-");
             }
 
-            if (result == CheckEditNumber.OK) {
-                System.out.println("Set number is ok");
-            } else {
+            if (result != CheckEditNumber.OK) {
                 JOptionPane.showMessageDialog(null, I18N.getString(Objects.requireNonNull(result)));
             }
         }

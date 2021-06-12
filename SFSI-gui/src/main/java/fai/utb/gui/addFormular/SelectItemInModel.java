@@ -64,7 +64,6 @@ public class SelectItemInModel extends JDialog {
 
     private void onOK() {
         choicesObject = choicesComboBox.getSelectedItem();
-        System.out.println(choicesObject);
         dispose();
     }
 

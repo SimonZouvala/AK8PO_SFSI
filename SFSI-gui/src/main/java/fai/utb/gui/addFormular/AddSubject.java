@@ -111,7 +111,6 @@ public class AddSubject extends JFrame {
             if (availableGroups.size() != 0) {
                 SelectItemInModel dialog = new SelectItemInModel(availableGroups);
                 dialog.setVisible(true);
-                System.out.println(dialog.getChoicesObject());
                 Group group = (Group) dialog.getChoicesObject();
 
                 if (group != null) {
@@ -288,6 +287,7 @@ public class AddSubject extends JFrame {
             } catch (ExecutionException e) {
                 JOptionPane.showMessageDialog(null, "ExecutionException");
             }
+
             if (result == CheckAddSubjectResult.SUBJECT_ADD) {
                 subjectListModel.addSubject(subject);
                 setVisible(false);
@@ -304,10 +304,11 @@ public class AddSubject extends JFrame {
         if (groupListModel == null || groupListModel.getSize() == 0) {
             return groupList;
         }
+
         for (Group group : groupListModel.getGroupsList()) {
             groupList.remove(group);
         }
-        System.out.println(groupList.toString());
+
         return groupList;
     }
 
