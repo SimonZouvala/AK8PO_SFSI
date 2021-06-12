@@ -1,6 +1,6 @@
 # AK8PO_SFSI - Software for secretary of institute
 
-This is a desktop application for obtaining credit from the subject at TBU Zlín. 
+This is a desktop application for obtaining credit from the subject at UTB Zlín. 
 
 ## How to run
 Run main class in SFSI-gui module.
