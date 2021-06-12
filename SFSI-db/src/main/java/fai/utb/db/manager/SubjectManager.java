@@ -19,7 +19,7 @@ public abstract class SubjectManager  extends BasicManager{
     public abstract void create(Subject subject);
 
     /**
-     * Changes number of  classroom capacity.
+     * Changes number of  classroom capacity and change work labels based on this.
      * @param subject where number of classroom capacity was changes
      * @param newCapacity value to change
      */

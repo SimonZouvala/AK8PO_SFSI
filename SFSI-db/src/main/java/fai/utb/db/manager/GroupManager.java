@@ -23,7 +23,7 @@ public abstract class GroupManager  extends BasicManager{
     public abstract void remove(Group group);
 
     /**
-     * Changes number of students in group.
+     * Changes number of students in group and change work labels based on this.
      * @param group where number of students will be change
      * @param quantity value to change
      */
