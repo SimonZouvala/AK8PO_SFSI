@@ -25,65 +25,10 @@
         <number_of_weeks>4</number_of_weeks>
         <number_of_hours>5</number_of_hours>
     </worklabel>
-    <worklabel id="cdc936ae-6d63-477b-bf39-71d86733f165">
-        <name>EXERCISE Pokročilé programování 1 K</name>
-        <employee/>
-        <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
-        <language>CZ</language>
-        <point>18.0</point>
-        <number_of_students>10</number_of_students>
-        <lesson_type>EXERCISE</lesson_type>
-        <completion/>
-        <number_of_weeks>1</number_of_weeks>
-        <number_of_hours>15</number_of_hours>
-    </worklabel>
     
-    <worklabel id="ff0dce83-1df6-4a71-82ee-5c3876c13fe3">
-        <name>EXERCISE Pokročilé programování 2 K</name>
-        <employee/>
-        <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
-        <language>CZ</language>
-        <point>18.0</point>
-        <number_of_students>10</number_of_students>
-        <lesson_type>EXERCISE</lesson_type>
-        <completion/>
-        <number_of_weeks>1</number_of_weeks>
-        <number_of_hours>15</number_of_hours>
-    </worklabel>
-    <worklabel id="d968a89b-9f0a-4a4f-9f47-7ee7211f36c0">
-        <name>EXERCISE Pokročilé programování 3 K</name>
-        <employee>dda84559-7bfa-4ce9-8a3d-333150d7e5c2</employee>
-        <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
-        <language>CZ</language>
-        <point>18.0</point>
-        <number_of_students>10</number_of_students>
-        <lesson_type>EXERCISE</lesson_type>
-        <completion/>
-        <number_of_weeks>1</number_of_weeks>
-        <number_of_hours>15</number_of_hours>
-    </worklabel>
-    <worklabel id="9973f241-76b8-41a4-a182-881bb5f6cd65">
-        <name>EXERCISE Pokročilé programování 4 K</name>
-        <employee/>
-        <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
-        <language>CZ</language>
-        <point>18.0</point>
-        <number_of_students>10</number_of_students>
-        <lesson_type>EXERCISE</lesson_type>
-        <completion/>
-        <number_of_weeks>1</number_of_weeks>
-        <number_of_hours>15</number_of_hours>
-    </worklabel>
-    <worklabel id="de93827f-8c6c-451b-bf8c-c6dcac9e01fb">
-        <name>EXERCISE Pokročilé programování 5 K</name>
-        <employee/>
-        <subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject>
-        <language>CZ</language>
-        <point>18.0</point>
-        <number_of_students>10</number_of_students>
-        <lesson_type>EXERCISE</lesson_type>
-        <completion/>
-        <number_of_weeks>1</number_of_weeks>
-        <number_of_hours>15</number_of_hours>
-    </worklabel>
-<worklabel id="0eda3c52-e589-43e2-ae5c-d74ee25cb769"><name>KL Pokročilé programování</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>15.0</point><number_of_students>50</number_of_students><lesson_type/><completion>KL</completion><number_of_weeks>0</number_of_weeks><number_of_hours>0</number_of_hours></worklabel></worklabels>
+    
+    
+    
+    
+    
+<worklabel id="a77ed050-afd3-4b8d-8d7f-24ad0f22608a"><name>EXERCISE Pokročilé programování 1 K</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>18.0</point><number_of_students>20</number_of_students><lesson_type>EXERCISE</lesson_type><completion/><number_of_weeks>1</number_of_weeks><number_of_hours>15</number_of_hours></worklabel><worklabel id="a8d81dd2-e405-4de6-a3bb-1c38395c3089"><name>EXERCISE Pokročilé programování 2 K</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>18.0</point><number_of_students>20</number_of_students><lesson_type>EXERCISE</lesson_type><completion/><number_of_weeks>1</number_of_weeks><number_of_hours>15</number_of_hours></worklabel><worklabel id="67347108-91aa-4666-a535-426e8bcb3b98"><name>EXERCISE Pokročilé programování 3 K</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>18.0</point><number_of_students>20</number_of_students><lesson_type>EXERCISE</lesson_type><completion/><number_of_weeks>1</number_of_weeks><number_of_hours>15</number_of_hours></worklabel><worklabel id="cf329edb-e5d8-4095-8fba-a6b59fc19636"><name>KL Pokročilé programování</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>18.0</point><number_of_students>80</number_of_students><lesson_type/><completion>KL</completion><number_of_weeks>0</number_of_weeks><number_of_hours>0</number_of_hours></worklabel><worklabel id="72f7e2b7-be89-4b8d-92cf-a72dc867be90"><name>EXERCISE Pokročilé programování 5 K</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>18.0</point><number_of_students>0</number_of_students><lesson_type>EXERCISE</lesson_type><completion/><number_of_weeks>1</number_of_weeks><number_of_hours>15</number_of_hours></worklabel><worklabel id="e107d164-2081-4f71-a218-4efea88c8d7e"><name>EXERCISE Pokročilé programování 6 K</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>18.0</point><number_of_students>0</number_of_students><lesson_type>EXERCISE</lesson_type><completion/><number_of_weeks>1</number_of_weeks><number_of_hours>15</number_of_hours></worklabel><worklabel id="a435aa7f-098e-4803-abd1-b4d325559dc6"><name>EXERCISE Pokročilé programování 7 K</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>18.0</point><number_of_students>0</number_of_students><lesson_type>EXERCISE</lesson_type><completion/><number_of_weeks>1</number_of_weeks><number_of_hours>15</number_of_hours></worklabel><worklabel id="80e041f4-6fd9-4ca0-bd58-084ec78ff306"><name>EXERCISE Pokročilé programování 8 K</name><employee/><subject>dc4d11e7-7a9a-49b0-882f-24561d132316</subject><language>CZ</language><point>18.0</point><number_of_students>0</number_of_students><lesson_type>EXERCISE</lesson_type><completion/><number_of_weeks>1</number_of_weeks><number_of_hours>15</number_of_hours></worklabel></worklabels>

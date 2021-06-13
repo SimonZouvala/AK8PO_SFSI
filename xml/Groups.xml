@@ -15,7 +15,7 @@
         <form_of_study>P</form_of_study>
         <semester>LS</semester>
         <grade>2</grade>
-        <quantity>500</quantity>
+        <quantity>100</quantity>
         <language>EN</language>
     </group>
     <group id="b60f5270-b2cd-4a0f-83de-1dfb221738ef">
@@ -24,8 +24,8 @@
         <form_of_study>K</form_of_study>
         <semester>LS</semester>
         <grade>3</grade>
-        <quantity>50</quantity>
+        <quantity>80</quantity>
         <language>EN</language>
     </group>
 
-<group id="83e9c558-42aa-4532-b10d-79828ef998b4"><degree>MGR</degree><field_of_study>sss</field_of_study><form_of_study>K</form_of_study><semester>ZS</semester><grade>2</grade><quantity>50</quantity><language>EN</language></group></groups>
+<group id="83e9c558-42aa-4532-b10d-79828ef998b4"><degree>MGR</degree><field_of_study>sss</field_of_study><form_of_study>K</form_of_study><semester>ZS</semester><grade>2</grade><quantity>50</quantity><language>EN</language></group><group id="7162dfd0-5bc9-4a60-a9d7-8198cc5a81f0"><degree>MGR</degree><field_of_study>SWI</field_of_study><form_of_study>P</form_of_study><semester>LS</semester><grade>4</grade><quantity>2</quantity><language>EN</language></group></groups>

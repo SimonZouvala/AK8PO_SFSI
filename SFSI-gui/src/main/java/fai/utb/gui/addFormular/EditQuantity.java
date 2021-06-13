@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Form for set number of students in group or capacity classroom in subject
+ *
  * @author Šimon Zouvala
  */
 public class EditQuantity extends JDialog {
@@ -33,36 +34,38 @@ public class EditQuantity extends JDialog {
     private final int index;
 
     /**
-     *
-     * @param model relevant list model (Subject or Group list model)
-     * @param index position of relevant object (subject or group) in list model
+     * @param model relevant list model (Subject list model)
+     * @param index position of relevant object (subject) in list model
      */
-    public EditQuantity(JList<String> model, int index) {
+    public EditQuantity(SubjectListModel model, int index) {
         this.index = index;
+        subjectListModel = model;
+        numberToSet = subjectListModel.getSubjectList().get(index).getClassroomCapacity();
+        this.groupListModel = null;
+        label.setText(I18N.getString("SubjectClassroomCapacity"));
+        createUIComponents();
+    }
 
-        if (model.getModel() instanceof GroupListModel) {
-            this.groupListModel = (GroupListModel) model.getModel();
-            numberToSet = groupListModel.getGroupsList().get(index).getQuantity();
-            this.subjectListModel = null;
-            label.setText(I18N.getString("NumberOfStudents"));
+    /**
+     * @param model relevant list model (Group list model)
+     * @param index position of relevant object (group) in list model
+     */
+    public EditQuantity(GroupListModel model, int index) {
+        this.index = index;
+        this.groupListModel = model;
+        numberToSet = groupListModel.getGroupsList().get(index).getQuantity();
+        this.subjectListModel = null;
+        label.setText(I18N.getString("NumberOfStudents"));
+        createUIComponents();
+    }
 
-        } else {
-            subjectListModel = (SubjectListModel) model.getModel();
-            numberToSet = subjectListModel.getSubjectList().get(index).getClassroomCapacity();
-            this.groupListModel = null;
-            label.setText(I18N.getString("SubjectClassroomCapacity"));
-        }
-
+    private void createUIComponents() {
         quantityTextField.setText(String.valueOf(numberToSet));
 
         this.setContentPane(contentPane);
         this.setModal(true);
         this.getRootPane().setDefaultButton(buttonOK);
         this.pack();
-        createUIComponents();
-    }
-
-    private void createUIComponents() {
         buttonCancel.addActionListener(e -> onCancel());
         buttonOK.addActionListener(e -> onOK());
 

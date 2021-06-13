@@ -83,7 +83,8 @@ public class MainWindow extends JFrame {
 
             if (employee != null) {
                 new WorkLabelManagerImpl().addEmployeeToWorkLabel(
-                        employee, new WorkLabelManagerImpl().getAllWorkLabels().get(selectionTable.getSelectedIndex()));
+                        employee, ((WorkLabelListModel) selectionTable.getModel()).getWorkLabelList()
+                                .get(selectionTable.getSelectedIndex()));
             }
 
             selectionTable.clearSelection();
@@ -96,7 +97,8 @@ public class MainWindow extends JFrame {
             unJoinButton.setEnabled(false);
 
             new WorkLabelManagerImpl().removeEmployeeFromWorkLabel(
-                    new WorkLabelManagerImpl().getAllWorkLabels().get(selectionTable.getSelectedIndex()));
+                    ((WorkLabelListModel) selectionTable.getModel()).getWorkLabelList()
+                            .get(selectionTable.getSelectedIndex()));
 
             selectionTable.clearSelection();
             WorkLabelListSwingWorker workLabelListSwingWorker = new WorkLabelListSwingWorker(0);
@@ -196,12 +198,19 @@ public class MainWindow extends JFrame {
         editButton.addActionListener(e -> {
             showTextArea.setText("");
             joinButton.setEnabled(false);
+            EditQuantity editQuantity;
 
-            EditQuantity editQuantity = new EditQuantity(selectionTable, selectionTable.getSelectedIndex());
-            editQuantity.setVisible(true);
+            if (selectionTable.getModel() instanceof GroupListModel) {
+                editQuantity  = new EditQuantity((GroupListModel) selectionTable.getModel(), selectionTable.getSelectedIndex());
+                editQuantity.setVisible(true);
+            }
+
+            if (selectionTable.getModel() instanceof SubjectListModel) {
+                editQuantity  = new EditQuantity((SubjectListModel) selectionTable.getModel(), selectionTable.getSelectedIndex());
+                editQuantity.setVisible(true);
+            }
             selectionTable.clearSelection();
         });
-
     }
 
     private void prepareButtonsWorkLabel() {
